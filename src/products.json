@@ -1,0 +1,294 @@
+{
+"products": [ 
+  {
+    "id": 1,
+    "name": "Collier Bracelet strass argent ",
+    "description": "Collier Bracelet strass argent ",
+    "imageCount": 5,
+    "folder": "1",
+    "gender":"homme",
+    "price": "130.00",
+    "category": "collier"
+  },
+  {
+    "id": 2,
+    "name": "Collier Bracelet Strass Doré ",
+    "description": "Collier Bracelet Strass Doré",
+    "imageCount": 5,    
+    "gender":"homme",
+    "folder": "2",
+    "price": "130.00",
+    "category": "collier"
+  },
+  {
+    "id": 3,
+    "name": "Collier bracelet cartier argent ",
+    "description": "Collier bracelet cartier argent ",
+    "imageCount": 1,
+    "folder": "3",
+    "gender":"homme",
+    "price": "44.00",
+    "category": "collier"
+  },
+  {
+    "id": 4,
+    "name": "Collier bracelet Cartier doré ",
+    "description": "Collier bracelet cartier doré pour homme ",
+    "imageCount": 2,
+    "folder": "4",
+    "gender":"homme",
+    "price": "44.00",
+    "category": "collier"
+  },
+  {
+    "id": 5,
+    "name": "collier bracelet grain café ",
+    "description": "Collier bracelet grain café ",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "5",
+    "price": "54.00",
+    "category": "collier"
+  },
+  {
+    "id": 6,
+    "name": "Collier Homme doré",
+    "description": "collier homme doré",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "6",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 7,
+    "name": "collier bracelet swiss argent",
+    "description": "collier bracelet swiss argent",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "7",
+    "price": "44.00",
+    "category": "collier"
+  },
+  {
+    "id": 8,
+    "name": "Collier swiss argent",
+    "description": "Collier swiss argent",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "8",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 9,
+    "name": "collier grain café argent ",
+    "description": "collier grain café argent ",
+    "imageCount": 6,
+    "gender":"homme",
+    "folder": "9",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 10,
+    "name": "Collier torsadé doré",
+    "description": "Collier torsadé doré",
+    "imageCount": 8,
+    "gender":"homme",
+    "folder": "10",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 11,
+    "name": "collier cartier argent",
+    "description": "collier cartier argent",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "11",
+    "price": "29.00",
+    "category": "collier"
+  },
+  {
+    "id": 12,
+    "name": "Collier cartier doré",
+    "description": "Collier cartier doré",
+    "imageCount": 5,
+    "gender":"homme",
+    "folder": "12",
+    "price": "29.00",
+    "category": "collier"
+  },
+  {
+    "id": 13,
+    "name": "Collier bracelet montre strass doré",
+    "description": "Collier bracelet montre strass doré",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "13",
+    "price": "190.00",
+    "category": "collier"
+  },
+  {
+    "id": 14,
+    "name": "Collier bracelet montre strass argent",
+    "description": "Collier bracelet montre strass argent",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "14",
+    "price": "190.00",
+    "category": "collier"
+  },
+  {
+    "id": 15,
+    "name": "Collier stras argent",
+    "description": "Collier straas argent",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "15",
+    "price": "75.00",
+    "category": "collier"
+  },
+  {
+    "id": 16,
+    "name": "Collier strass doré",
+    "description": "Collier strass doré",
+    "imageCount": 2,
+    "folder": "16",
+    "gender":"homme",
+    "price": "75.00",
+    "category": "collier"
+  },
+  {
+    "id": 17,
+    "name": "Collier homme argent ",
+    "description": "Collier homme argent ",
+    "imageCount": 4,
+    "folder": "17",
+    "gender":"homme",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 18,
+    "name": "bracelet serpent argent",
+    "description": "bracelet serpent argent",
+    "imageCount": 3,
+    "folder": "18",
+    "gender":"homme",
+    "price": "25.00",
+    "category": "bracelet"
+  },
+  {
+    "id": 19,
+    "name": "bracelet serpent doré",
+    "description": "bracelet serpent doré",
+    "imageCount": 5,
+    "gender":"homme",
+    "folder": "19",
+    "price": "25.00",
+    "category": "bracelet"
+  },
+  {
+    "id": 20,
+    "name": "Collier homme argent",
+    "description": "Collier homme argent",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "20",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 21,
+    "name": "Collier swiss doré",
+    "description": "Collier swiss doré",
+    "imageCount": 2,
+    "folder": "21",
+    "gender":"homme",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 22,
+    "name": "collier panaché",
+    "description": "collier panaché",
+    "imageCount": 4,
+    "gender":"homme",
+    "folder": "22",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 23,
+    "name": "Bracelet panaché",
+    "description": "Bracelet panaché",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "23",
+    "price": "25.00",
+    "category": "bracelet"
+  },
+  {
+    "id": 24,
+    "name": "Collier afrique",
+    "description": "Collier afrique",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "24",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 25,
+    "name": "collier croisé argent",
+    "description": "collier croisé argent",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "25",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 26,
+    "name": "Collier croisé",
+    "description": "Collier croisé",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "26",
+    "price": "39.00",
+    "category": "collier"
+  },
+  {
+    "id": 27,
+    "name": "bracelet strass argent",
+    "description": "bracelet strass argent",
+    "imageCount": 2,
+    "gender":"homme",
+    "folder": "27",
+    "price": "55.00",
+    "category": "bracelet"
+  },
+  {
+    "id": 28,
+    "name": "bracelet strass doré",
+    "description": "bracelet strass doré",
+    "imageCount": 1,
+    "gender":"homme",
+    "folder": "28",
+    "price": "55.00",
+    "category": "bracelet"
+  },
+  {
+    "id": 29,
+    "name": "bracelet swiss doré",
+    "description": "Bracelet swiss doré",
+    "imageCount": 4,
+    "gender":"homme",
+    "folder": "29",
+    "price": "25.00",
+    "category": "bracelet"
+  }
+]
+}
