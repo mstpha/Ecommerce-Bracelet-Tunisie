@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Suggestions from './Suggestions';
+import { UserContext } from '../userContext';
+import { addOrderToUser } from './Services/userServices';
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
@@ -16,7 +18,8 @@ const ProductDetail = ({ products }) => {
   const [psug, setPsug] = useState([]);
   const product = products.find(p => p.id === parseInt(id));
   const currentUser = parseInt(localStorage.getItem('currentUser'));
-
+  const { user,setUser } = useContext(UserContext);
+  
   let suggestions = [];
   useEffect(() => {
 
@@ -44,7 +47,7 @@ const ProductDetail = ({ products }) => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + product.imageCount) % product.imageCount);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -67,36 +70,25 @@ const ProductDetail = ({ products }) => {
     }
 
     try {
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const userIndex = users.findIndex(user => user.id === currentUser);
-
-      if (userIndex === -1) {
-        setConfirmDisable(false);
-        return;
-      }
 
       const orderItem = {
         productId: product.id,
         quantity: quantity,
-        price: product.price,
+        price: product.price+6,
         total: product.price * quantity,
         displayString: itemsList,
         timestamp: new Date().toISOString()
       };
-
-      const updatedUsers = [...users];
-      if (!updatedUsers[userIndex].orders) {
-        updatedUsers[userIndex].orders = [];
+      var UserOrderApplied = await addOrderToUser(currentUser,orderItem);
+      if (UserOrderApplied){
+        setUser(UserOrderApplied)
+        toast.success('Order added successfully');
+        setShowConfirmModal(false)
       }
-
-      updatedUsers[userIndex].orders.push(orderItem);
-
-      localStorage.setItem('users', JSON.stringify(updatedUsers));
-
-      toast.success('Order added successfully');
-      setShowConfirmModal(false)
-      setFormData({ fullName: '', phoneNumber: '', address: '' })
+      setFormData({ 
+        fullName: user.fullName?user.fullName:'', 
+        phoneNumber: user.phoneNumber?user.phoneNumber:'',
+        address: user.address?user.address: '' })
       setConfirmDisable(false)
     } catch (error) {
       console.error('Error updating user orders:', error);
@@ -188,27 +180,30 @@ const ProductDetail = ({ products }) => {
                 type="text"
                 name="fullName"
                 placeholder="Nom complet"
-                value={formData.fullName}
+                value={user.fullName?user.fullName:formData.fullName}
                 onChange={handleInputChange}
                 className="mb-2 w-full p-2 border rounded"
                 required
+                disabled={user.fullName?true:false}
               />
               <input
                 type="tel"
                 name="phoneNumber"
                 placeholder="Numéro de téléphone"
-                value={formData.phoneNumber}
+                value={user.phone?user.phone:formData.phoneNumber}
                 onChange={handleInputChange}
                 className="mb-2 w-full p-2 border rounded"
                 required
+                disabled={user.phone?true:false}
               />
               <textarea
                 name="address"
                 placeholder="Adresse"
-                value={formData.address}
+                value={user.address? user.address : formData.address}
                 onChange={handleInputChange}
                 className="mb-2 w-full p-2 border rounded"
                 required
+                disabled={user.address? true:false}
               />
               <div className="flex justify-end">
                 <button

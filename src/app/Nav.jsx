@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Menu, ShoppingCart, Search, X, Home, ShoppingBag, ChevronDown, ChevronRight } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import ShoppingCartSideNav from './ShoppingCartSideNav';
 import { UserContext } from '../userContext';
+import Profile from './Profile';
 
 const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeCartItem }) => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
@@ -11,7 +13,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   const [isShopExpanded, setIsShopExpanded] = useState(false);
   const [isHommeExpanded, setIsHommeExpanded] = useState(false);
   const { user, logout, loading } = useContext(UserContext);
-
+  const [showProfile, setShowProfile] = useState(false);
   const sideNavRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -100,6 +102,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
           </div>
           <span
             className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+            onClick={() => setShowProfile(true)}
           >
             {user?.fullName}
           </span>
@@ -197,8 +200,17 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
           </li>
         </ul>
       </div>
+      {showProfile && <Profile onClose={() => setShowProfile(false)} />}
 
-
+      <ShoppingCartSideNav
+        isOpen={isCartOpen}
+        setIsOpen={setIsCartOpen}
+        cartItems={cartItems}
+        updateCartItem={updateCartItem}
+        removeCartItem={removeCartItem}
+        clearCartItems={clearCartItems}
+        ref={cartNavRef}
+      />
     </>
   );
 };

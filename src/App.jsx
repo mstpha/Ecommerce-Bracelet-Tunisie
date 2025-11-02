@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import Nav from './app/Nav';
 import ProductDetail from './app/ProductDetail';
 import Shop from './app/Shop';
@@ -10,17 +10,51 @@ import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
 import Login from './app/Login';
 import Register from './app/Register';
+import { getUserById } from './app/Services/userServices';
+import { UserContext } from './userContext';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
-
-
-
+  const { setUser } = useContext(UserContext);
+  const navigate=useNavigate()
+  const addToCart = (product, quantity) => {
+    toast.success("Produit ajouté avec succès.");
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map(item => 
+          item.id === product.id 
+            ? { ...item, quantity: item.quantity + quantity } 
+            : item
+        );
+      }
+      return [...prevItems, { ...product, quantity: quantity }];
+    });
+  };
+  
+  const updateCartItem = (id, newQuantity) => {
+    setCartItems(prevItems => 
+      prevItems.map(item => 
+        item.id === id ? { ...item, quantity: Math.max(0, newQuantity) } : item
+      ).filter(item => item.quantity > 0)
+    );
+  };
 
   useEffect(() => {
-    setProducts(productsData.products);
+    const initalize = async ()=>{
+      var currentUser=parseInt(localStorage.getItem("currentUser"))
+      var LoggedInUser;
+      if(currentUser){
+        LoggedInUser = await getUserById(currentUser)
+        setUser(LoggedInUser)
+        navigate("/welcome")
+      }
+      setProducts(productsData.products);
+
+    }
+    initalize()
   }, []);
 
   const removeCartItem = (id) => {
@@ -39,6 +73,10 @@ function App() {
       {(location.pathname !== '/' && location.pathname!=="/register") && (
         <Nav 
           setSearchTerm={setSearchTerm} 
+          cartItems={cartItems} 
+          updateCartItem={updateCartItem} 
+          removeCartItem={removeCartItem} 
+          clearCartItems={clearCartItems}
         />
       )}
       
@@ -57,7 +95,7 @@ function App() {
             />
             <Route 
               path="/product/:id" 
-              element={<ProductDetail products={products} />} 
+              element={<ProductDetail addToCart={addToCart} products={products} />} 
             />
           </Routes>
         </main>

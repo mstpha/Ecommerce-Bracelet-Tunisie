@@ -1,12 +1,26 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { getUserById, loginUser } from './Services/userServices';
+import { UserContext } from '../userContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const navigate=useNavigate();
+
+  useEffect(()=>{
+    var currentUser=parseInt(localStorage.getItem("currentUser"))
+    if (currentUser){
+      const UserLogin=getUserById(currentUser);
+      setUser(UserLogin)
+      navigate("/welcome")
+    }
+  },[])
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,12 +30,33 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const userIndex = users.findIndex(user => 
-      user.fullName.toLowerCase() === currentUser.toLowerCase()
-  );
+
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+    return true;
   };
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const login = await loginUser(formData.email,formData.password)
+  if (validateEmail(formData.email)) {
+    if (login){
+      localStorage.setItem("currentUser",login.id)
+      toast.success("Welcome " + login.fullName)
+      navigate("/welcome")
+    }
+
+  } else {
+    toast.error("Login error.")
+  }
+};
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -40,6 +75,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1A9D8F] focus:border-transparent transition-colors duration-300"
                 placeholder="Enter your email"
@@ -57,6 +93,7 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
+                  autoComplete="new-password"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1A9D8F] focus:border-transparent transition-colors duration-300"
                   placeholder="Enter your password"

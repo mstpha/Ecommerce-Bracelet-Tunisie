@@ -6,7 +6,7 @@ const Welcome = () => {
   const [isSlidedArm, setIsArmSlided] = useState(false);
   const [isSlidedBracelet, setIsBraceletSlided] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
-  const { user, logout, loading } = useContext(UserContext);
+  const { user,loading } = useContext(UserContext);
 
   useEffect(() => {
     const rotateTimer = setTimeout(() => setIsRotated(true), 1000);

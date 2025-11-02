@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import {
+  addUser,
+} from './Services/userServices';
+
 import { Toaster } from 'react-hot-toast';
 const Register = () => {
   const [RegformData, setRegformData] = useState({
@@ -8,13 +12,14 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phone:0,
-    address:'',
-    orders:[]
+    phone: 0,
+    address: '',
+    orders: []
   });
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRegformData(prev => ({
@@ -30,7 +35,7 @@ const Register = () => {
       return false;
     }
     if (!/^[a-zA-Z\s]+$/.test(trimmedName)) {
-      toast.error('Full name should only contain letters and spaces') ;
+      toast.error('Full name should only contain letters and spaces');
       return false;
 
     }
@@ -65,43 +70,32 @@ const Register = () => {
   };
 
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    var validation = validateFullName(RegformData.fullName) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  var validation = validateFullName(RegformData.fullName) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
-  
-  if (RegformData.password !== RegformData.confirmPassword) {
-    toast.error('Passwords do not match.');
-    return;
-  }
-  
-  if (validation === true) {
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
-    
-    const newId = existingUsers.length + 1;
-    
-    const newUser = {
-      id: newId,
-      ...RegformData
-    };
-    
-    existingUsers.push(newUser);
-    
-    localStorage.setItem('users', JSON.stringify(existingUsers));
-    localStorage.setItem('currentUser',newId);
+    if (RegformData.password !== RegformData.confirmPassword) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+    let newUser;
+    if (validation === true) {
+      newUser=addUser(RegformData)
+    }
+
+    localStorage.setItem('currentUser', newUser.id);
     toast.success('Registration successful!');
     navigate("/welcome")
-  }
-};
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-md mx-auto">
         <h2 className="text-2xl font-bold text-[#4A3C31] mb-6">Create Account</h2>
-        
+
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            
+
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-[#4A3C31] mb-2">
                 Full Name
@@ -224,7 +218,7 @@ const handleSubmit = (e) => {
           <div className="mt-6 text-center">
             <div className="text-sm text-[#4A3C31]">
               Already have an account?{' '}
-              <div onClick={()=>{Navigate("/")}} className="text-[#1A9D8F] hover:underline font-medium transition-colors duration-300">
+              <div onClick={() => { Navigate("/") }} className="text-[#1A9D8F] hover:underline font-medium transition-colors duration-300">
                 Login
               </div>
             </div>
