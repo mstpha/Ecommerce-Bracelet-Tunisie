@@ -184,10 +184,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="mt-8 text-center text-sm text-gray-600">
-          Protected by industry-standard encryption
-        </p>
+
       </div>
     </div>
   );
