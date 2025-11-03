@@ -7,7 +7,7 @@ const ShopItem = ({ item, truncateDescription }) => {
     const [currentImage, setCurrentImage] = useState(1);
   
     const getUniqueRandomImage = (current, max) => {
-      if (max === 1) return 1; // If there's only one image, always return 1
+      if (max === 1) return 1; 
       let newImage;
       do {
         newImage = Math.floor(Math.random() * max) + 1;

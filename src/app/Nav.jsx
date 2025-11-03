@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Menu, ShoppingCart, Search, X, Home, ShoppingBag, ChevronDown, ChevronRight } from 'lucide-react';
+import { Menu, ShoppingCart, Search, X, Home, ShoppingBag, ChevronDown, ChevronRight, LogOut } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ShoppingCartSideNav from './ShoppingCartSideNav';
 import { UserContext } from '../userContext';
@@ -17,13 +17,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   const sideNavRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const currentUser = parseInt(localStorage.getItem('currentUser'));
 
-  useEffect(()=>{
-    if (location.pathname!=="/" && !currentUser){
-      navigate("/")
-    }
-  })
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sideNavRef.current && !sideNavRef.current.contains(event.target)) {
@@ -100,11 +94,21 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
 
             </div>
           </div>
-          <span
-            className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-            onClick={() => setShowProfile(true)}
-          >
-            {user?.fullName}
+          <span className="flex items-center gap-2">
+            <span
+              className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+              onClick={() => setShowProfile(true)}
+            >
+              {user?.fullName}
+            </span>
+            <LogOut
+              size={18}
+              className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                logout();
+              }}
+            />
           </span>
 
         </div>
@@ -156,16 +160,17 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             {isShopExpanded && (
               <ul className="mt-4 ml-4 bg-[#3A2C21] rounded-md p-3">
                 <li className="my-2">
-                              <div
+                  <div
                     className="flex items-center text-md hover:text-[#1A9D8F] cursor-pointer transition-colors duration-300 pb-2"
-              onClick={()=>{
-                navigate("/shop")
-              setIsSideNavOpen(false)}}
-            >
-              <ShoppingBag className="mr-4" size={24} />
-              Shop
+                    onClick={() => {
+                      navigate("/shop")
+                      setIsSideNavOpen(false)
+                    }}
+                  >
+                    <ShoppingBag className="mr-4" size={24} />
+                    Shop
 
-            </div>
+                  </div>
                   <div
                     className="flex items-center text-md hover:text-[#1A9D8F] cursor-pointer transition-colors duration-300"
                     onClick={toggleHommeExpanded}

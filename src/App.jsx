@@ -12,12 +12,13 @@ import Login from './app/Login';
 import Register from './app/Register';
 import { getUserById } from './app/Services/userServices';
 import { UserContext } from './userContext';
+import Checkout from './app/Checkout';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
-  const { setUser } = useContext(UserContext);
+  const { user,setUser } = useContext(UserContext);
   const navigate=useNavigate()
   const addToCart = (product, quantity) => {
     toast.success("Produit ajouté avec succès.");
@@ -44,12 +45,17 @@ function App() {
 
   useEffect(() => {
     const initalize = async ()=>{
-      var currentUser=parseInt(localStorage.getItem("currentUser"))
+      if (user) return;
+      var currentUser=localStorage.getItem("ID")
       var LoggedInUser;
+
       if(currentUser){
         LoggedInUser = await getUserById(currentUser)
+
         setUser(LoggedInUser)
-        navigate("/welcome")
+        if (location.pathname==="/"){
+          navigate("/welcome")
+        }
       }
       setProducts(productsData.products);
 
@@ -93,6 +99,7 @@ function App() {
               path="/shop/:gender/:category" 
               element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
             />
+            <Route path="/checkout" element={<Checkout />} />
             <Route 
               path="/product/:id" 
               element={<ProductDetail addToCart={addToCart} products={products} />} 

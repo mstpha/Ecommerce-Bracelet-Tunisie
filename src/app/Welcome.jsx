@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../userContext';
+import Loader from './Loader';
 
 const Welcome = () => {
   const [isRotated, setIsRotated] = useState(false);
   const [isSlidedArm, setIsArmSlided] = useState(false);
   const [isSlidedBracelet, setIsBraceletSlided] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
-  const { user,loading } = useContext(UserContext);
-
+  const { user } = useContext(UserContext);
+  const [loading,setLoading]=useState(true)
   useEffect(() => {
     const rotateTimer = setTimeout(() => setIsRotated(true), 1000);
     const slideArmTimer = setTimeout(() => setIsArmSlided(true), 2000);
@@ -21,7 +22,22 @@ const Welcome = () => {
       clearTimeout(contentTimer);
     };
   }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
 
+    return () => clearTimeout(timer);
+  }, []);
+if (loading){
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="transform scale-400">
+          <Loader/>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden">
       <div 

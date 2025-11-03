@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
@@ -7,19 +7,18 @@ import Suggestions from './Suggestions';
 import { UserContext } from '../userContext';
 import { addOrderToUser } from './Services/userServices';
 
-const ProductDetail = ({ products }) => {
+const ProductDetail = ({ addToCart, products }) => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('');
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [formData, setFormData] = useState({ fullName: '', phoneNumber: '', address: '' });
   const [quantity, setQuantity] = useState(1);
   const [confirmdisable, setConfirmDisable] = useState(false);
   const [psug, setPsug] = useState([]);
   const product = products.find(p => p.id === parseInt(id));
-  const currentUser = parseInt(localStorage.getItem('currentUser'));
-  const { user,setUser } = useContext(UserContext);
-  
+  const currentUser = localStorage.getItem('ID');
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate()
   let suggestions = [];
   useEffect(() => {
 
@@ -47,54 +46,10 @@ const ProductDetail = ({ products }) => {
     setCurrentImageIndex((prevIndex) => (prevIndex - 1 + product.imageCount) % product.imageCount);
   };
 
-  const handleInputChange = async (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
-
-  const handleConfirm = async (e) => {
-    e.preventDefault();
-    setConfirmDisable(true);
-
-    const itemsList = `${product.name} x${quantity} prix: ${product.price} Total: ${(product.price * quantity).toFixed(2)}`;
-
-    // Get current user ID from localStorage
-
-    if (!currentUser) {
-      console.error('No user logged in');
-      setConfirmDisable(false);
-      return;
-    }
-
-    try {
-
-      const orderItem = {
-        productId: product.id,
-        quantity: quantity,
-        price: product.price+6,
-        total: product.price * quantity,
-        displayString: itemsList,
-        timestamp: new Date().toISOString()
-      };
-      var UserOrderApplied = await addOrderToUser(currentUser,orderItem);
-      if (UserOrderApplied){
-        setUser(UserOrderApplied)
-        toast.success('Order added successfully');
-        setShowConfirmModal(false)
-      }
-      setFormData({ 
-        fullName: user.fullName?user.fullName:'', 
-        phoneNumber: user.phoneNumber?user.phoneNumber:'',
-        address: user.address?user.address: '' })
-      setConfirmDisable(false)
-    } catch (error) {
-      console.error('Error updating user orders:', error);
-      setConfirmDisable(false);
-    }
-  };
 
   if (!product) {
     return <div>Product not found</div>;
@@ -155,12 +110,19 @@ const ProductDetail = ({ products }) => {
           </div>
           <div>
             <button
-              onClick={() => setShowConfirmModal(true)}
+              onClick={() => navigate('/checkout', {
+                state: {
+                  product,
+                  quantity,
+                  isCart: false
+                }
+              })}
               className="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-orange-600 mb-2"
             >
               Acheter maintenant
             </button>
             <button
+              onClick={() => addToCart(product, quantity)}
               className="w-full bg-[#1A9D8F] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-[#157A6E]"
             >
               Ajouter au panier
@@ -169,63 +131,7 @@ const ProductDetail = ({ products }) => {
         </div>
       </div>
 
-
-
-      {showConfirmModal && (
-        <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg max-w-sm w-11/12">
-            <h2 className="text-xl font-bold mb-3">Confirmer la commande</h2>
-            <form onSubmit={handleConfirm}>
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Nom complet"
-                value={user.fullName?user.fullName:formData.fullName}
-                onChange={handleInputChange}
-                className="mb-2 w-full p-2 border rounded"
-                required
-                disabled={user.fullName?true:false}
-              />
-              <input
-                type="tel"
-                name="phoneNumber"
-                placeholder="Numéro de téléphone"
-                value={user.phone?user.phone:formData.phoneNumber}
-                onChange={handleInputChange}
-                className="mb-2 w-full p-2 border rounded"
-                required
-                disabled={user.phone?true:false}
-              />
-              <textarea
-                name="address"
-                placeholder="Adresse"
-                value={user.address? user.address : formData.address}
-                onChange={handleInputChange}
-                className="mb-2 w-full p-2 border rounded"
-                required
-                disabled={user.address? true:false}
-              />
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmModal(false)}
-                  className="mr-2 px-4 py-2 bg-gray-300 rounded"
-                >
-                  Annuler
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-[#1A9D8F] text-white rounded"
-                  disabled={confirmdisable}
-                >
-                  Confirmer
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-      <Suggestions suggestions={psug.slice(0, 5)} />
+      <Suggestions suggestions={psug.slice(0, 15)} />
 
     </div>
   );

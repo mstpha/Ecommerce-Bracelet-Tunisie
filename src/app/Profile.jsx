@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X } from 'lucide-react';
+import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X, Mail } from 'lucide-react';
 import { UserContext } from '../userContext';
 import { updateUser } from './Services/userServices';
 import toast from 'react-hot-toast';
@@ -7,26 +7,32 @@ import toast from 'react-hot-toast';
 const Profile = ({ onClose }) => {
   const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
   const [editedPhone, setEditedPhone] = useState('');
   const [editedAddress, setEditedAddress] = useState('');
+  const [editedEmail, setEditedEmail] = useState('');
+  const [editedName, setEditedName] = useState('');
   const { user, setUser, loading } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
       setEditedPhone(user.phone ?? '');
       setEditedAddress(user.address ?? '');
+      setEditedEmail(user.email ?? '');
+      setEditedName(user.fullName ?? '');
     }
   }, [user]);
 
   const saveUserData = (updatedUser) => {
     try {
-      const currentUser = parseInt(localStorage.getItem('currentUser'));
-      const updatedUserReturn = updateUser(currentUser,updatedUser)
-      if (updatedUserReturn){
+      const currentUser = localStorage.getItem('ID');
+      const updatedUserReturn = updateUser(currentUser, updatedUser)
+      if (updatedUserReturn) {
         toast.success("User Updated Successfully!");
         setUser(prev => ({ ...prev, ...updatedUser }));
       }
-      
+
     } catch (error) {
       console.error('Error saving user data:', error);
     }
@@ -44,6 +50,20 @@ const Profile = ({ onClose }) => {
       saveUserData({ address: editedAddress.trim() });
     }
     setIsEditingAddress(false);
+  };
+
+  const handleSaveEmail = () => {
+    if (editedEmail.trim()) {
+      saveUserData({ email: editedEmail.trim() });
+    }
+    setIsEditingEmail(false);
+  };
+
+  const handleSaveName = () => {
+    if (editedName.trim()) {
+      saveUserData({ fullName: editedName.trim() });
+    }
+    setIsEditingName(false);
   };
 
   const formatDate = (timestamp) => {
@@ -94,24 +114,89 @@ const Profile = ({ onClose }) => {
             <div className="bg-[#1A9D8F] rounded-full p-3 mr-4">
               <User size={24} className="text-white" />
             </div>
-            <div>
-              <h3 className="text-xl font-bold text-[#4A3C31]">{user.fullName}</h3>
-              <p className="text-gray-600">{user.email}</p>
+            <div className="flex-1">
+              {isEditingName ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent"
+                    placeholder="Entrez votre nom"
+                    autoFocus
+                  />
+                  <button
+                    onClick={handleSaveName}
+                    className="text-[#1A9D8F] text-sm font-medium"
+                  >
+                    Sauvegarder
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-bold text-[#4A3C31]">{user.fullName}</h3>
+                  <button
+                    onClick={() => setIsEditingName(true)}
+                    className="text-gray-500 hover:text-[#1A9D8F]"
+                  >
+                    <Edit3 size={16} />
+                  </button>
+                </div>
+              )}
             </div>
+          </div>
+
+          {/* Email */}
+          <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
+            <div className="flex items-center flex-1">
+              <Mail size={20} className="text-[#1A9D8F] mr-3" />
+              <div className="flex-1">
+                <p className="text-sm text-gray-500">Email</p>
+                {isEditingEmail ? (
+                  <input
+                    type="email"
+                    value={editedEmail}
+                    onChange={(e) => setEditedEmail(e.target.value)}
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full"
+                    placeholder="Entrez votre email"
+                    autoFocus
+                  />
+                ) : (
+                  <p className="font-medium">
+                    {user.email || 'Non renseigné'}
+                  </p>
+                )}
+              </div>
+            </div>
+            {isEditingEmail ? (
+              <button
+                onClick={handleSaveEmail}
+                className="text-[#1A9D8F] text-sm font-medium ml-2"
+              >
+                Sauvegarder
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsEditingEmail(true)}
+                className="text-gray-500 hover:text-[#1A9D8F]"
+              >
+                <Edit3 size={16} />
+              </button>
+            )}
           </div>
 
           {/* Phone Number */}
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
-            <div className="flex items-center">
+            <div className="flex items-center flex-1">
               <Phone size={20} className="text-[#1A9D8F] mr-3" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-gray-500">Téléphone</p>
                 {isEditingPhone ? (
                   <input
                     type="tel"
                     value={editedPhone}
                     onChange={(e) => setEditedPhone(e.target.value)}
-                    className="border-b-2 border-[#1A9D8F] focus:outline-none"
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full"
                     placeholder="Entrez votre numéro"
                     autoFocus
                   />
@@ -125,7 +210,7 @@ const Profile = ({ onClose }) => {
             {isEditingPhone ? (
               <button
                 onClick={handleSavePhone}
-                className="text-[#1A9D8F] text-sm font-medium"
+                className="text-[#1A9D8F] text-sm font-medium ml-2"
               >
                 Sauvegarder
               </button>
@@ -141,9 +226,9 @@ const Profile = ({ onClose }) => {
 
           {/* Address */}
           <div className="flex items-center justify-between p-3 bg-white rounded">
-            <div className="flex items-center">
+            <div className="flex items-center flex-1">
               <MapPin size={20} className="text-[#1A9D8F] mr-3" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-gray-500">Adresse</p>
                 {isEditingAddress ? (
                   <textarea
@@ -164,7 +249,7 @@ const Profile = ({ onClose }) => {
             {isEditingAddress ? (
               <button
                 onClick={handleSaveAddress}
-                className="text-[#1A9D8F] text-sm font-medium"
+                className="text-[#1A9D8F] text-sm font-medium ml-2"
               >
                 Sauvegarder
               </button>
@@ -208,7 +293,7 @@ const Profile = ({ onClose }) => {
                       {order.total?.toFixed(2)} DT
                     </p>
                   </div>
-                  
+
                   <div className="flex justify-between items-center text-sm text-gray-500">
                     <div className="flex items-center">
                       <Calendar size={14} className="mr-1" />

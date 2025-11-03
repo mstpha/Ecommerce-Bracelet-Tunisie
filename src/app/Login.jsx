@@ -9,16 +9,20 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    var currentUser=parseInt(localStorage.getItem("currentUser"))
-    if (currentUser){
-      const UserLogin=getUserById(currentUser);
-      setUser(UserLogin)
-      navigate("/welcome")
+  useEffect(() => {
+    const initalize = async () => {
+      var currentUser = localStorage.getItem("ID")
+      if (currentUser) {
+        const UserLogin = getUserById(currentUser);
+        setUser(UserLogin)
+        navigate("/welcome")
+      }
     }
-  },[])
+    initalize()
+
+  }, [])
   const [showPassword, setShowPassword] = useState(false);
   const { setUser } = useContext(UserContext);
 
@@ -43,50 +47,76 @@ const Login = () => {
 
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const login = await loginUser(formData.email,formData.password)
-  if (validateEmail(formData.email)) {
-    if (login){
-      localStorage.setItem("currentUser",login.id)
-      toast.success("Welcome " + login.fullName)
-      navigate("/welcome")
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateEmail(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
     }
 
-  } else {
-    toast.error("Login error.")
-  }
-};
+    const login = await loginUser(formData.email, formData.password);
+    if (login) {
+      localStorage.setItem("ID", login.id);
+      toast.success("Welcome " + login.fullName);
+      setUser(login)
+      navigate("/welcome");
+    }
+  };
+
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-md mx-auto">
-        <h2 className="text-2xl font-bold text-[#4A3C31] mb-6">Login</h2>
-        
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="min-h-screen  flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl mb-4 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="white" className="w-8 h-8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+            </svg>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+          <p className="text-gray-600">Sign in to continue to your account</p>
+        </div>
+
+        {/* Login Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email Input */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#4A3C31] mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
               </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1A9D8F] focus:border-transparent transition-colors duration-300"
-                placeholder="Enter your email"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
+                  placeholder="you@example.com"
+                />
+              </div>
             </div>
 
+            {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#4A3C31] mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-gray-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
+                </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   id="password"
@@ -95,13 +125,13 @@ const handleSubmit = async (e) => {
                   onChange={handleChange}
                   autoComplete="new-password"
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1A9D8F] focus:border-transparent transition-colors duration-300"
+                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#1A9D8F] transition-colors duration-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-600 transition-colors duration-300"
                 >
                   {showPassword ? (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -117,35 +147,47 @@ const handleSubmit = async (e) => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-
-              <Link to="/forgot-password" className="text-sm text-[#1A9D8F] hover:underline transition-colors duration-300">
+            {/* Forgot Password Link */}
+            <div className="flex items-center justify-end">
+              <Link to="/forgot-password" className="text-sm font-medium text-teal-600 hover:text-teal-700 transition-colors duration-300">
                 Forgot Password?
               </Link>
             </div>
 
+            {/* Login Button */}
             <button
               type="submit"
-              className="w-full px-4 py-2 text-sm font-medium border border-[#1A9D8F] rounded-md 
-                text-white bg-[#1A9D8F] 
-                hover:bg-white hover:text-[#1A9D8F] 
-                focus:outline-none focus:ring-2 focus:ring-[#1A9D8F] 
-                focus:bg-white focus:text-[#1A9D8F]
-                transition-colors duration-300"
+              className="w-full py-3 px-4 text-base font-semibold text-white bg-gradient-to-r from-teal-500 to-emerald-600 rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transform hover:-translate-y-0.5 transition-all duration-300"
             >
-              Login
+              Sign In
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-[#4A3C31]">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-[#1A9D8F] hover:underline font-medium transition-colors duration-300">
-                Sign up
-              </Link>
-            </p>
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">New to our platform?</span>
+            </div>
+          </div>
+
+          {/* Sign Up Link */}
+          <div className="text-center">
+            <Link
+              to="/register"
+              className="inline-flex items-center justify-center w-full py-3 px-4 text-base font-semibold text-teal-600 bg-teal-50 rounded-xl hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all duration-300"
+            >
+              Create an account
+            </Link>
           </div>
         </div>
+
+        {/* Footer */}
+        <p className="mt-8 text-center text-sm text-gray-600">
+          Protected by industry-standard encryption
+        </p>
       </div>
     </div>
   );

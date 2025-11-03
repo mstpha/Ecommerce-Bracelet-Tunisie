@@ -7,7 +7,7 @@ const ShopItemsuggestion = ({ item, truncateDescription }) => {
     const [currentImage, setCurrentImage] = useState(1);
   
     const getUniqueRandomImage = (current, max) => {
-      if (max === 1) return 1; // If there's only one image, always return 1
+      if (max === 1) return 1; 
       let newImage;
       do {
         newImage = Math.floor(Math.random() * max) + 1;
@@ -57,7 +57,7 @@ const ShopItemsuggestion = ({ item, truncateDescription }) => {
           <h3 className="text-lg font-semibold text-[#4A3C31] mb-2 line-clamp-2">{item.name}</h3>
           <p className="text-sm text-[#4A3C31] mb-2 flex-grow line-clamp-2">{truncateDescription(item.description)}</p>
           <p className="text-[#1A9D8F] font-bold mt-auto">
-            {item.discount ? item.discount : item.price}
+            {item.discount ? item.discount : item.price} DT
             <span className='line-through ml-1 text-[0.8em]'>{item.discount ? item.price : null}</span>
           </p>
         </div>

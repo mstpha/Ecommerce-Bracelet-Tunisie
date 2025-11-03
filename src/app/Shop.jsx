@@ -3,13 +3,14 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import productsData from './../products.json';
 import ShopItem from './ShopItem';
 import Suggestions from './Suggestions';
+import Loader from './Loader';
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();
   const { gender, category } = useParams();
   const [items, setItems] = useState([]);
   const [sortedItems, setSortedItems] = useState([]);
   const [sortOrder, setSortOrder] = useState('none');
-  const [hovered,setHovered]=useState(false);
+  const [loading,setLoading]=useState(true);
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const search = params.get('search');
@@ -17,6 +18,13 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
       setSearchTerm(search);
     }
   }, [location, setSearchTerm]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     let filteredItems = productsData.products;
@@ -37,7 +45,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     let filtered = items;
     if (searchTerm) {
       filtered = filtered.filter(item => 
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        item.name.toLowerCase().startsWith(searchTerm.toLowerCase())
       );
     }
     setSortedItems(filtered);
@@ -73,12 +81,20 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     if (description.length <= maxLength) return description;
     return description.slice(0, maxLength).trim() + '...';
   };
-
+if (loading){
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="transform scale-400">
+          <Loader/>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold text-[#4A3C31] mb-6">Shop</h2>
       <div className="mb-4 flex flex-wrap gap-4 items-center">
-        <Suggestions suggestions={shuffleArray(items).slice(0, 5)}/>
+        <Suggestions suggestions={shuffleArray(items).slice(0, 15)}/>
         <div className="inline-flex rounded-md shadow-sm" role="group">
           <button 
             onClick={() => sortByPrice('asc')} 

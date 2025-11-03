@@ -1,18 +1,19 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const navigate=useNavigate()
   const logout = () => {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('ID');
     setUser(null);
+    navigate("/")
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, logout, loading,setLoading }}>
+    <UserContext.Provider value={{ user, setUser, logout }}>
       {children}
     </UserContext.Provider>
   );

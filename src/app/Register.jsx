@@ -70,7 +70,7 @@ const Register = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     var validation = validateFullName(RegformData.fullName) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
 
@@ -80,10 +80,9 @@ const Register = () => {
     }
     let newUser;
     if (validation === true) {
-      newUser=addUser(RegformData)
+      newUser= await addUser(RegformData)
     }
-
-    localStorage.setItem('currentUser', newUser.id);
+    localStorage.setItem('ID', newUser.id);
     toast.success('Registration successful!');
     navigate("/welcome")
   };
@@ -218,7 +217,7 @@ const Register = () => {
           <div className="mt-6 text-center">
             <div className="text-sm text-[#4A3C31]">
               Already have an account?{' '}
-              <div onClick={() => { Navigate("/") }} className="text-[#1A9D8F] hover:underline font-medium transition-colors duration-300">
+              <div onClick={() => { navigate("/") }} className="text-[#1A9D8F] hover:underline font-medium transition-colors duration-300">
                 Login
               </div>
             </div>
