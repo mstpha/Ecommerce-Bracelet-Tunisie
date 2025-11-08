@@ -114,7 +114,7 @@ const Profile = ({ onClose }) => {
             <div className="bg-[#1A9D8F] rounded-full p-3 mr-4">
               <User size={24} className="text-white" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {isEditingName ? (
                 <div className="flex items-center gap-2">
                   <input
@@ -134,7 +134,7 @@ const Profile = ({ onClose }) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-bold text-[#4A3C31]">{user.fullName}</h3>
+                  <h3 className="text-xl font-bold text-[#4A3C31] break-words overflow-hidden">{user.fullName}</h3>
                   <button
                     onClick={() => setIsEditingName(true)}
                     className="text-gray-500 hover:text-[#1A9D8F]"
@@ -150,7 +150,7 @@ const Profile = ({ onClose }) => {
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
             <div className="flex items-center flex-1 min-w-0">
               <Mail size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Email</p>
                 {isEditingEmail ? (
                   <input
@@ -189,7 +189,7 @@ const Profile = ({ onClose }) => {
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
             <div className="flex items-center flex-1 min-w-0">
               <Phone size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Téléphone</p>
                 {isEditingPhone ? (
                   <input
@@ -228,7 +228,7 @@ const Profile = ({ onClose }) => {
           <div className="flex items-center justify-between p-3 bg-white rounded">
             <div className="flex items-center flex-1 min-w-0">
               <MapPin size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Adresse</p>
                 {isEditingAddress ? (
                   <textarea
