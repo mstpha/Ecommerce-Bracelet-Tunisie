@@ -116,15 +116,14 @@ const Profile = ({ onClose }) => {
             </div>
             <div className="flex-1 min-w-0">
               {isEditingName ? (
-<div className="flex items-center gap-2 min-w-0">
-                  <input
-                    type="text"
-                    value={editedName}
-                    onChange={(e) => setEditedName(e.target.value)}
-                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
-                    placeholder="Entrez votre nom"
-                    autoFocus
-                  />
+                <div className="flex items-center gap-2 min-w-0 flex-wrap">                  <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
+                  placeholder="Entrez votre nom"
+                  autoFocus
+                />
                   <button
                     onClick={handleSaveName}
                     className="text-[#1A9D8F] text-sm font-medium"
