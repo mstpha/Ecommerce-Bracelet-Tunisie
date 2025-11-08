@@ -148,7 +148,7 @@ const Profile = ({ onClose }) => {
 
           {/* Email */}
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <Mail size={20} className="text-[#1A9D8F] mr-3" />
               <div className="flex-1">
                 <p className="text-sm text-gray-500">Email</p>
@@ -162,7 +162,7 @@ const Profile = ({ onClose }) => {
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.email || 'Non renseigné'}
                   </p>
                 )}
@@ -187,7 +187,7 @@ const Profile = ({ onClose }) => {
 
           {/* Phone Number */}
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <Phone size={20} className="text-[#1A9D8F] mr-3" />
               <div className="flex-1">
                 <p className="text-sm text-gray-500">Téléphone</p>
@@ -201,7 +201,7 @@ const Profile = ({ onClose }) => {
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.phone || 'Non renseigné'}
                   </p>
                 )}
@@ -226,7 +226,7 @@ const Profile = ({ onClose }) => {
 
           {/* Address */}
           <div className="flex items-center justify-between p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <MapPin size={20} className="text-[#1A9D8F] mr-3" />
               <div className="flex-1">
                 <p className="text-sm text-gray-500">Adresse</p>
@@ -240,7 +240,7 @@ const Profile = ({ onClose }) => {
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.address || 'Non renseignée'}
                   </p>
                 )}
