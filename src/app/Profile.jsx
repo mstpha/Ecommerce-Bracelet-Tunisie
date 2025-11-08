@@ -116,12 +116,12 @@ const Profile = ({ onClose }) => {
             </div>
             <div className="flex-1 min-w-0">
               {isEditingName ? (
-                <div className="flex items-center gap-2">
+<div className="flex items-center gap-2 min-w-0">
                   <input
                     type="text"
                     value={editedName}
                     onChange={(e) => setEditedName(e.target.value)}
-                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent"
+                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
                     placeholder="Entrez votre nom"
                     autoFocus
                   />
@@ -196,7 +196,7 @@ const Profile = ({ onClose }) => {
                     type="tel"
                     value={editedPhone}
                     onChange={(e) => setEditedPhone(e.target.value)}
-                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full"
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full max-w-full"
                     placeholder="Entrez votre numéro"
                     autoFocus
                   />
@@ -234,7 +234,7 @@ const Profile = ({ onClose }) => {
                   <textarea
                     value={editedAddress}
                     onChange={(e) => setEditedAddress(e.target.value)}
-                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full resize-none"
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full resize-none max-w-full"
                     placeholder="Entrez votre adresse"
                     rows="2"
                     autoFocus
