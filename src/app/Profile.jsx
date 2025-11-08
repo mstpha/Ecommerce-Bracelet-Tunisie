@@ -313,7 +313,7 @@ const Profile = ({ onClose }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-[#1A9D8F] text-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
+            className="px-6 py-2 bg-[#1A9D8F] texft-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
           >
             Fermer
           </button>
