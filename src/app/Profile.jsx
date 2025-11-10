@@ -114,17 +114,16 @@ const Profile = ({ onClose }) => {
             <div className="bg-[#1A9D8F] rounded-full p-3 mr-4">
               <User size={24} className="text-white" />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               {isEditingName ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={editedName}
-                    onChange={(e) => setEditedName(e.target.value)}
-                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent"
-                    placeholder="Entrez votre nom"
-                    autoFocus
-                  />
+                <div className="flex items-center gap-2 min-w-0 flex-wrap">                  <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
+                  placeholder="Entrez votre nom"
+                  autoFocus
+                />
                   <button
                     onClick={handleSaveName}
                     className="text-[#1A9D8F] text-sm font-medium"
@@ -134,7 +133,7 @@ const Profile = ({ onClose }) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-bold text-[#4A3C31]">{user.fullName}</h3>
+                  <h3 className="text-xl font-bold text-[#4A3C31] break-words overflow-hidden">{user.fullName}</h3>
                   <button
                     onClick={() => setIsEditingName(true)}
                     className="text-gray-500 hover:text-[#1A9D8F]"
@@ -148,9 +147,9 @@ const Profile = ({ onClose }) => {
 
           {/* Email */}
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <Mail size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Email</p>
                 {isEditingEmail ? (
                   <input
@@ -162,7 +161,7 @@ const Profile = ({ onClose }) => {
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.email || 'Non renseigné'}
                   </p>
                 )}
@@ -187,21 +186,22 @@ const Profile = ({ onClose }) => {
 
           {/* Phone Number */}
           <div className="flex items-center justify-between mb-4 p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <Phone size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Phone</p>
                 {isEditingPhone ? (
                   <input
                     type="tel"
                     value={editedPhone}
                     onChange={(e) => setEditedPhone(e.target.value)}
-                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full"
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full max-w-full"
                     placeholder="Entrez votre numéro"
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.phone || 'Non renseigné'}
                   </p>
                 )}
@@ -226,21 +226,22 @@ const Profile = ({ onClose }) => {
 
           {/* Address */}
           <div className="flex items-center justify-between p-3 bg-white rounded">
-            <div className="flex items-center flex-1">
+            <div className="flex items-center flex-1 min-w-0">
               <MapPin size={20} className="text-[#1A9D8F] mr-3" />
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <p className="text-sm text-gray-500">Adress</p>
+
                 {isEditingAddress ? (
                   <textarea
                     value={editedAddress}
                     onChange={(e) => setEditedAddress(e.target.value)}
-                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full resize-none"
+                    className="border-b-2 border-[#1A9D8F] focus:outline-none w-full resize-none max-w-full"
                     placeholder="Entrez votre adresse"
                     rows="2"
                     autoFocus
                   />
                 ) : (
-                  <p className="font-medium">
+                  <p className="font-medium break-words overflow-hidden">
                     {user.address || 'Non renseignée'}
                   </p>
                 )}
@@ -314,7 +315,7 @@ const Profile = ({ onClose }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-[#1A9D8F] text-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
+            className="px-6 py-2 bg-[#1A9D8F] texft-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
           >
             Close
           </button>

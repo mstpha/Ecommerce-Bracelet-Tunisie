@@ -35,8 +35,9 @@ const Welcome = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="transform scale-400">
-          <Loader />
+
+        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
+          <Loader/>
         </div>
       </div>
     );

@@ -101,14 +101,24 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             >
               {user?.fullName}
             </span>
-            <LogOut
-              size={18}
-              className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                logout();
-              }}
-            />
+           {user ? (
+  <LogOut
+    size={18}
+    className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+    onClick={(e) => {
+      e.stopPropagation();
+      logout();
+    }}
+  />
+) : (
+  <span
+    className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+    onClick={() => navigate('/')}
+  >
+    Login
+  </span>
+)}
+
           </span>
 
         </div>
