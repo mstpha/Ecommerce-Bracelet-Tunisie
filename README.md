@@ -1,145 +1,146 @@
-# 🛍️ E-commerce Bracelet Tunisie
+# 🛍️ E-commerce Bracelet Tunisia
 
-Une plateforme e-commerce moderne et élégante dédiée à la vente de bracelets en Tunisie, développée avec React et Firebase.
+A modern and elegant e-commerce platform dedicated to selling bracelets in Tunisia, built with React and Firebase.
 
-🔗 **Démo en ligne**: [ecommerce-bracelet.vercel.app](https://ecommerce-bracelet.vercel.app)
+🔗 **Live Demo**: [ecommerce-bracelet.vercel.app](https://ecommerce-bracelet.vercel.app)
 
-## 📋 Description du projet
+## 📋 Project Description
 
-E-commerce Bracelet Tunisie est une application web complète permettant aux utilisateurs de parcourir, sélectionner et acheter des bracelets en ligne. Le projet offre une expérience utilisateur fluide avec gestion de panier, profil utilisateur personnalisable, et un système de commandes intégré.
+E-commerce Bracelet Tunisia is a complete web application that allows users to browse, select, and purchase bracelets online. The project offers a seamless user experience with cart management, customizable user profile, and an integrated order system.
 
-## 🚀 Technologies utilisées
+## 🚀 Technologies Used
 
 ### Frontend
-- **React.js** - Bibliothèque JavaScript pour l'interface utilisateur
-- **Vite** - Outil de build moderne et rapide
-- **Tailwind CSS** - Framework CSS utilitaire pour le styling
-- **Context API** - Gestion d'état globale de l'application
+- **React.js** - JavaScript library for user interface
+- **Vite** - Modern and fast build tool
+- **Tailwind CSS** - Utility-first CSS framework for styling
+- **Context API** - Global state management
 
-### Backend & Base de données
-- **Firebase Firestore** - Base de données NoSQL en temps réel
-- **Firebase Authentication** - Système d'authentification sécurisé
+### Backend & Database
+- **Firebase Firestore** - Real-time NoSQL database
+- **Firebase Authentication** - Secure authentication system
 
-### Autres
-- **UUID** - Génération d'identifiants uniques
-- **localStorage** - Stockage local pour la persistance de session
-- **Vercel** - Plateforme de déploiement
+### Other
+- **UUID** - Unique identifier generation
+- **localStorage** - Local storage for session persistence
+- **Vercel** - Deployment platform
 
-## 📦 Prérequis
+## 📦 Prerequisites
 
-- **Node.js** (dernière version LTS recommandée)
-- **npm** ou **yarn**
-- Un navigateur web moderne
+- **Node.js** (latest LTS version recommended)
+- **npm** or **yarn**
+- A modern web browser
 
-## 🔧 Installation et lancement
+## 🔧 Installation and Setup
 
-### 1. Cloner le repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/mstpha/Ecommerce-Bracelet-Tunisie.git
 cd Ecommerce-Bracelet-Tunisie
 ```
 
-### 2. Installer les dépendances
+### 2. Install dependencies
 ```bash
 npm install
 ```
 
-### 3. Lancer l'application en mode développement
+### 3. Run the application in development mode
 ```bash
 npm run dev
 ```
 
-L'application sera accessible sur `http://localhost:5173`
+The application will be accessible at `http://localhost:5173`
 
-### 4. Build pour la production
+### 4. Build for production
 ```bash
 npm run build
 ```
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 ```
 Ecommerce-Bracelet-Tunisie/
-├── public/              # Fichiers statiques
+├── public/              # Static files
+│   └── README/          # Screenshot images
 ├── src/
-│   ├── components/      # Composants React réutilisables
-│   ├── context/         # Context API pour la gestion d'état
-│   ├── services/        # Services Firebase (userService)
-│   ├── data/            # Fichier JSON des produits
-│   ├── pages/           # Pages de l'application
-│   ├── App.jsx          # Composant principal
-│   └── main.jsx         # Point d'entrée de l'application
-├── package.json         # Dépendances et scripts
+│   ├── components/      # Reusable React components
+│   ├── context/         # Context API for state management
+│   ├── services/        # Firebase services (userService)
+│   ├── data/            # Product JSON file
+│   ├── pages/           # Application pages
+│   ├── App.jsx          # Main component
+│   └── main.jsx         # Application entry point
+├── package.json         # Dependencies and scripts
 └── README.md           # Documentation
 ```
 
-## ✨ Fonctionnalités implémentées
+## ✨ Implemented Features
 
-### 🔐 Authentification
-- **Inscription** - Création de nouveau compte utilisateur
-- **Connexion** - Authentification sécurisée via Firebase
-- **Gestion de session** - Persistance avec UUID et localStorage
+### 🔐 Authentication
+- **Registration** - New user account creation
+- **Login** - Secure authentication via Firebase
+- **Session Management** - Persistence with UUID and localStorage
 
-[Ici mettre l'image de la page de connexion/inscription]
+![Login/Register Page](./public/README/login.png)
 
-### 👤 Profil utilisateur
-- Modification du nom
-- Modification de l'email
-- Modification du numéro de téléphone
-- Modification de l'adresse
-- Historique des commandes
+### 👤 User Profile
+- Name modification
+- Email modification
+- Phone number modification
+- Address modification
+- Order history
 
-[Ici mettre l'image de la page de profil]
+![Profile Page](./public/README/profile.png)
 
-### 🛒 Catalogue de produits
-- **Affichage des produits** - Liste complète des bracelets disponibles
-- **Produits recommandés** - Section dédiée aux articles mis en avant
-- **Stockage JSON** - Données des produits organisées et facilement modifiables
+### 🛒 Product Catalog
+- **Product Display** - Complete list of available bracelets
+- **Recommended Products** - Dedicated section for featured items
+- **JSON Storage** - Organized and easily modifiable product data
 
-[Ici mettre l'image de la page catalogue avec la section produits recommandés]
+![Catalog Page with Recommended Products](./public/README/catalog.png)
 
-### 📦 Page détail produit
-- Informations complètes sur le produit
-- **Achat instantané** - Redirection directe vers le checkout
-- **Ajout au panier** - Option pour continuer le shopping
+### 📦 Product Detail Page
+- Complete product information
+- **Instant Purchase** - Direct redirect to checkout
+- **Add to Cart** - Option to continue shopping
 
-[Ici mettre l'image de la page détail produit]
+![Product Detail Page](./public/README/product-detail.png)
 
-### 🛍️ Gestion du panier
-- **Menu latéral** - Affichage du panier en sidebar
-- Visualisation des articles ajoutés
-- Calcul du total en temps réel
-- Modification des quantités
-- Suppression d'articles
+### 🛍️ Cart Management
+- **Side Menu** - Cart display in sidebar
+- View added items
+- Real-time total calculation
+- Quantity modification
+- Item removal
 
-[Ici mettre l'image du menu panier latéral]
+![Cart Sidebar](./public/README/cart.png)
 
-### 💳 Processus de commande
-- **Page de checkout** - Formulaire de finalisation d'achat
-- **Paiement simulé** - Formulaire de saisie de carte bancaire (données fictives)
-- Confirmation de commande
-- Enregistrement dans l'historique utilisateur
+### 💳 Checkout Process
+- **Checkout Page** - Purchase completion form
+- **Mock Payment** - Credit card entry form (fictitious data)
+- Order confirmation
+- Save to user order history
 
-[Ici mettre l'image de la page de checkout]
+![Checkout Page](./public/README/checkout.png)
 
-### 🎨 Interface utilisateur
-- Design responsive adapté à tous les écrans
-- Navigation intuitive
-- Animations et transitions fluides avec Tailwind CSS
-- Expérience utilisateur optimisée
+### 🎨 User Interface
+- Responsive design adapted to all screens
+- Intuitive navigation
+- Smooth animations and transitions with Tailwind CSS
+- Optimized user experience
 
-## 🎓 Contexte
+## 🎓 Context
 
-Ce projet a été développé dans le cadre d'un projet universitaire, démontrant les compétences en développement web full-stack avec les technologies modernes React et Firebase.
+This project was developed as part of a university project, demonstrating full-stack web development skills with modern React and Firebase technologies.
 
-## 👨‍💻 Auteur
+## 👨‍💻 Author
 
 **Mustapha** - [GitHub](https://github.com/mstpha)
 
-## 📝 Licence
+## 📝 License
 
-Ce projet est un projet universitaire à des fins éducatives.
+This project is a university project for educational purposes.
 
 ---
 
-⭐ Si vous aimez ce projet, n'hésitez pas à lui donner une étoile sur GitHub !
+⭐ If you like this project, feel free to give it a star on GitHub!

@@ -88,8 +88,8 @@ const Profile = ({ onClose }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-opacity-50 flex justify-center items-center z-50 border-4 border-black rounded-lg">
-      <div className="bg-white p-6 rounded-lg max-w-2xl w-11/12 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50 p-4">
+      <div className="bg-white p-6 rounded-lg max-w-2xl w-11/12 max-h-[90vh] overflow-y-auto border-4 border-[#1A9D8F] shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-[#4A3C31]">My Profile</h2>
           <button
@@ -302,7 +302,7 @@ const Profile = ({ onClose }) => {
         <div className="flex justify-end mt-6">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-[#1A9D8F] texft-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
+            className="px-6 py-2 bg-[#1A9D8F] text-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
           >
             Close
           </button>
