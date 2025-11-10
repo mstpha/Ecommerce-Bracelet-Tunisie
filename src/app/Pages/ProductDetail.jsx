@@ -44,20 +44,24 @@ const ProductDetail = ({ addToCart, products }) => {
     };
     fetchReviews();
   }, [product, id])
+
   const nextImage = () => {
-    setSlideDirection('slide-left');
+    if (slideDirection) return;
+    setSlideDirection('next');
     setTimeout(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.imageCount);
-    }, 50);
+      setSlideDirection('');
+    }, 300);
   };
 
   const prevImage = () => {
-    setSlideDirection('slide-right');
+    if (slideDirection) return;
+    setSlideDirection('prev');
     setTimeout(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex - 1 + product.imageCount) % product.imageCount);
-    }, 50);
+      setSlideDirection('');
+    }, 300);
   };
-
   const handleAddReview = async () => {
     if (!reviewText.trim()) {
       toast.error('Please write a review');
@@ -131,7 +135,7 @@ const ProductDetail = ({ addToCart, products }) => {
             <div className="flex justify-between items-center mt-8 mb-8">
               <div className="flex flex-col items-center">
                 <Truck size={48} className="text-[#1A9D8F] mb-3" />
-                <p className="text-base text-center font-medium max-w-[120px]">Fast Delivery <p> 48 Hours</p></p>
+                <p className="text-base text-center font-medium max-w-[120px]">Fast Delivery 48 Hours</p>
               </div>
               <div className="flex flex-col items-center">
                 <Shield size={48} className="text-[#1A9D8F] mb-3" />

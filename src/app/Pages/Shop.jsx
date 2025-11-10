@@ -18,7 +18,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const search = params.get('search');
-    console.log(search)
     if (search) {
       setSearchTerm(search);
     }
