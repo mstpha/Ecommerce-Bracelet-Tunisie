@@ -37,9 +37,21 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
         <ul className="mt-4 px-4">
           {cartItems?.map((item) => (
             <li key={item.id} className="mb-4 p-2 bg-[#5B4D3D] rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium">{item.name}</span>
-                <span className="text-[#1A9D8F]">{item.price}</span>
+              <div className="flex gap-3 mb-2">
+                <img 
+                  src={`/${item.id}/1.webp`} 
+                  alt={item.name}
+                  className="w-16 h-16 object-cover rounded"
+                  onError={(e) => {
+                    e.target.src = '/placeholder.png';
+                  }}
+                />
+                <div className="flex-1">
+                  <div className="flex justify-between items-start mb-1">
+                    <span className="font-medium text-sm">{item.name}</span>
+                  </div>
+                  <span className="text-[#1A9D8F] font-semibold">{item.price} TND</span>
+                </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center bg-[#4A3C31] rounded-full">
@@ -51,7 +63,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
                     <Plus size={16} />
                   </button>
                 </div>
-                <button onClick={() => removeCartItem(item.id)} className="text-red-500 hover:text-red-700">
+                <button onClick={() => removeCartItem(item.id)} className="text-red-500 hover:text-red-700 text-sm">
                   Supprimer
                 </button>
               </div>

@@ -4,13 +4,19 @@ import Nav from './app/Nav';
 import ProductDetail from './app/ProductDetail';
 import Shop from './app/Shop';
 import Welcome from './app/Welcome';
-import productsData from './products.json';
+import productsData from './app/Data/products.json'
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
 import Login from './app/Login';
 import Register from './app/Register';
-import { getUserById } from './app/Services/userServices';
+import { 
+  getUserById, 
+  addToUserCart, 
+  updateUserCartItem, 
+  removeFromUserCart, 
+  clearUserCart 
+} from './app/Services/userServices';
 import { UserContext } from './userContext';
 import Checkout from './app/Checkout';
 
@@ -18,10 +24,12 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
-  const { user,setUser } = useContext(UserContext);
-  const navigate=useNavigate()
-  const addToCart = (product, quantity) => {
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  
+  const addToCart = async (product, quantity) => {
     toast.success("Produit ajouté avec succès.");
+    
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
@@ -33,50 +41,98 @@ function App() {
       }
       return [...prevItems, { ...product, quantity: quantity }];
     });
+
+    if (user?.id) {
+      try {
+        const updatedUser = await addToUserCart(user.id, product, quantity);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error('Error syncing cart:', error);
+      }
+    }
   };
   
-  const updateCartItem = (id, newQuantity) => {
+  const updateCartItem = async (id, newQuantity) => {
     setCartItems(prevItems => 
       prevItems.map(item => 
         item.id === id ? { ...item, quantity: Math.max(0, newQuantity) } : item
       ).filter(item => item.quantity > 0)
     );
+
+    if (user?.id) {
+      try {
+        const updatedUser = await updateUserCartItem(user.id, id, newQuantity);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error('Error syncing cart update:', error);
+      }
+    }
+  };
+
+  const removeCartItem = async (id) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
+
+    if (user?.id) {
+      try {
+        const updatedUser = await removeFromUserCart(user.id, id);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error('Error syncing cart removal:', error);
+      }
+    }
+  };
+
+  const clearCartItems = async () => {
+    setCartItems([]);
+
+    if (user?.id) {
+      try {
+        const updatedUser = await clearUserCart(user.id);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error('Error syncing cart clear:', error);
+      }
+    }
   };
 
   useEffect(() => {
-    const initalize = async ()=>{
-      if (user) return;
-      var currentUser=localStorage.getItem("ID")
-      var LoggedInUser;
+    const initalize = async () => {
+      if (user) {
+        setCartItems(user.cartItems || []);
+        return;
+      }
+      
+      const currentUser = localStorage.getItem("ID");
+      let LoggedInUser;
 
-      if(currentUser){
-        LoggedInUser = await getUserById(currentUser)
-
-        setUser(LoggedInUser)
-        if (location.pathname==="/"){
-          navigate("/welcome")
+      if (currentUser) {
+        LoggedInUser = await getUserById(currentUser);
+        setUser(LoggedInUser);
+        
+        setCartItems(LoggedInUser?.cartItems || []);
+        
+        if (location.pathname === "/") {
+          navigate("/welcome");
         }
       }
+      
       setProducts(productsData.products);
-
     }
-    initalize()
+    initalize();
   }, []);
 
-  const removeCartItem = (id) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
+  useEffect(() => {
+    if (user?.cartItems) {
+      setCartItems(user.cartItems);
+    }
+  }, [user?.id]);
 
-  const clearCartItems = () => {
-    setCartItems([]);
-  };
-  const location =useLocation();
+  const location = useLocation();
 
   return (
-    
-      <div className="flex flex-col min-h-screen">
-        <Toaster />
-      {(location.pathname !== '/' && location.pathname!=="/register") && (
+    <div className="flex flex-col min-h-screen">
+      <Toaster />
+      {(location.pathname !== '/' && location.pathname !== "/register") && (
         <Nav 
           setSearchTerm={setSearchTerm} 
           cartItems={cartItems} 
@@ -86,30 +142,29 @@ function App() {
         />
       )}
       
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="register" element={<Register/>}/>
-            <Route path="/welcome" element={<Welcome />} />
-            <Route 
-              path="/shop" 
-              element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
-            />
-            <Route 
-              path="/shop/:gender/:category" 
-              element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
-            />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route 
-              path="/product/:id" 
-              element={<ProductDetail addToCart={addToCart} products={products} />} 
-            />
-          </Routes>
-        </main>
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="register" element={<Register/>}/>
+          <Route path="/welcome" element={<Welcome />} />
+          <Route 
+            path="/shop" 
+            element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
+          />
+          <Route 
+            path="/shop/category/:category" 
+            element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
+          />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route 
+            path="/product/:id" 
+            element={<ProductDetail addToCart={addToCart} products={products} />} 
+          />
+        </Routes>
+      </main>
 
-        <Footer />
-
-      </div>
+      <Footer />
+    </div>
   );
 }
 

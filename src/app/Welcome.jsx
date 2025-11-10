@@ -8,7 +8,8 @@ const Welcome = () => {
   const [isSlidedBracelet, setIsBraceletSlided] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
   const { user } = useContext(UserContext);
-  const [loading,setLoading]=useState(true)
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const rotateTimer = setTimeout(() => setIsRotated(true), 1000);
     const slideArmTimer = setTimeout(() => setIsArmSlided(true), 2000);
@@ -22,6 +23,7 @@ const Welcome = () => {
       clearTimeout(contentTimer);
     };
   }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -29,25 +31,27 @@ const Welcome = () => {
 
     return () => clearTimeout(timer);
   }, []);
-if (loading){
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="transform scale-400">
-          <Loader/>
+          <Loader />
         </div>
       </div>
-    )
+    );
   }
+
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden">
-      <div 
-  className="fixed inset-0 bg-cover bg-center bg-no-repeat"
-  style={{
-    backgroundImage: 'url("welcomeassets/background.webp")',
-    filter: 'brightness(0.6)',
-    zIndex: -1
-  }}
-/>
+      <div
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url("welcomeassets/background.webp")',
+          filter: 'brightness(0.6)',
+          zIndex: -1
+        }}
+      />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/4">
         <div
           className={`
@@ -62,6 +66,7 @@ if (loading){
           />
         </div>
       </div>
+
       <div className="absolute sm:top-[20%] top-[15%] left-[36%] transform -translate-x-1/2 flex items-center justify-center">
         <div
           className={`
@@ -92,24 +97,43 @@ if (loading){
         </div>
       </div>
 
-      <div className={`relative pt-[60vh] mt-[20vh] pb-16 px-4 transition-opacity duration-1000 ${isContentVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div
+        className={`relative pt-[60vh] mt-[20vh] pb-16 px-4 transition-opacity duration-1000 ${isContentVisible ? 'opacity-100' : 'opacity-0'
+          }`}
+      >
         <div className="max-w-4xl mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
-          <h1 className="text-3xl font-bold text-[#4A3C31] mb-4">Bienvenue <span className='text-[#1A9D8F]'>{user?.fullName}</span> chez Bracelet Tunisie</h1>
-          <p className="text-lg text-[#4A3C31] mb-6">Chez Bracelet Tunisie, nous croyons en plus que simplement vendre des produits – nous créons des expériences et construisons des relations durables avec nos clients.</p>
-          
-          <h2 className="text-2xl font-semibold text-[#4A3C31] mb-4">Notre Engagement envers Vous</h2>
+          <h1 className="text-3xl font-bold text-[#4A3C31] mb-4">
+            Welcome <span className="text-[#1A9D8F]">{user?.fullName}</span> to Bracelet Tunisia
+          </h1>
+          <p className="text-lg text-[#4A3C31] mb-6">
+            At Bracelet Tunisia, we believe in more than just selling products — we create experiences and build lasting relationships with our customers.
+          </p>
+
+          <h2 className="text-2xl font-semibold text-[#4A3C31] mb-4">Our Commitment to You</h2>
           <ul className="list-disc list-inside mb-6 text-[#4A3C31]">
-            <li className="mb-2"><strong>Assurance Qualité :</strong> Chaque article de notre collection est soigneusement sélectionné et rigoureusement testé pour garantir qu'il répond à nos normes élevées de qualité et de style.</li>
-            <li className="mb-2"><strong>Sélection Innovante :</strong> Nous mettons constamment à jour notre inventaire pour vous apporter les dernières tendances et les classiques intemporels, vous assurant de toujours trouver quelque chose qui correspond à votre style unique.</li>
-            <li><strong>Expérience d'Achat Fluide :</strong> Profitez d'une interface conviviale, de transactions sécurisées et d'une livraison rapide – car votre confort est notre priorité.</li>
+            <li className="mb-2">
+              <strong>Quality Assurance:</strong> Each item in our collection is carefully selected and thoroughly tested to ensure it meets our high standards of quality and style.
+            </li>
+            <li className="mb-2">
+              <strong>Innovative Selection:</strong> We continuously update our inventory to bring you the latest trends and timeless classics, ensuring you always find something that matches your unique style.
+            </li>
+            <li>
+              <strong>Seamless Shopping Experience:</strong> Enjoy a user-friendly interface, secure transactions, and fast delivery — because your comfort is our priority.
+            </li>
           </ul>
-          
-          <h2 className="text-2xl font-semibold text-[#4A3C31] mb-4">Notre Promesse</h2>
-          <p className="text-lg text-[#4A3C31] mb-6">Nous ne sommes pas là simplement pour vendre – nous sommes là pour dépasser vos attentes. Du moment où vous parcourez notre collection jusqu'à longtemps après l'arrivée de votre achat à votre porte, nous nous consacrons à assurer votre entière satisfaction.</p>
-          
-          <p className="text-lg text-[#4A3C31] mb-4">Découvrez la différence Bracelet Tunisie aujourd'hui. Bienvenue dans un monde où le style rencontre la substance, et où chaque achat raconte une histoire.</p>
-          
-          <p className="text-xl font-bold text-[#1A9D8F] italic">Bracelet Tunisie – Élevez Votre Style, Enrichissez Votre Vie</p>
+
+          <h2 className="text-2xl font-semibold text-[#4A3C31] mb-4">Our Promise</h2>
+          <p className="text-lg text-[#4A3C31] mb-6">
+            We’re not just here to sell — we’re here to exceed your expectations. From the moment you browse our collection to long after your purchase arrives at your doorstep, we’re dedicated to ensuring your complete satisfaction.
+          </p>
+
+          <p className="text-lg text-[#4A3C31] mb-4">
+            Experience the Bracelet Tunisia difference today. Welcome to a world where style meets substance — where every purchase tells a story.
+          </p>
+
+          <p className="text-xl font-bold text-[#1A9D8F] italic">
+            Bracelet Tunisia – Elevate Your Style, Enrich Your Life
+          </p>
         </div>
       </div>
     </div>

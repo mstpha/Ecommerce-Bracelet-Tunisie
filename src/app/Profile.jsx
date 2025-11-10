@@ -190,7 +190,7 @@ const Profile = ({ onClose }) => {
             <div className="flex items-center flex-1">
               <Phone size={20} className="text-[#1A9D8F] mr-3" />
               <div className="flex-1">
-                <p className="text-sm text-gray-500">Téléphone</p>
+                <p className="text-sm text-gray-500">Phone</p>
                 {isEditingPhone ? (
                   <input
                     type="tel"
@@ -229,7 +229,7 @@ const Profile = ({ onClose }) => {
             <div className="flex items-center flex-1">
               <MapPin size={20} className="text-[#1A9D8F] mr-3" />
               <div className="flex-1">
-                <p className="text-sm text-gray-500">Adresse</p>
+                <p className="text-sm text-gray-500">Adress</p>
                 {isEditingAddress ? (
                   <textarea
                     value={editedAddress}
@@ -268,7 +268,7 @@ const Profile = ({ onClose }) => {
         <div>
           <div className="flex items-center mb-4">
             <ShoppingBag size={24} className="text-[#1A9D8F] mr-2" />
-            <h3 className="text-xl font-bold text-[#4A3C31]">Mes Commandes</h3>
+            <h3 className="text-xl font-bold text-[#4A3C31]">My Orders</h3>
           </div>
 
           {user.orders.length === 0 ? (
@@ -316,7 +316,7 @@ const Profile = ({ onClose }) => {
             onClick={onClose}
             className="px-6 py-2 bg-[#1A9D8F] text-white rounded-lg font-medium hover:bg-[#157A6E] transition-colors"
           >
-            Fermer
+            Close
           </button>
         </div>
       </div>

@@ -12,7 +12,6 @@ import {
 } from 'firebase/firestore';
 import toast from "react-hot-toast";
 
-// Firebase configuration - replace with your actual config from Firebase Console
 const firebaseConfig = {
   apiKey: "AIzaSyAWx5AgqPA3M3QwAMDlRza22Vzm6oQfW1U",
   authDomain: "ecommerce-300ff.firebaseapp.com",
@@ -21,12 +20,16 @@ const firebaseConfig = {
   messagingSenderId: "508783268387",
   appId: "1:508783268387:web:f1e5d959d6a47e1be39796"
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Collection reference
 const USERS_COLLECTION = 'users';
+const REVIEWS_COLLECTION = 'reviews';
+
+// ============ USER FUNCTIONS ============
 
 const fetchAllUsers = async () => {
   try {
@@ -95,6 +98,7 @@ export const addUser = async (userData) => {
       phone: userData.phone || '',
       address: userData.address || '',
       orders: userData.orders || [],
+      cartItems: userData.cartItems || [],
       createdAt: new Date().toISOString()
     };
 
@@ -115,7 +119,6 @@ export const updateUser = async (userId, updates) => {
       return;
     }
 
-    // Check if email is being updated and if it already exists
     if (updates.email && updates.email !== userDoc.email) {
       const emailExists = await getUserByEmail(updates.email);
       if (emailExists) {
@@ -152,6 +155,183 @@ export const deleteUser = async (userId) => {
     throw error;
   }
 };
+
+// ============ CART MANAGEMENT ============
+
+export const addToUserCart = async (userId, product, quantity) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    const cartItems = user.cartItems || [];
+    const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
+
+    let updatedCartItems;
+    if (existingItemIndex !== -1) {
+      // Update existing item
+      updatedCartItems = cartItems.map((item, index) =>
+        index === existingItemIndex
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
+    } else {
+      // Add new item
+      updatedCartItems = [...cartItems, { ...product, quantity }];
+    }
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      cartItems: updatedCartItems
+    });
+
+    return { ...user, cartItems: updatedCartItems };
+  } catch (error) {
+    toast.error('Error adding to cart: ' + error.message);
+    throw error;
+  }
+};
+
+export const updateUserCartItem = async (userId, productId, newQuantity) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    const cartItems = user.cartItems || [];
+    const updatedCartItems = cartItems
+      .map(item =>
+        item.id === productId
+          ? { ...item, quantity: Math.max(0, newQuantity) }
+          : item
+      )
+      .filter(item => item.quantity > 0);
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      cartItems: updatedCartItems
+    });
+
+    return { ...user, cartItems: updatedCartItems };
+  } catch (error) {
+    toast.error('Error updating cart item: ' + error.message);
+    throw error;
+  }
+};
+
+export const removeFromUserCart = async (userId, productId) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    const cartItems = user.cartItems || [];
+    const updatedCartItems = cartItems.filter(item => item.id !== productId);
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      cartItems: updatedCartItems
+    });
+
+    return { ...user, cartItems: updatedCartItems };
+  } catch (error) {
+    toast.error('Error removing from cart: ' + error.message);
+    throw error;
+  }
+};
+
+export const clearUserCart = async (userId) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      cartItems: []
+    });
+
+    return { ...user, cartItems: [] };
+  } catch (error) {
+    toast.error('Error clearing cart: ' + error.message);
+    throw error;
+  }
+};
+// ============ REVIEW FUNCTIONS ============
+
+export const addReview = async (productId, userName, reviewMessage) => {
+  try {
+
+    if (!productId || !userName || !reviewMessage) {
+      toast.error('Product ID, user name, and review message are required');
+      return null;
+    }
+
+    const productReviewRef = doc(db, REVIEWS_COLLECTION, productId);
+    const productReviewSnap = await getDoc(productReviewRef);
+
+    let existingReviews = [];
+    
+    if (productReviewSnap.exists()) {
+      // Product review document exists, get existing reviews
+      existingReviews = productReviewSnap.data().reviews || [];
+    }
+
+    // Create new review object
+    const newReview = {
+      userName: userName.trim(),
+      review: reviewMessage.trim(),
+      timestamp: new Date().toISOString()
+    };
+
+    // Add new review to the array
+    const updatedReviews = [...existingReviews, newReview];
+
+    // Save to Firestore
+    await setDoc(productReviewRef, {
+      productId: productId,
+      reviews: updatedReviews
+    });
+
+    toast.success('Review added successfully!');
+    return { productId, reviews: updatedReviews };
+  } catch (error) {
+    toast.error('Error adding review: ' + error.message);
+    throw error;
+  }
+};
+
+export const getReviews = async (productId) => {
+  try {
+    if (!productId) {
+      toast.error('Product ID is required');
+      return [];
+    }
+
+    const productReviewRef = doc(db, REVIEWS_COLLECTION, productId);
+    const productReviewSnap = await getDoc(productReviewRef);
+
+    if (productReviewSnap.exists()) {
+      return productReviewSnap.data().reviews || [];
+    }
+    
+    return []; // No reviews yet
+  } catch (error) {
+    toast.error('Error fetching reviews: ' + error.message);
+    throw error;
+  }
+};
+
+
+// ============ ORDER FUNCTIONS ============
 
 export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => {
   try {
@@ -220,8 +400,6 @@ export const getUserOrders = async (userId) => {
   const user = await getUserById(userId);
   return user ? user.orders || [] : [];
 };
-
-
 
 export const loginUser = async (email, password) => {
   try {

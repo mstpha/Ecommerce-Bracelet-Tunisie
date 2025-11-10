@@ -180,22 +180,21 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
                     ) : (
                       <ChevronRight className="mr-2" size={20} />
                     )}
-                    Homme
+                    Category
                   </div>
                   {isHommeExpanded && (
                     <ul className="mt-2 ml-4 space-y-2">
-                      {['Bracelet', 'Casquette', 'Collier', 'Boucle'].map((item) => (
-                        <li key={item}>
-                          <div
-                            className="text-sm hover:text-[#1A9D8F] block py-1 px-2 ml-4 rounded transition-colors duration-300 hover:bg-[#4A3C31]"
-                            onClick={() => {
-                              navigate(`/shop/homme/${item.toLowerCase()}`)
-                              setIsSideNavOpen(false)
-                            }}
-                          >
-                            {item}
-                          </div>
-                        </li>
+                      {['Bracelet', 'Cap', 'Necklace', 'Earring'].map((item) => (<li key={item}>
+                        <div
+                          className="text-sm hover:text-[#1A9D8F] block py-1 px-2 ml-4 rounded transition-colors duration-300 hover:bg-[#4A3C31]"
+                          onClick={() => {
+                            navigate(`/shop/category/${item.toLowerCase()}`)
+                            setIsSideNavOpen(false)
+                          }}
+                        >
+                          {item}
+                        </div>
+                      </li>
                       ))}
                     </ul>
                   )}

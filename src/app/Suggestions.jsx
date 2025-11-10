@@ -23,8 +23,8 @@ const Suggestions = ({ suggestions }) => {
             <Sparkles className="text-[#1A9D8F]" size={24} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#4A3C31]">Suggestions Pour Vous</h2>
-            <p className="text-sm text-[#1A9D8F] font-medium">Articles sélectionnés spécialement</p>
+            <h2 className="text-2xl font-bold text-[#4A3C31]">Suggestions For you</h2>
+            <p className="text-sm text-[#1A9D8F] font-medium">Aritcles Specially selected for you!</p>
           </div>
         </div>
 
