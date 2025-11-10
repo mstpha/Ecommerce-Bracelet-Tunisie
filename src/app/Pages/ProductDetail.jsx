@@ -46,12 +46,16 @@ const ProductDetail = ({ addToCart, products }) => {
   }, [product, id])
   const nextImage = () => {
     setSlideDirection('slide-left');
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.imageCount);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.imageCount);
+    }, 50);
   };
 
   const prevImage = () => {
     setSlideDirection('slide-right');
-    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + product.imageCount) % product.imageCount);
+    setTimeout(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex - 1 + product.imageCount) % product.imageCount);
+    }, 50);
   };
 
   const handleAddReview = async () => {
