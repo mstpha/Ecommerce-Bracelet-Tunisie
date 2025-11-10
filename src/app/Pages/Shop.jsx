@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import productsData from './Data/products.json';
-import ShopItem from './ShopItem';
-import Suggestions from './Suggestions';
-import Loader from './Loader';
+import productsData from '../Data/products.json';
+import ShopItem from '../Components/ShopItem';
+import Suggestions from '../Components/Suggestions';
+import Loader from '../Components/Loader';
 
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();

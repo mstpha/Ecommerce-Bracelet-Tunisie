@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
-import Suggestions from './Suggestions';
-import { UserContext } from '../userContext';
-import { addOrderToUser, addReview, getReviews } from './Services/userServices';
+import Suggestions from '../Components/Suggestions';
+import { UserContext } from '../../userContext';
+import { addOrderToUser, addReview, getReviews } from '../Services/userServices';
 
 const ProductDetail = ({ addToCart, products }) => {
   const { id } = useParams();

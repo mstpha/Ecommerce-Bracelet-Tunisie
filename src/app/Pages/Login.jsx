@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { getUserById, loginUser } from './Services/userServices';
-import { UserContext } from '../userContext';
+import { getUserById, loginUser } from '../Services/userServices';
+import { UserContext } from '../../userContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({

@@ -2,8 +2,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Truck, Package, CreditCard, MapPin, Phone, User, ArrowLeft, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { UserContext } from '../userContext';
-import { addOrderToUser, addCartOrdersToUser } from './Services/userServices';
+import { UserContext } from '../../userContext';
+import { addOrderToUser, addCartOrdersToUser } from '../Services/userServices';
 
 const Checkout = () => {
   const navigate = useNavigate();

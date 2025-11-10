@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../userContext';
-import Loader from './Loader';
+import { UserContext } from '../../userContext';
+import Loader from '../Components/Loader';
 
 const Welcome = () => {
   const [isRotated, setIsRotated] = useState(false);

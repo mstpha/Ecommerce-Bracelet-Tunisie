@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import Nav from './app/Nav';
-import ProductDetail from './app/ProductDetail';
-import Shop from './app/Shop';
-import Welcome from './app/Welcome';
+import Nav from './app/Pages/Nav';
+import ProductDetail from './app/Pages/ProductDetail';
+import Shop from './app/Pages/Shop';
+import Welcome from './app/Pages/Welcome';
 import productsData from './app/Data/products.json'
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
-import Login from './app/Login';
-import Register from './app/Register';
+import Login from './app/Pages/Login';
+import Register from './app/Pages/Register';
 import { 
   getUserById, 
   addToUserCart, 
@@ -18,7 +18,7 @@ import {
   clearUserCart 
 } from './app/Services/userServices';
 import { UserContext } from './userContext';
-import Checkout from './app/Checkout';
+import Checkout from './app/Pages/Checkout';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);

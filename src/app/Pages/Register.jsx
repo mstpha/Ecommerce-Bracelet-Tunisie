@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
   addUser,
-} from './Services/userServices';
+} from '../Services/userServices';
 
 import { Toaster } from 'react-hot-toast';
 const Register = () => {

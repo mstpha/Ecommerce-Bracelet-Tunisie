@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useContext } from 'react';
 import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
-import { addCartOrdersToUser } from './Services/userServices';
-import { UserContext } from '../userContext';
+import { addCartOrdersToUser } from '../Services/userServices';
+import { UserContext } from '../../userContext';
 import { useNavigate } from 'react-router-dom';
 
 

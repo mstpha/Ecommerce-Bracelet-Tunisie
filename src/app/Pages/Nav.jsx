@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Menu, ShoppingCart, Search, X, Home, ShoppingBag, ChevronDown, ChevronRight, LogOut } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ShoppingCartSideNav from './ShoppingCartSideNav';
-import { UserContext } from '../userContext';
+import { UserContext } from '../../userContext';
 import Profile from './Profile';
 
 const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeCartItem }) => {
