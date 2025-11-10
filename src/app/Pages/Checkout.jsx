@@ -163,7 +163,7 @@ const Checkout = () => {
         navigate("/shop")
       }
 
-      toast.success('Commande confirmée avec succès!');
+      toast.success('Order confirmed successfully!');
 
     } catch (error) {
       console.error('Error submitting order:', error);
@@ -173,11 +173,10 @@ const Checkout = () => {
     }
   };
 
-  // Redirect if no order data
   useEffect(() => {
     if (!orderItems && !product) {
-      toast.error('Aucun article à commander');
-      navigate('/');
+      toast.error('No articles bought');
+      navigate('/login');
     }
   }, [orderItems, product, navigate]);
 

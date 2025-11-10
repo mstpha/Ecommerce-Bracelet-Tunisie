@@ -17,7 +17,7 @@ const Login = () => {
       if (currentUser) {
         const UserLogin = getUserById(currentUser);
         setUser(UserLogin)
-        navigate("/welcome")
+        navigate("/")
       }
     }
     initalize()
@@ -60,7 +60,7 @@ const Login = () => {
       localStorage.setItem("ID", login.id);
       toast.success("Welcome " + login.fullName);
       setUser(login)
-      navigate("/welcome");
+      navigate("/");
     }
   };
 

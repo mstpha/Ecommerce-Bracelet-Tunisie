@@ -113,7 +113,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             ) : (
               <span
                 className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/login')}
               >
                 Login
               </span>
@@ -142,8 +142,8 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
 
         <ul className="mt-8 px-4">
           <li className="mb-6">
-            <div to="/welcome" className="flex items-center text-lg cursor-pointer hover:text-[#1A9D8F]" onClick={() => {
-              navigate("/welcome")
+            <div to="/" className="flex items-center text-lg cursor-pointer hover:text-[#1A9D8F]" onClick={() => {
+              navigate("/")
               setIsSideNavOpen(false)
             }}>
               <Home className="mr-4" size={24} />

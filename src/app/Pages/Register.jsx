@@ -84,7 +84,7 @@ const Register = () => {
     }
     localStorage.setItem('ID', newUser.id);
     toast.success('Registration successful!');
-    navigate("/welcome")
+    navigate("/")
   };
 
   return (

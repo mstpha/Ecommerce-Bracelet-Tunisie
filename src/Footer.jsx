@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <h3 className="text-xl font-bold mb-2">Contactez-nous</h3>
+            <h3 className="text-xl font-bold mb-2">Contact-us</h3>
             <div className="flex items-center mb-2">
               <Mail size={20} className="mr-2" />
               <a 
@@ -19,11 +19,11 @@ const Footer = () => {
             </div>
             <div className="flex items-center">
               <Phone size={20} className="mr-2" />
-              <span>Téléphone: 28 679 989</span>
+              <span>Phone number: 28 679 989</span>
             </div>
           </div>
           <div className="flex flex-col items-center md:items-end">
-            <h3 className="text-xl font-bold mb-2">Suivez-nous</h3>
+            <h3 className="text-xl font-bold mb-2">Follow us!</h3>
             <div className="flex space-x-4">
               <a 
 
@@ -45,7 +45,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 text-center">
-          <p>&copy; {new Date().getFullYear()} Bracelet Tunisie. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} Bracelet Tunisie. All rights reserved.</p>
         </div>
       </div>
     </footer>

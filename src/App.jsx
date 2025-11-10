@@ -111,8 +111,8 @@ function App() {
         
         setCartItems(LoggedInUser?.cartItems || []);
         
-        if (location.pathname === "/") {
-          navigate("/welcome");
+        if (location.pathname === "/login" || location.pathname==="/register") {
+          navigate("/");
         }
       }
       
@@ -132,7 +132,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Toaster />
-      {(location.pathname !== '/' && location.pathname !== "/register") && (
+      {(location.pathname !== '/login' && location.pathname !== "/register") && (
         <Nav 
           setSearchTerm={setSearchTerm} 
           cartItems={cartItems} 
@@ -144,9 +144,9 @@ function App() {
       
       <main className="flex-grow">
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="register" element={<Register/>}/>
-          <Route path="/welcome" element={<Welcome />} />
+          <Route path="/" element={<Welcome />} />
           <Route 
             path="/shop" 
             element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
