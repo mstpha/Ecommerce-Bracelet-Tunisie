@@ -9,7 +9,16 @@
       "gender": "men",
       "rating": "4.5",
       "price": "130.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Sterling Silver",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 2,
@@ -20,7 +29,16 @@
       "folder": "2",
       "rating": "5",
       "price": "130.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 3,
@@ -31,7 +49,15 @@
       "gender": "men",
       "rating": "5",
       "price": "44.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cartier Inspired",
+        "finish": "Silver Tone",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 4,
@@ -42,7 +68,15 @@
       "gender": "men",
       "rating": "5.0",
       "price": "44.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cartier Inspired",
+        "finish": "Gold Tone",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 5,
@@ -53,7 +87,15 @@
       "folder": "5",
       "rating": "5.0",
       "price": "54.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Coffee Bean Chain",
+        "finish": "Polished",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 6,
@@ -64,7 +106,15 @@
       "folder": "6",
       "rating": "4.4",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "style": "Classic Chain",
+        "finish": "High Polish",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 7,
@@ -75,7 +125,15 @@
       "folder": "7",
       "rating": "4.1",
       "price": "44.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Swiss Link",
+        "finish": "Silver Tone",
+        "includes": ["Necklace", "Bracelet"],
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 8,
@@ -86,7 +144,15 @@
       "folder": "8",
       "rating": "4.6",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Swiss Link",
+        "finish": "Silver Tone",
+        "length": "22 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 9,
@@ -97,7 +163,15 @@
       "folder": "9",
       "rating": "4.8",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Coffee Bean Chain",
+        "finish": "Silver Tone",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 10,
@@ -108,7 +182,15 @@
       "folder": "10",
       "rating": "4.9",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "style": "Twisted Rope",
+        "finish": "High Polish",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 11,
@@ -119,7 +201,15 @@
       "folder": "11",
       "rating": "4.3",
       "price": "29.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cartier Inspired",
+        "finish": "Silver Tone",
+        "length": "20 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 12,
@@ -130,7 +220,15 @@
       "folder": "12",
       "rating": "4.5",
       "price": "29.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cartier Inspired",
+        "finish": "Gold Tone",
+        "length": "20 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 13,
@@ -141,7 +239,16 @@
       "folder": "13",
       "rating": "4.7",
       "price": "190.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "limited_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury Set",
+        "includes": ["Watch", "Necklace", "Bracelet"],
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 14,
@@ -152,7 +259,16 @@
       "folder": "14",
       "rating": "4.6",
       "price": "190.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "limited_stock",
+      "characteristics": {
+        "material": "Sterling Silver",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury Set",
+        "includes": ["Watch", "Necklace", "Bracelet"],
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 15,
@@ -163,7 +279,16 @@
       "folder": "15",
       "rating": "4.4",
       "price": "75.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Sterling Silver",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 16,
@@ -174,7 +299,16 @@
       "gender": "men",
       "rating": "4.5",
       "price": "75.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 17,
@@ -185,7 +319,15 @@
       "gender": "men",
       "rating": "4.2",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Classic Chain",
+        "finish": "Silver Tone",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 18,
@@ -196,7 +338,15 @@
       "gender": "men",
       "rating": "4.1",
       "price": "25.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Snake Chain",
+        "finish": "Silver Tone",
+        "length": "8 inches",
+        "clasp": "Magnetic Clasp"
+      }
     },
     {
       "id": 19,
@@ -207,7 +357,15 @@
       "folder": "19",
       "rating": "4.3",
       "price": "25.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Snake Chain",
+        "finish": "Gold Tone",
+        "length": "8 inches",
+        "clasp": "Magnetic Clasp"
+      }
     },
     {
       "id": 20,
@@ -218,7 +376,15 @@
       "folder": "20",
       "rating": "4.0",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Classic Chain",
+        "finish": "Silver Tone",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 21,
@@ -229,7 +395,15 @@
       "gender": "men",
       "rating": "4.4",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Swiss Link",
+        "finish": "Gold Tone",
+        "length": "22 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 22,
@@ -240,7 +414,15 @@
       "folder": "22",
       "rating": "4.6",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Two-Tone",
+        "finish": "Silver & Gold",
+        "length": "22 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 23,
@@ -251,7 +433,15 @@
       "folder": "23",
       "rating": "3.9",
       "price": "25.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Two-Tone",
+        "finish": "Silver & Gold",
+        "length": "8 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 24,
@@ -262,7 +452,15 @@
       "folder": "24",
       "rating": "4.2",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Africa Map Pendant",
+        "finish": "Gold Tone",
+        "length": "24 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 25,
@@ -273,7 +471,15 @@
       "folder": "25",
       "rating": "4.1",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cross Pendant",
+        "finish": "Silver Tone",
+        "length": "24 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 26,
@@ -284,7 +490,15 @@
       "folder": "26",
       "rating": "4.0",
       "price": "39.00",
-      "category": "necklace"
+      "category": "necklace",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Cross Pendant",
+        "finish": "Gold Tone",
+        "length": "24 inches",
+        "clasp": "Lobster Clasp"
+      }
     },
     {
       "id": 27,
@@ -295,7 +509,16 @@
       "folder": "27",
       "rating": "4.5",
       "price": "55.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Sterling Silver",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "length": "8 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 28,
@@ -306,7 +529,16 @@
       "folder": "28",
       "rating": "4.4",
       "price": "55.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Gold Plated",
+        "stone": "Rhinestone",
+        "finish": "Polished",
+        "style": "Luxury",
+        "length": "8 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 29,
@@ -317,7 +549,15 @@
       "folder": "29",
       "rating": "4.7",
       "price": "25.00",
-      "category": "bracelet"
+      "category": "bracelet",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Swiss Link",
+        "finish": "Gold Tone",
+        "length": "8 inches",
+        "clasp": "Box Clasp"
+      }
     },
     {
       "id": 30,
@@ -328,7 +568,15 @@
       "folder": "30",
       "rating": "4.3",
       "price": "20.00",
-      "category": "cap"
+      "category": "cap",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Cotton Blend",
+        "style": "Baseball Cap",
+        "color": "Black",
+        "adjustable": true,
+        "closure": "Strap Back"
+      }
     },
     {
       "id": 31,
@@ -339,18 +587,35 @@
       "folder": "31",
       "rating": "4.6",
       "price": "22.00",
-      "category": "cap"
+      "category": "cap",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Cotton Blend",
+        "style": "Streetwear",
+        "color": "Beige",
+        "adjustable": true,
+        "closure": "Strap Back"
+      }
     },
     {
       "id": 32,
       "name": "White Sports Cap",
       "description": "Lightweight white men's sports cap",
-      "imageCount": 2,
+      "imageCount": 1,
       "gender": "men",
       "folder": "32",
       "rating": "4.5",
       "price": "21.00",
-      "category": "cap"
+      "category": "cap",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Polyester",
+        "style": "Sports Cap",
+        "color": "White",
+        "adjustable": true,
+        "closure": "Strap Back",
+        "breathable": true
+      }
     },
     {
       "id": 33,
@@ -361,7 +626,15 @@
       "folder": "33",
       "rating": "4.7",
       "price": "19.00",
-      "category": "earring"
+      "category": "earring",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Stud",
+        "finish": "Silver Tone",
+        "size": "6mm",
+        "closure": "Push Back"
+      }
     },
     {
       "id": 34,
@@ -372,7 +645,15 @@
       "folder": "34",
       "rating": "4.5",
       "price": "18.00",
-      "category": "earring"
+      "category": "earring",
+      "availability": "in_stock",
+      "characteristics": {
+        "material": "Stainless Steel",
+        "style": "Hoop",
+        "finish": "Black Tone",
+        "diameter": "15mm",
+        "closure": "Hinged Clasp"
+      }
     }
   ]
 }

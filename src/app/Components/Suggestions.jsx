@@ -29,7 +29,7 @@ const Suggestions = ({ suggestions }) => {
         </div>
 
         <div className="relative z-10">
-          <div className="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-[#1A9D8F]/40 scrollbar-track-transparent scroll-smooth py-2">
+          <div className="flex space-x-4 custom-scrollbar overflow-x-auto scrollbar-thin scrollbar-thumb-[#1A9D8F]/40 scrollbar-track-transparent scroll-smooth py-2">
             {suggestions.map((item) => (
               <div key={item.id} className="min-w-[180px] flex-shrink-0 transform transition-transform hover:scale-105">
                 <ShopItemsug item={item} truncateDescription={truncateDescription} />
@@ -42,7 +42,24 @@ const Suggestions = ({ suggestions }) => {
       <div className="flex items-center gap-4 mt-6">
         <div className="flex-1 h-[2px] bg-gradient-to-r from-transparent via-[#1A9D8F] to-transparent opacity-30"></div>
       </div>
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #1A9D8F;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #157A6E;
+        }
+      `}</style>
     </div>
+    
   );
 };
 
