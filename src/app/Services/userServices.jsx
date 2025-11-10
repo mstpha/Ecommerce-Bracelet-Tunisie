@@ -40,7 +40,7 @@ const fetchAllUsers = async () => {
     });
     return users;
   } catch (error) {
-    toast.error("Error fetching users: " + error.message);
+    toast.error("Error fetching users: ");
     throw error;
   }
 };
@@ -59,7 +59,7 @@ export const getUserById = async (userId) => {
     }
     return null;
   } catch (error) {
-    toast.error("Error fetching user: " + error.message);
+    toast.error("Error fetching user: ");
     throw error;
   }
 };
@@ -75,7 +75,7 @@ export const getUserByEmail = async (email) => {
     }
     return null;
   } catch (error) {
-    toast.error("Error fetching user by email: " + error.message);
+    toast.error("Error fetching user by email: ");
     throw error;
   }
 };
@@ -106,7 +106,7 @@ export const addUser = async (userData) => {
 
     return { id: userId, ...newUser };
   } catch (error) {
-    toast.error('Error adding user: ' + error.message);
+    toast.error('Error adding user: ');
     throw error;
   }
 };
@@ -135,7 +135,7 @@ export const updateUser = async (userId, updates) => {
     await setDoc(doc(db, USERS_COLLECTION, userId), updatedData);
     return { id: userId, ...updatedData };
   } catch (error) {
-    toast.error('Error updating user: ' + error.message);
+    toast.error('Error updating user: ');
     throw error;
   }
 };
@@ -151,7 +151,7 @@ export const deleteUser = async (userId) => {
     await deleteDoc(doc(db, USERS_COLLECTION, userId));
     return true;
   } catch (error) {
-    toast.error('Error deleting user: ' + error.message);
+    toast.error('Error deleting user: ');
     throw error;
   }
 };
@@ -189,7 +189,7 @@ export const addToUserCart = async (userId, product, quantity) => {
 
     return { ...user, cartItems: updatedCartItems };
   } catch (error) {
-    toast.error('Error adding to cart: ' + error.message);
+    toast.error('Error adding to cart: ');
     throw error;
   }
 };
@@ -218,7 +218,7 @@ export const updateUserCartItem = async (userId, productId, newQuantity) => {
 
     return { ...user, cartItems: updatedCartItems };
   } catch (error) {
-    toast.error('Error updating cart item: ' + error.message);
+    toast.error('Error updating cart item: ');
     throw error;
   }
 };
@@ -241,7 +241,7 @@ export const removeFromUserCart = async (userId, productId) => {
 
     return { ...user, cartItems: updatedCartItems };
   } catch (error) {
-    toast.error('Error removing from cart: ' + error.message);
+    toast.error('Error removing from cart: ');
     throw error;
   }
 };
@@ -261,7 +261,7 @@ export const clearUserCart = async (userId) => {
 
     return { ...user, cartItems: [] };
   } catch (error) {
-    toast.error('Error clearing cart: ' + error.message);
+    toast.error('Error clearing cart: ');
     throw error;
   }
 };
@@ -304,7 +304,7 @@ export const addReview = async (productId, userName, reviewMessage) => {
     toast.success('Review added successfully!');
     return { productId, reviews: updatedReviews };
   } catch (error) {
-    toast.error('Error adding review: ' + error.message);
+    toast.error('Error adding review: ');
     throw error;
   }
 };
@@ -325,7 +325,7 @@ export const getReviews = async (productId) => {
     
     return []; // No reviews yet
   } catch (error) {
-    toast.error('Error fetching reviews: ' + error.message);
+    toast.error('Error fetching reviews: ');
     throw error;
   }
 };
@@ -359,7 +359,7 @@ export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => 
 
     return { ...user, orders: updatedOrders };
   } catch (error) {
-    toast.error('Error adding cart orders: ' + error.message);
+    toast.error('Error adding cart orders: ');
     throw error;
   }
 };
@@ -391,7 +391,7 @@ export const addOrderToUser = async (userId, order) => {
 
     return { ...user, orders: updatedOrders };
   } catch (error) {
-    toast.error('Error adding order: ' + error.message);
+    toast.error('Error adding order: ');
     throw error;
   }
 };
@@ -413,7 +413,7 @@ export const loginUser = async (email, password) => {
     const { password: _, confirmPassword: __, ...userWithoutPassword } = user;
     return userWithoutPassword;
   } catch (error) {
-    toast.error('Error logging in: ' + error.message);
+    toast.error('Error logging in: ');
     throw error;
   }
 };

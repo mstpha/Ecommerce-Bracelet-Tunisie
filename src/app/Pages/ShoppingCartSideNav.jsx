@@ -16,7 +16,21 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
     }, 0);
     return (subtotal + 6).toFixed(2);
   };
-  const navigate=useNavigate()
+  const navigate = useNavigate()
+
+  const getDisplayCharacteristics = (item) => {
+    if (!item.characteristics) return [];
+
+    const chars = [];
+    const { color, material, style, size } = item.characteristics;
+
+    if (color) chars.push({ label: 'Color', value: color });
+    if (size) chars.push({ label: 'Size', value: size });
+    if (material) chars.push({ label: 'Material', value: material });
+    if (style) chars.push({ label: 'Style', value: style });
+
+    return chars.slice(0, 2);
+  };
 
   return (
     <>
@@ -38,8 +52,8 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
           {cartItems?.map((item) => (
             <li key={item.id} className="mb-4 p-2 bg-[#5B4D3D] rounded-lg">
               <div className="flex gap-3 mb-2">
-                <img 
-                  src={`/${item.id}/1.webp`} 
+                <img
+                  src={`/${item.id}/1.webp`}
                   alt={item.name}
                   className="w-16 h-16 object-cover rounded"
                   onError={(e) => {
@@ -51,6 +65,16 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
                     <span className="font-medium text-sm">{item.name}</span>
                   </div>
                   <span className="text-[#1A9D8F] font-semibold">{item.price} TND</span>
+
+                  {getDisplayCharacteristics(item).length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {getDisplayCharacteristics(item).map((char, index) => (
+                        <div key={index} className="text-xs text-[#F5F2E9]/80">
+                          <span className="font-semibold">{char.label}:</span> {char.value}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">

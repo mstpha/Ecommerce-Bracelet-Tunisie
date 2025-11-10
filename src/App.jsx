@@ -28,7 +28,7 @@ function App() {
   const navigate = useNavigate();
   
   const addToCart = async (product, quantity) => {
-    toast.success("Produit ajouté avec succès.");
+    toast.success("Product added successfully");
     
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
