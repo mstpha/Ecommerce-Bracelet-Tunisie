@@ -101,41 +101,38 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             >
               {user?.fullName}
             </span>
-           {user ? (
-  <LogOut
-    size={18}
-    className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-    onClick={(e) => {
-      e.stopPropagation();
-      logout();
-    }}
-  />
-) : (
-  <span
-    className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-    onClick={() => navigate('/')}
-  >
-    Login
-  </span>
-)}
+            {user ? (
+              <LogOut
+                size={18}
+                className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logout();
+                }}
+              />
+            ) : (
+              <span
+                className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
+                onClick={() => navigate('/')}
+              >
+                Login
+              </span>
+            )}
 
           </span>
 
         </div>
       </nav>
 
-      {/* Overlay */}
       {isSideNavOpen && (
         <div className="fixed inset-0  bg-opacity-50 z-40" onClick={() => setIsSideNavOpen(false)}></div>
       )}
 
-      {/* Side Navbar */}
       <div
         ref={sideNavRef}
         className={`fixed top-0 left-0 h-full w-64 bg-[#4A3C31] text-[#F5F2E9] transform transition-transform duration-300 ease-in-out z-50 ${isSideNavOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
       >
-        {/* Logo section */}
         <div className="h-56 bg-[url('/logo.jfif')] bg-center bg-cover bg-no-repeat relative">
           <X
             className="absolute top-4 right-4 cursor-pointer text-[#F5F2E9] bg-[#4A3C31] rounded-full p-1"
@@ -143,7 +140,6 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
           />
         </div>
 
-        {/* Menu items */}
         <ul className="mt-8 px-4">
           <li className="mb-6">
             <div to="/welcome" className="flex items-center text-lg cursor-pointer hover:text-[#1A9D8F]" onClick={() => {

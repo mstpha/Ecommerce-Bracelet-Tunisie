@@ -78,17 +78,9 @@ const Profile = ({ onClose }) => {
 
   if (!user) {
     return (
-      <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg max-w-md w-11/12">
-          <div className="text-center">
-            <p className="text-lg">User not found.</p>
-            <button
-              onClick={onClose}
-              className="mt-4 px-4 py-2 bg-[#1A9D8F] text-white rounded"
-            >
-              Fermer
-            </button>
-          </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
+          <Loader/>
         </div>
       </div>
     );

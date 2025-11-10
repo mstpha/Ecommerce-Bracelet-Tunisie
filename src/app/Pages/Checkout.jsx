@@ -14,7 +14,6 @@ const Checkout = () => {
   const [EndDate, setEndDate] = useState("")
   const [errors, setErrors] = useState([]);
 
-  // Get order data from location state (passed from ProductDetail or ShoppingCart)
   const { orderItems, product, quantity, isCart } = location.state || {};
   const [formData, setFormData] = useState({
     fullName: user?.fullName || '',
@@ -31,30 +30,36 @@ const Checkout = () => {
   const deliveryOptions = [
     {
       id: 'standard',
-      name: 'Livraison Standard',
-      description: '48 heures',
+      name: 'Standard Delivery',
+      description: '48 hours',
       price: 6,
       icon: Truck
     },
     {
       id: 'express',
-      name: 'Livraison Express',
-      description: '24 heures',
+      name: 'Express Delivery',
+      description: '24 hours',
       price: 10,
       icon: Package
     }
   ];
-
   const paymentOptions = [
     {
       id: 'cash',
-      name: 'Paiement à la livraison',
-      description: 'Payez en espèces lors de la réception'
+
+      name: 'Cash on Delivery',
+
+      description: 'Pay in cash upon receipt'
+
     },
+
     {
       id: 'card',
-      name: 'Carte bancaire',
-      description: 'Paiement sécurisé par carte'
+
+      name: 'Credit Card',
+
+      description: 'Secure Card Payment'
+
     }
   ];
 
@@ -75,7 +80,6 @@ const Checkout = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // Clear errors when user starts typing
     if (errors.length > 0) {
       setErrors([]);
     }
@@ -84,20 +88,20 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setErrors([]); // Clear previous errors
+    setErrors([]);
     const currentUser = localStorage.getItem('ID');
     const validationErrors = [];
 
     if (!formData.fullName || !formData.phoneNumber || !formData.address || !formData.city || !formData.postalCode) {
-      validationErrors.push('Veuillez remplir tous les champs de livraison');
+      validationErrors.push('Please fill in all delivery fields');
     }
 
     if (paymentMethod === 'card') {
       if (!CC || !EndDate || !CVV) {
-        validationErrors.push('Veuillez remplir toutes les informations de carte bancaire');
+        validationErrors.push('Please fill in all bank card details');
       } else {
         if (CC.toString().replace(/\s/g, '').length < 13 || CC.toString().replace(/\s/g, '').length > 19) {
-          validationErrors.push('Numéro de carte invalide');
+          validationErrors.push('Carte number invalid');
         }
 
         if (CVV.toString().length < 3 || CVV.toString().length > 4) {
@@ -105,7 +109,7 @@ const Checkout = () => {
         }
 
         if (!/^\d{2}\/\d{2}$/.test(EndDate)) {
-          validationErrors.push('Date d\'expiration invalide (MM/AA)');
+          validationErrors.push('Expiration Date invalid (MM/AA)');
         }
       }
     }
@@ -180,25 +184,22 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <button
           onClick={() => navigate(-1)}
           className="flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
         >
           <ArrowLeft className="mr-2" size={20} />
-          Retour
+          Return
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Finaliser votre commande</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Finalize your order</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Forms */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Delivery Information */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <MapPin className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Informations de livraison</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Delivery information</h2>
               </div>
 
               <form className="space-y-4">
@@ -206,7 +207,7 @@ const Checkout = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       <User className="inline mr-2" size={16} />
-                      Nom complet
+                      Full name
                     </label>
                     <input
                       type="text"
@@ -222,7 +223,7 @@ const Checkout = () => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       <Phone className="inline mr-2" size={16} />
-                      Numéro de téléphone
+                      Phone number
                     </label>
                     <input
                       type="tel"
@@ -238,7 +239,7 @@ const Checkout = () => {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Adresse complète
+                    Full address
                   </label>
                   <textarea
                     name="address"
@@ -254,7 +255,7 @@ const Checkout = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Ville
+                      City
                     </label>
                     <input
                       type="text"
@@ -268,7 +269,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Code postal
+                      Postal code
                     </label>
                     <input
                       type="text"
@@ -283,11 +284,10 @@ const Checkout = () => {
               </form>
             </div>
 
-            {/* Delivery Mode */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <Truck className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Mode de livraison</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Delivery type</h2>
               </div>
 
               <div className="space-y-3">
@@ -298,8 +298,8 @@ const Checkout = () => {
                       key={option.id}
                       onClick={() => setDeliveryMode(option.id)}
                       className={`flex items-center justify-between p-4 border-2 rounded-xl cursor-pointer transition-all ${deliveryMode === option.id
-                          ? 'border-teal-500 bg-teal-50'
-                          : 'border-gray-200 hover:border-teal-300'
+                        ? 'border-teal-500 bg-teal-50'
+                        : 'border-gray-200 hover:border-teal-300'
                         }`}
                     >
                       <div className="flex items-center">
@@ -319,11 +319,10 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <CreditCard className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Mode de paiement</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Payment type</h2>
               </div>
 
               <div className="space-y-3">
@@ -335,8 +334,8 @@ const Checkout = () => {
                       if (errors.length > 0) setErrors([]);
                     }}
                     className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === option.id
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 hover:border-teal-300'
+                      ? 'border-teal-500 bg-teal-50'
+                      : 'border-gray-200 hover:border-teal-300'
                       }`}
                   >
                     <div className={`mr-4 w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === option.id ? 'border-teal-500' : 'border-gray-300'
@@ -355,7 +354,7 @@ const Checkout = () => {
 
               {paymentMethod === 'card' && (
                 <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-                  <p className="text-sm text-gray-600 mb-4">Informations de carte (Mockup)</p>
+                  <p className="text-sm text-gray-600 mb-4">Card information</p>
                   <div className="space-y-3">
                     <input
                       type="text"
@@ -395,18 +394,16 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Right Column - Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Récapitulatif</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Summary</h2>
 
-              {/* Error Box */}
               {errors.length > 0 && (
                 <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
                   <div className="flex items-start">
                     <AlertCircle className="text-red-500 mr-3 flex-shrink-0 mt-0.5" size={20} />
                     <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-red-800 mb-2">Erreurs de validation</h3>
+                      <h3 className="text-sm font-semibold text-red-800 mb-2">Valiation Error</h3>
                       <ul className="space-y-1">
                         {errors.map((error, index) => (
                           <li key={index} className="text-sm text-red-700">
@@ -419,7 +416,6 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Order Items */}
               <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
                 {isCart && orderItems ? (
                   orderItems.map((item, index) => (
@@ -437,7 +433,7 @@ const Checkout = () => {
                   <div className="flex items-center space-x-4 pb-4 border-b border-gray-200">
                     <div className="flex-1">
                       <p className="font-semibold text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-600">Quantité: {quantity}</p>
+                      <p className="text-sm text-gray-600">Quantity: {quantity}</p>
                     </div>
                     <p className="font-bold text-gray-900">
                       {(product.price * quantity).toFixed(2)} TND
@@ -446,14 +442,13 @@ const Checkout = () => {
                 ) : null}
               </div>
 
-              {/* Pricing Details */}
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-600">
-                  <span>Sous-total</span>
+                  <span>Sub-total</span>
                   <span className="font-semibold">{subtotal.toFixed(2)} TND</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Livraison</span>
+                  <span>Delivery</span>
                   <span className="font-semibold">{deliveryFee.toFixed(2)} TND</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3">
@@ -464,7 +459,6 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Confirm Button */}
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
@@ -474,7 +468,7 @@ const Checkout = () => {
               </button>
 
               <p className="text-xs text-gray-500 text-center mt-4">
-                En confirmant, vous acceptez nos conditions générales
+                By confirming, you accept our terms and conditions.
               </p>
             </div>
           </div>

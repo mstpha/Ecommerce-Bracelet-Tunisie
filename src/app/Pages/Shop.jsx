@@ -106,7 +106,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
       <div className="flex items-center justify-center min-h-screen">
 
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <Loader/>
+          <Loader />
         </div>
       </div>
     );
@@ -118,10 +118,8 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
 
       <div className="mb-4 flex flex-wrap gap-4 items-center">
         <Suggestions suggestions={shuffleArray(productsData.products).slice(0, 15)} />
-        
-        {/* Sort + Rating Filter Group */}
+
         <div className="inline-flex rounded-md shadow-sm" role="group">
-          {/* Sort Buttons */}
           <button
             onClick={() => sortByPrice('asc')}
             className={`px-4 py-2 text-sm font-medium border border-[#1A9D8F] rounded-l-lg 
@@ -141,7 +139,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
           >
             High to Low
           </button>
-          
+
           <select
             value={ratingFilter}
             onChange={(e) => handleRatingFilter(e.target.value)}
@@ -157,7 +155,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
             <option value="4">4★ & Up</option>
             <option value="5">5★ Only</option>
           </select>
-          
+
           <button
             onClick={resetOrder}
             className={`px-4 py-2 text-sm font-medium border border-[#1A9D8F] rounded-r-lg
@@ -170,7 +168,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
         </div>
       </div>
 
-      {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {sortedItems.map((item) => (
           <ShopItem key={item.id} item={item} truncateDescription={truncateDescription} />

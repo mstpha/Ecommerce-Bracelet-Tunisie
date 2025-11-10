@@ -75,7 +75,14 @@ const ProductDetail = ({ addToCart, products }) => {
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   if (!product) {
-    return <div>Product not found</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+
+        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
+          <Loader />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -153,10 +160,9 @@ const ProductDetail = ({ addToCart, products }) => {
           </div>
         </div>
       </div>
-<div className="mt-10 bg-white rounded-lg shadow-sm p-5">
+      <div className="mt-10 bg-white rounded-lg shadow-sm p-5">
         <h2 className="text-xl font-bold text-[#4A3C31] mb-5">Client Reviews</h2>
 
-        {/* Add Review Form */}
         <div className="mb-6 bg-gray-50 rounded-lg p-4">
           <h3 className="text-base font-semibold mb-2 text-[#4A3C31]">Leave us a review!</h3>
           <textarea
@@ -173,13 +179,11 @@ const ProductDetail = ({ addToCart, products }) => {
             Publish review
           </button>
         </div>
-        {/* Reviews count */}
         {reviews.length > 0 && (
           <p className="text-xs text-gray-500 mt-3 mb-3 text-right">
             {reviews.length} Total Reviews
           </p>
         )}
-        {/* Display Reviews */}
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {reviews.length > 0 ? (
             reviews.map((review, index) => (
