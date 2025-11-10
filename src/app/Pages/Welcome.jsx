@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../userContext';
-import Loader from '../Components/Loader';
+import LoadingTruck from '../Components/Loader';
 
 const Welcome = () => {
   const [isRotated, setIsRotated] = useState(false);
@@ -37,7 +37,7 @@ const Welcome = () => {
       <div className="flex items-center justify-center min-h-screen">
 
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <Loader/>
+          <LoadingTruck/>
         </div>
       </div>
     );

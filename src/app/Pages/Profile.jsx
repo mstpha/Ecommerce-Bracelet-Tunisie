@@ -3,6 +3,7 @@ import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X, Mail } from 'luci
 import { UserContext } from '../../userContext';
 import { updateUser } from '../Services/userServices';
 import toast from 'react-hot-toast';
+import LoadingTruck from '../Components/Loader';
 
 const Profile = ({ onClose }) => {
   const [isEditingPhone, setIsEditingPhone] = useState(false);
@@ -80,7 +81,7 @@ const Profile = ({ onClose }) => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <Loader/>
+          <LoadingTruck/>
         </div>
       </div>
     );

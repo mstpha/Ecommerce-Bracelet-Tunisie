@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import Suggestions from '../Components/Suggestions';
 import { UserContext } from '../../userContext';
 import { addOrderToUser, addReview, getReviews } from '../Services/userServices';
+import LoadingTruck from '../Components/Loader';
 
 const ProductDetail = ({ addToCart, products }) => {
   const { id } = useParams();
@@ -79,7 +80,7 @@ const ProductDetail = ({ addToCart, products }) => {
       <div className="flex items-center justify-center min-h-screen">
 
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <Loader />
+          <LoadingTruck />
         </div>
       </div>
     );

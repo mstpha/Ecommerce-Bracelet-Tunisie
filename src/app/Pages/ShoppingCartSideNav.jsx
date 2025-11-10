@@ -27,7 +27,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
       >
         <div className="sticky top-0 bg-[#4A3C31] z-10 p-4 flex justify-between items-center border-b border-[#F5F2E9]">
           <h2 className="text-2xl font-bold flex items-center">
-            <ShoppingCart className="mr-2" /> Panier
+            <ShoppingCart className="mr-2" /> Shopping Cart
           </h2>
           <X
             className="cursor-pointer hover:text-[#1A9D8F] transition-colors"
@@ -64,7 +64,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
                   </button>
                 </div>
                 <button onClick={() => removeCartItem(item.id)} className="text-red-500 hover:text-red-700 text-sm">
-                  Supprimer
+                  Remove item
                 </button>
               </div>
             </li>
@@ -88,7 +88,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
             className="w-full bg-[#1A9D8F] text-white font-bold py-2 px-4 rounded hover:bg-[#158275] transition-colors"
             disabled={cartItems.length === 0}
           >
-            Confirmer la commande
+            Confirm Cart orders
           </button>
         </div>
       </div>

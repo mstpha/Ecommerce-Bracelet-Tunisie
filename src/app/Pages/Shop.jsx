@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import productsData from '../Data/products.json';
 import ShopItem from '../Components/ShopItem';
 import Suggestions from '../Components/Suggestions';
-import Loader from '../Components/Loader';
+import LoadingTruck from '../Components/Loader';
 
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();
@@ -106,7 +106,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
       <div className="flex items-center justify-center min-h-screen">
 
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <Loader />
+          <LoadingTruck />
         </div>
       </div>
     );
