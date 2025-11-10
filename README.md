@@ -64,7 +64,6 @@ Ecommerce-Bracelet-Tunisie/
 │   └── README/          # Screenshot images
 ├── src/
 │   ├── components/      # Reusable React components
-│   ├── context/         # Context API for state management
 │   ├── services/        # Firebase services (userService)
 │   ├── data/            # Product JSON file
 │   ├── pages/           # Application pages
@@ -112,6 +111,7 @@ Ecommerce-Bracelet-Tunisie/
 - Real-time total calculation
 - Quantity modification
 - Item removal
+- Saved in Firebase database for persistence
 
 ![Cart Sidebar](./public/README/cart.png)
 
@@ -135,7 +135,7 @@ This project was developed as part of a university project, demonstrating full-s
 
 ## 👨‍💻 Author
 
-**Mustapha** - [GitHub](https://github.com/mstpha)
+**Adem ben Mustapha** - [GitHub](https://github.com/mstpha)
 
 ## 📝 License
 
