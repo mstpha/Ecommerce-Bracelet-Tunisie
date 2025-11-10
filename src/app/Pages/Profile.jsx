@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X, Mail } from 'lucide-react';
+import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X, Mail, Heart, Star } from 'lucide-react';
 import { UserContext } from '../../userContext';
-import { updateUser } from '../Services/userServices';
+import { removeFromFavorites, updateUser } from '../Services/userServices';
 import toast from 'react-hot-toast';
 import LoadingTruck from '../Components/Loader';
 
@@ -77,11 +77,26 @@ const Profile = ({ onClose }) => {
     });
   };
 
+
+  const handleRemoveFavorite = async (productId) => {
+    try {
+      const currentUser = localStorage.getItem('ID');
+      const updatedUser = await removeFromFavorites(currentUser, productId);
+      if (updatedUser) {
+        setUser(updatedUser);
+      }
+    } catch (error) {
+      console.error('Error removing favorite:', error);
+    }
+  };
+
+
+
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <LoadingTruck/>
+          <LoadingTruck />
         </div>
       </div>
     );
@@ -107,15 +122,15 @@ const Profile = ({ onClose }) => {
             </div>
             <div className="flex-1 min-w-0">
               {isEditingName ? (
-                <div className="flex items-center gap-2 min-w-0 flex-wrap">                  
-                <input
-                  type="text"
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
-                  placeholder="Entrez votre nom"
-                  autoFocus
-                />
+                <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                    className="text-xl font-bold border-b-2 border-[#1A9D8F] focus:outline-none bg-transparent max-w-full"
+                    placeholder="Entrez votre nom"
+                    autoFocus
+                  />
                   <button
                     onClick={handleSaveName}
                     className="text-[#1A9D8F] text-sm font-medium"
@@ -253,7 +268,59 @@ const Profile = ({ onClose }) => {
             )}
           </div>
         </div>
+        <div className="mb-6">
+          <div className="flex items-center mb-4">
+            <Heart size={24} className="text-[#1A9D8F] mr-2" />
+            <h3 className="text-xl font-bold text-[#4A3C31]">My Favorites</h3>
+          </div>
 
+          {(!user.favorites || user.favorites.length === 0) ? (
+            <div className="text-center py-8 bg-[#F5F5F5] rounded-lg">
+              <Heart size={48} className="text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-500">No favorite products yet</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-96 overflow-y-auto custom-scrollbar p-2">
+              {user.favorites.map((favorite) => (
+                <div key={favorite.id} className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => onProductClick && onProductClick(favorite.id)}
+                  >
+                    <div className="aspect-square relative">
+                      <img
+                        src={`/${favorite.folder}/1.webp`}
+                        alt={favorite.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-semibold text-sm text-[#4A3C31] mb-1 truncate">
+                        {favorite.name}
+                      </h4>
+                      <p className="text-[#1A9D8F] font-bold text-sm">
+                        {favorite.price} DT
+                      </p>
+                      {favorite.rating && (
+                        <div className="flex items-center mt-1">
+                          <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                          <span className="text-xs text-gray-600 ml-1">{favorite.rating}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleRemoveFavorite(favorite.id)}
+                    className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
+                    title="Remove from favorites"
+                  >
+                    <X size={16} className="text-red-500" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <div>
           <div className="flex items-center mb-4">
             <ShoppingBag size={24} className="text-[#1A9D8F] mr-2" />

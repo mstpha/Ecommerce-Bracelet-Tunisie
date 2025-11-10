@@ -265,6 +265,74 @@ export const clearUserCart = async (userId) => {
     throw error;
   }
 };
+
+
+// ============ FAVORITES MANAGEMENT ============
+
+export const addToFavorites = async (userId, product) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    const favorites = user.favorites || [];
+    
+    const isAlreadyFavorite = favorites.some(fav => fav.id === product.id);
+    if (isAlreadyFavorite) {
+      toast.error('Product already in favorites');
+      return;
+    }
+
+    const favoriteItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      rating: product.rating,
+      folder: product.folder,
+      addedAt: new Date().toISOString()
+    };
+
+    const updatedFavorites = [...favorites, favoriteItem];
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      favorites: updatedFavorites
+    });
+
+    toast.success('Added to favorites!');
+    return { ...user, favorites: updatedFavorites };
+  } catch (error) {
+    toast.error('Error adding to favorites: ');
+    throw error;
+  }
+};
+
+export const removeFromFavorites = async (userId, productId) => {
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      toast.error('User not found');
+      return;
+    }
+
+    const favorites = user.favorites || [];
+    const updatedFavorites = favorites.filter(fav => fav.id !== productId);
+
+    await setDoc(doc(db, USERS_COLLECTION, userId), {
+      ...user,
+      favorites: updatedFavorites
+    });
+
+    toast.success('Removed from favorites');
+    return { ...user, favorites: updatedFavorites };
+  } catch (error) {
+    toast.error('Error removing from favorites: ');
+    throw error;
+  }
+};
+
 // ============ REVIEW FUNCTIONS ============
 
 export const addReview = async (productId, userName, reviewMessage) => {

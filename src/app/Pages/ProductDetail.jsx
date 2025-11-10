@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus, Package, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus, Package, Info, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Suggestions from '../Components/Suggestions';
 import { UserContext } from '../../userContext';
-import { addOrderToUser, addReview, getReviews } from '../Services/userServices';
+import { addOrderToUser, addReview, addToFavorites, getReviews, removeFromFavorites } from '../Services/userServices';
 import LoadingTruck from '../Components/Loader';
 
 const ProductDetail = ({ addToCart, products }) => {
@@ -18,12 +18,13 @@ const ProductDetail = ({ addToCart, products }) => {
   const [reviewText, setReviewText] = useState('');
   const [confirmdisable, setConfirmDisable] = useState(false);
   const [psug, setPsug] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
   const product = products.find(p => p.id === parseInt(id));
   const currentUser = localStorage.getItem('ID');
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate()
   let suggestions = [];
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -43,7 +44,40 @@ const ProductDetail = ({ addToCart, products }) => {
       setReviews(productReviews);
     };
     fetchReviews();
+
+    if (user && user.favorites) {
+      const isInFavorites = user.favorites.some(fav => fav.id === parseInt(id));
+      setIsFavorite(isInFavorites);
+    }
+
   }, [product, id])
+
+
+  const handleToggleFavorite = async () => {
+    if (!user) {
+      toast.error('Please login to add favorites');
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        const updatedUser = await removeFromFavorites(currentUser, parseInt(id));
+        if (updatedUser) {
+          setUser(updatedUser);
+          setIsFavorite(false);
+        }
+      } else {
+        const updatedUser = await addToFavorites(currentUser, product);
+        if (updatedUser) {
+          setUser(updatedUser);
+          setIsFavorite(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
 
   const nextImage = () => {
     if (slideDirection) return;
@@ -62,7 +96,7 @@ const ProductDetail = ({ addToCart, products }) => {
       setSlideDirection('');
     }, 300);
   };
-  
+
   const handleAddReview = async () => {
     if (!reviewText.trim()) {
       toast.error('Please write a review');
@@ -84,12 +118,10 @@ const ProductDetail = ({ addToCart, products }) => {
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
-  // Helper function to format characteristic keys
   const formatKey = (key) => {
     return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
   };
 
-  // Helper function to format characteristic values
   const formatValue = (value) => {
     if (Array.isArray(value)) {
       return value.join(', ');
@@ -100,7 +132,6 @@ const ProductDetail = ({ addToCart, products }) => {
     return value;
   };
 
-  // Get availability badge styling
   const getAvailabilityBadge = (availability) => {
     const styles = {
       in_stock: 'bg-green-100 text-green-800 border-green-200',
@@ -147,23 +178,35 @@ const ProductDetail = ({ addToCart, products }) => {
           <button onClick={nextImage} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2">
             <ChevronRight size={24} />
           </button>
+          <button
+            onClick={handleToggleFavorite}
+            className="absolute top-4 right-4 bg-white rounded-full p-3 shadow-lg hover:scale-110 transition-transform"
+          >
+            <Star
+              size={24}
+              className={`${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'} transition-colors`}
+            />
+          </button>
         </div>
-        
+
         <div className="w-full md:w-1/2 flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[#4A3C31] mb-2">{product.name}</h1>
-            
+
+
+
+
             {/* Availability Badge */}
             <div className="mb-4">
               {getAvailabilityBadge(product.availability)}
             </div>
-            
+
             <p className="text-2xl font-bold text-[#1A9D8F] mb-4">
               {product.price} DT
-              <br /> 
+              <br />
               <span className="text-base font-normal text-gray-600">+ 6DT Delivery</span>
             </p>
-            
+
             <p className="text-lg text-[#4A3C31] mb-6 font-serif leading-relaxed">{product.description}</p>
 
             {/* Product Characteristics */}
@@ -214,7 +257,7 @@ const ProductDetail = ({ addToCart, products }) => {
               </div>
             </div>
           </div>
-          
+
           <div>
             <button
               onClick={() => navigate('/checkout', {
@@ -237,7 +280,7 @@ const ProductDetail = ({ addToCart, products }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="mt-10 bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-[#4A3C31]">Customer Reviews</h2>
@@ -277,7 +320,7 @@ const ProductDetail = ({ addToCart, products }) => {
             Post Review
           </button>
         </div>
-        
+
         <div className="space-y-4">
           {reviews.length > 0 ? (
             <>
@@ -331,7 +374,7 @@ const ProductDetail = ({ addToCart, products }) => {
           )}
         </div>
       </div>
-      
+
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
@@ -348,7 +391,7 @@ const ProductDetail = ({ addToCart, products }) => {
           background: #157A6E;
         }
       `}</style>
-      
+
       <Suggestions suggestions={psug.slice(0, 15)} />
     </div>
   );

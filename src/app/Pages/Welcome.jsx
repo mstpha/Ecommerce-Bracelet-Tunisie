@@ -32,7 +32,7 @@ const Welcome = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (loading) {
+  if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
 
