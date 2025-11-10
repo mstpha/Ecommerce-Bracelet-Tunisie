@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
-import ShopItemsug from './ShopItemsug';
+import ShopItem from './ShopItem';
 
 const Suggestions = ({ suggestions }) => {
   const truncateDescription = (description, maxLength = 60) => {
@@ -32,7 +32,7 @@ const Suggestions = ({ suggestions }) => {
           <div className="flex space-x-4 custom-scrollbar overflow-x-auto scrollbar-thin scrollbar-thumb-[#1A9D8F]/40 scrollbar-track-transparent scroll-smooth py-2">
             {suggestions.map((item) => (
               <div key={item.id} className="min-w-[180px] flex-shrink-0 transform transition-transform hover:scale-105">
-                <ShopItemsug item={item} truncateDescription={truncateDescription} />
+                <ShopItem item={item} truncateDescription={truncateDescription} />
               </div>
             ))}
           </div>
