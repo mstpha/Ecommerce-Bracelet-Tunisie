@@ -32,17 +32,6 @@ const Welcome = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-
-        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <LoadingTruck/>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden">
       <div
