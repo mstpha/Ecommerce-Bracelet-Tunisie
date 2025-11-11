@@ -210,7 +210,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
           </li>
         </ul>
       </div>
-      {showProfile && <Profile onClose={() => setShowProfile(false)} />}
+      {showProfile && <Profile isOpen={showProfile} onClose={() => setShowProfile(false)} />}
 
       <ShoppingCartSideNav
         isOpen={isCartOpen}

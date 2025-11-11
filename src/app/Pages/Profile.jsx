@@ -5,7 +5,7 @@ import { removeFromFavorites, updateUser } from '../Services/userServices';
 import toast from 'react-hot-toast';
 import LoadingTruck from '../Components/Loader';
 
-const Profile = ({ onClose }) => {
+const Profile = ({ isOpen,onClose }) => {
   const [isEditingPhone, setIsEditingPhone] = useState(false);
   const [isEditingAddress, setIsEditingAddress] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
@@ -92,7 +92,7 @@ const Profile = ({ onClose }) => {
 
 
 
-  if (!user) {
+  if (!user && isOpen==true) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">

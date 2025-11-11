@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
@@ -6,6 +6,7 @@ import {
 } from '../Services/userServices';
 
 import { Toaster } from 'react-hot-toast';
+import { UserContext } from '../../userContext';
 const Register = () => {
   const [RegformData, setRegformData] = useState({
     fullName: '',
@@ -27,7 +28,7 @@ const Register = () => {
       [name]: value
     }));
   };
-
+  const {setUser } = useContext(UserContext);
   const validateFullName = (name) => {
     const trimmedName = name.trim();
     if (trimmedName.length < 2) {
@@ -82,6 +83,7 @@ const Register = () => {
     if (validation === true) {
       newUser = await addUser(RegformData)
     }
+    setUser(newUser)
     localStorage.setItem('ID', newUser.id);
     toast.success('Registration successful!');
     navigate("/")
