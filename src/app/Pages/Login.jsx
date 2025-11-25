@@ -59,7 +59,7 @@ const Login = () => {
     if (login) {
       localStorage.setItem("ID", login.id);
       toast.success("Welcome " + login.full_name);
-      setUser(login.data)
+      setUser(login)
       navigate("/");
     }
   };

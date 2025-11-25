@@ -68,7 +68,6 @@ export const addUser = async (userData) => {
       }),
     });
 
-    toast.success('User created successfully!');
     return newUser;
   } catch (error) {
     toast.error(error.message || 'Error adding user');
@@ -112,7 +111,6 @@ export const loginUser = async (email, password) => {
       body: JSON.stringify({ email, password }),
     });
 
-    toast.success('Login successful!');
     return user;
   } catch (error) {
     toast.error(error.message || 'Invalid email or password');
