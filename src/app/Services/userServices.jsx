@@ -63,7 +63,6 @@ export const addUser = async (userData) => {
         full_name: userData.full_name,
         email: userData.email,
         password: userData.password,
-        confirmPassword: userData.confirmPassword,
         phone: userData.phone || '',
         address: userData.address || '',
       }),
