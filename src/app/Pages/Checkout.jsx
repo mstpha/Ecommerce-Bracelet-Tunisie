@@ -8,7 +8,7 @@ import { addOrderToUser, addCartOrdersToUser } from '../Services/userServices';
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [CC, setCC] = useState(0)
   const [CVV, setCVV] = useState(0)
   const [EndDate, setEndDate] = useState("")
@@ -16,7 +16,7 @@ const Checkout = () => {
 
   const { orderItems, product, quantity, isCart } = location.state || {};
   const [formData, setFormData] = useState({
-    fullName: user?.fullName || '',
+    full_name: user?.full_name || '',
     phoneNumber: user?.phone || '',
     address: user?.address || '',
     city: '',
@@ -92,7 +92,7 @@ const Checkout = () => {
     const currentUser = localStorage.getItem('ID');
     const validationErrors = [];
 
-    if (!formData.fullName || !formData.phoneNumber || !formData.address || !formData.city || !formData.postalCode) {
+    if (!formData.full_name || !formData.phoneNumber || !formData.address || !formData.city || !formData.postalCode) {
       validationErrors.push('Please fill in all delivery fields');
     }
 
@@ -144,22 +144,20 @@ const Checkout = () => {
           displayString: itemsList
         }));
         const updatedUser = await addCartOrdersToUser(currentUser, ordersWithData, itemsList);
-        setUser(updatedUser);
         navigate("/shop")
       } else if (product && quantity) {
         const itemsList = `${product.name} x${quantity} prix: ${product.price} Total: ${(product.price * quantity).toFixed(2)}`;
 
         const orderItem = {
           ...orderData,
+          product_name:product.name,
           productId: product.id,
           quantity: quantity,
           price: product.price,
           total: product.price * quantity,
           displayString: itemsList
         };
-
         const updatedUser = await addOrderToUser(currentUser, orderItem);
-        setUser(updatedUser);
         navigate("/shop")
       }
 
@@ -210,12 +208,12 @@ const Checkout = () => {
                     </label>
                     <input
                       type="text"
-                      name="fullName"
-                      value={formData.fullName}
+                      name="full_name"
+                      value={formData.full_name}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
                       required
-                      disabled={user?.fullName}
+                      disabled={user?.full_name}
                     />
                   </div>
 

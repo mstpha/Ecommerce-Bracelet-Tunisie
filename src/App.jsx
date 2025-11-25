@@ -15,7 +15,9 @@ import {
   addToUserCart, 
   updateUserCartItem, 
   removeFromUserCart, 
-  clearUserCart 
+  clearUserCart, 
+  getUserOrders,
+  getUserCart
 } from './app/Services/userServices';
 import { UserContext } from './userContext';
 import Checkout from './app/Pages/Checkout';
@@ -41,11 +43,12 @@ function App() {
       }
       return [...prevItems, { ...product, quantity: quantity }];
     });
-
+    let userCart;
     if (user?.id) {
       try {
         const updatedUser = await addToUserCart(user.id, product, quantity);
-        setUser(updatedUser);
+        userCart = await getUserCart(localStorage.getItem('ID'))
+        setCartItems(userCart)
       } catch (error) {
         console.error('Error syncing cart:', error);
       }
@@ -62,7 +65,7 @@ function App() {
     if (user?.id) {
       try {
         const updatedUser = await updateUserCartItem(user.id, id, newQuantity);
-        setUser(updatedUser);
+
       } catch (error) {
         console.error('Error syncing cart update:', error);
       }
@@ -70,12 +73,12 @@ function App() {
   };
 
   const removeCartItem = async (id) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
 
-    if (user?.id) {
+    if (user) {
       try {
-        const updatedUser = await removeFromUserCart(user.id, id);
-        setUser(updatedUser);
+        const updatedUser = await removeFromUserCart(localStorage.getItem('ID'), id);
+        const userCart = await getUserCart(localStorage.getItem('ID'))
+        setCartItems(userCart)
       } catch (error) {
         console.error('Error syncing cart removal:', error);
       }
@@ -88,7 +91,7 @@ function App() {
     if (user?.id) {
       try {
         const updatedUser = await clearUserCart(user.id);
-        setUser(updatedUser);
+
       } catch (error) {
         console.error('Error syncing cart clear:', error);
       }
@@ -98,18 +101,17 @@ function App() {
   useEffect(() => {
     const initalize = async () => {
       if (user) {
-        setCartItems(user.cartItems || []);
         return;
       }
-      
+      let cartOrders=[];
       const currentUser = localStorage.getItem("ID");
       let LoggedInUser;
 
       if (currentUser) {
         LoggedInUser = await getUserById(currentUser);
         setUser(LoggedInUser);
-        
-        setCartItems(LoggedInUser?.cartItems || []);
+        cartOrders= await getUserCart(currentUser)
+        setCartItems(cartOrders || []);
         
         if (location.pathname === "/login" || location.pathname==="/register") {
           navigate("/");
@@ -121,11 +123,7 @@ function App() {
     initalize();
   }, []);
 
-  useEffect(() => {
-    if (user?.cartItems) {
-      setCartItems(user.cartItems);
-    }
-  }, [user?.id]);
+
 
   const location = useLocation();
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { User, Phone, MapPin, Edit3, ShoppingBag, Calendar, X, Mail, Heart, Star } from 'lucide-react';
 import { UserContext } from '../../userContext';
-import { removeFromFavorites, updateUser } from '../Services/userServices';
+import { getUserById, getUserFavorites, getUserOrders, removeFromFavorites, updateUser } from '../Services/userServices';
 import toast from 'react-hot-toast';
 import LoadingTruck from '../Components/Loader';
 
@@ -14,14 +14,27 @@ const Profile = ({ isOpen,onClose }) => {
   const [editedAddress, setEditedAddress] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
   const [editedName, setEditedName] = useState('');
-  const { user, setUser, loading } = useContext(UserContext);
-
+  const { user, setUser, loading,favoriteChange,setFavoriteChange } = useContext(UserContext);
+  const [favorites,setFavorites]=useState([])
+  const [orders,setOrders]=useState([])
   useEffect(() => {
+    let favs=[];
+    let ords=[];
+    const getOrders = async ()=>{
+      ords= await getUserOrders(localStorage.getItem('ID'));
+      setOrders(ords)
+    }
+    const getFaves = async ()=>{
+      favs= await getUserFavorites(localStorage.getItem('ID'));
+      setFavorites(favs)
+    }
     if (user) {
       setEditedPhone(user.phone ?? '');
       setEditedAddress(user.address ?? '');
       setEditedEmail(user.email ?? '');
-      setEditedName(user.fullName ?? '');
+      setEditedName(user.full_name ?? '');
+      getOrders()
+      getFaves()
     }
   }, [user]);
 
@@ -30,7 +43,7 @@ const Profile = ({ isOpen,onClose }) => {
       const currentUser = localStorage.getItem('ID');
       const updatedUserReturn = updateUser(currentUser, updatedUser)
       if (updatedUserReturn) {
-        toast.success("User Updated Successfully!");
+
         setUser(prev => ({ ...prev, ...updatedUser }));
       }
 
@@ -62,7 +75,7 @@ const Profile = ({ isOpen,onClose }) => {
 
   const handleSaveName = () => {
     if (editedName.trim()) {
-      saveUserData({ fullName: editedName.trim() });
+      saveUserData({ full_name: editedName.trim() });
     }
     setIsEditingName(false);
   };
@@ -81,9 +94,14 @@ const Profile = ({ isOpen,onClose }) => {
   const handleRemoveFavorite = async (productId) => {
     try {
       const currentUser = localStorage.getItem('ID');
-      const updatedUser = await removeFromFavorites(currentUser, productId);
-      if (updatedUser) {
-        setUser(updatedUser);
+      const updatedUserFaves = await removeFromFavorites(currentUser, productId);
+      let updatedUser= await getUserById(localStorage.getItem('ID'))
+      let favs=[];
+      if (updatedUserFaves) {
+        setUser(updatedUser)
+        favs= await getUserFavorites(localStorage.getItem('ID'));
+        setFavorites(favs)
+        setFavoriteChange(!favoriteChange)
       }
     } catch (error) {
       console.error('Error removing favorite:', error);
@@ -140,7 +158,7 @@ const Profile = ({ isOpen,onClose }) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-bold text-[#4A3C31] break-words overflow-hidden">{user.fullName}</h3>
+                  <h3 className="text-xl font-bold text-[#4A3C31] break-words overflow-hidden">{user.full_name}</h3>
                   <button
                     onClick={() => setIsEditingName(true)}
                     className="text-gray-500 hover:text-[#1A9D8F]"
@@ -274,14 +292,14 @@ const Profile = ({ isOpen,onClose }) => {
             <h3 className="text-xl font-bold text-[#4A3C31]">My Favorites</h3>
           </div>
 
-          {(!user.favorites || user.favorites.length === 0) ? (
+          {(!favorites || favorites.length === 0) ? (
             <div className="text-center py-8 bg-[#F5F5F5] rounded-lg">
               <Heart size={48} className="text-gray-400 mx-auto mb-3" />
               <p className="text-gray-500">No favorite products yet</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-h-96 overflow-y-auto custom-scrollbar p-2">
-              {user.favorites.map((favorite) => (
+              {favorites.map((favorite) => (
                 <div key={favorite.id} className="relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
                   <div
                     className="cursor-pointer"
@@ -290,13 +308,13 @@ const Profile = ({ isOpen,onClose }) => {
                     <div className="aspect-square relative">
                       <img
                         src={`/${favorite.folder}/1.webp`}
-                        alt={favorite.name}
+                        alt={favorite.product_name}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="p-3">
                       <h4 className="font-semibold text-sm text-[#4A3C31] mb-1 truncate">
-                        {favorite.name}
+                        {favorite.product_name}
                       </h4>
                       <p className="text-[#1A9D8F] font-bold text-sm">
                         {favorite.price} DT
@@ -310,7 +328,7 @@ const Profile = ({ isOpen,onClose }) => {
                     </div>
                   </div>
                   <button
-                    onClick={() => handleRemoveFavorite(favorite.id)}
+                    onClick={() => handleRemoveFavorite(favorite.product_id)}
                     className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50"
                     title="Remove from favorites"
                   >
@@ -327,36 +345,36 @@ const Profile = ({ isOpen,onClose }) => {
             <h3 className="text-xl font-bold text-[#4A3C31]">My Orders</h3>
           </div>
 
-          {user.orders.length === 0 ? (
+          {orders?.length === 0 ? (
             <div className="text-center py-8 bg-[#F5F5F5] rounded-lg">
               <ShoppingBag size={48} className="text-gray-400 mx-auto mb-3" />
               <p className="text-gray-500">No Orders for the moment</p>
             </div>
           ) : (
             <div className="space-y-4 max-h-96 overflow-y-auto">
-              {user.orders.map((order, index) => (
+              {orders?.map((order, index) => (
                 <div key={index} className="bg-[#F5F5F5] p-4 rounded-lg border-l-4 border-[#1A9D8F]">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="font-bold text-[#4A3C31]">
-                        {order.displayString || `Commande #${index + 1}`}
+                        {order.display_string || `Commande #${index + 1}`}
                       </p>
-                      {order.name && (
-                        <p className="text-sm text-gray-600">{order.name}</p>
+                      {order.product_name && (
+                        <p className="text-sm text-gray-600">{order.product_name}</p>
                       )}
                     </div>
                     <p className="font-bold text-[#1A9D8F]">
-                      {order.total?.toFixed(2)} DT
+                      {parseInt(order?.total).toFixed(2)} DT
                     </p>
                   </div>
 
                   <div className="flex justify-between items-center text-sm text-gray-500">
                     <div className="flex items-center">
                       <Calendar size={14} className="mr-1" />
-                      {order.timestamp ? formatDate(order.timestamp) : 'Date non disponible'}
+                      {order.created_at ? formatDate(order.created_at) : 'Date non disponible'}
                     </div>
                     <div className="flex items-center">
-                      <span className="mr-1">Quantité:</span>
+                      <span className="mr-1">Quantity:</span>
                       <span className="font-medium">{order.quantity}</span>
                     </div>
                   </div>

@@ -9,7 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { UserContext } from '../../userContext';
 const Register = () => {
   const [RegformData, setRegformData] = useState({
-    fullName: '',
+    full_name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -29,7 +29,7 @@ const Register = () => {
     }));
   };
   const {setUser } = useContext(UserContext);
-  const validateFullName = (name) => {
+  const validatefull_name = (name) => {
     const trimmedName = name.trim();
     if (trimmedName.length < 2) {
       toast.error('Full name must be at least 2 characters long');
@@ -73,7 +73,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var validation = validateFullName(RegformData.fullName) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
+    var validation = validatefull_name(RegformData.full_name) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
 
     if (RegformData.password !== RegformData.confirmPassword) {
       toast.error('Passwords do not match.');
@@ -83,7 +83,7 @@ const Register = () => {
     if (validation === true) {
       newUser = await addUser(RegformData)
     }
-    setUser(newUser)
+    setUser(newUser.data)
     localStorage.setItem('ID', newUser.id);
     toast.success('Registration successful!');
     navigate("/")
@@ -106,14 +106,14 @@ const Register = () => {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="full_name" className="block text-sm font-semibold text-gray-700 mb-2">
                 Full Name
               </label>
               <input
                 type="text"
-                id="fullName"
-                name="fullName"
-                value={RegformData.fullName}
+                id="full_name"
+                name="full_name"
+                value={RegformData.full_name}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"

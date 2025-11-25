@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCartItem, removeCartItem }, ref) => {
-  const [formData, setFormData] = useState({ fullName: '', phoneNumber: '', address: '' });
+  const [formData, setFormData] = useState({ full_name: '', phoneNumber: '', address: '' });
   const { user, setUser } = useContext(UserContext)
   const calculateTotal = () => {
     const subtotal = cartItems.reduce((total, item) => {
@@ -18,19 +18,6 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
   };
   const navigate = useNavigate()
 
-  const getDisplayCharacteristics = (item) => {
-    if (!item.characteristics) return [];
-
-    const chars = [];
-    const { color, material, style, size } = item.characteristics;
-
-    if (color) chars.push({ label: 'Color', value: color });
-    if (size) chars.push({ label: 'Size', value: size });
-    if (material) chars.push({ label: 'Material', value: material });
-    if (style) chars.push({ label: 'Style', value: style });
-
-    return chars.slice(0, 2);
-  };
 
   return (
     <>
@@ -53,8 +40,8 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
             <li key={item.id} className="mb-4 p-2 bg-[#5B4D3D] rounded-lg">
               <div className="flex gap-3 mb-2">
                 <img
-                  src={`/${item.id}/1.webp`}
-                  alt={item.name}
+                  src={`/${item.product_id}/1.webp`}
+                  alt={item.product_name}
                   className="w-16 h-16 object-cover rounded"
                   onError={(e) => {
                     e.target.src = '/placeholder.png';
@@ -62,19 +49,9 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
                 />
                 <div className="flex-1">
                   <div className="flex justify-between items-start mb-1">
-                    <span className="font-medium text-sm">{item.name}</span>
+                    <span className="font-medium text-sm">{item.product_name}</span>
                   </div>
                   <span className="text-[#1A9D8F] font-semibold">{item.price} TND</span>
-
-                  {getDisplayCharacteristics(item).length > 0 && (
-                    <div className="mt-2 space-y-1">
-                      {getDisplayCharacteristics(item).map((char, index) => (
-                        <div key={index} className="text-xs text-[#F5F2E9]/80">
-                          <span className="font-semibold">{char.label}:</span> {char.value}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -87,7 +64,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
                     <Plus size={16} />
                   </button>
                 </div>
-                <button onClick={() => removeCartItem(item.id)} className="text-red-500 hover:text-red-700 text-sm">
+                <button onClick={() => removeCartItem(item.product_id)} className="text-red-500 hover:text-red-700 text-sm">
                   Remove item
                 </button>
               </div>

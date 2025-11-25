@@ -16,7 +16,7 @@ const Login = () => {
       var currentUser = localStorage.getItem("ID")
       if (currentUser) {
         const UserLogin = getUserById(currentUser);
-        setUser(UserLogin)
+        setUser(UserLogin.data)
         navigate("/")
       }
     }
@@ -58,8 +58,8 @@ const Login = () => {
     const login = await loginUser(formData.email, formData.password);
     if (login) {
       localStorage.setItem("ID", login.id);
-      toast.success("Welcome " + login.fullName);
-      setUser(login)
+      toast.success("Welcome " + login.full_name);
+      setUser(login.data)
       navigate("/");
     }
   };

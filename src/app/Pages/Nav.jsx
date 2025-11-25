@@ -75,6 +75,10 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
           <div className="flex items-center space-x-4">
             <Menu className="cursor-pointer" onClick={() => setIsSideNavOpen(true)} />
             <ShoppingCart className="cursor-pointer" onClick={() => setIsCartOpen(true)} />
+        <div onClick={()=>{navigate('/shop')}} className="flex items-center cursor-pointer space-x-1">
+          <ShoppingBag size={24} />
+          <span>Shop</span>
+        </div>
           </div>
 
           <div className="flex-grow max-w-md mx-4">
@@ -99,7 +103,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
               className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
               onClick={() => setShowProfile(true)}
             >
-              {user?.fullName}
+              {user?.full_name}
             </span>
             {user ? (
               <LogOut

@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from '../../userContext';
 import LoadingTruck from '../Components/Loader';
+import { getUserById } from '../Services/userServices';
 
 const Welcome = () => {
   const [isRotated, setIsRotated] = useState(false);
   const [isSlidedArm, setIsArmSlided] = useState(false);
   const [isSlidedBracelet, setIsBraceletSlided] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user,setUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
+
+
+  
+
 
   useEffect(() => {
     const rotateTimer = setTimeout(() => setIsRotated(true), 1000);
@@ -93,7 +98,7 @@ const Welcome = () => {
       >
         <div className="max-w-4xl mx-auto bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold text-[#4A3C31] mb-4">
-            Welcome <span className="text-[#1A9D8F]">{user?.fullName}</span> to Bracelet Tunisia
+            Welcome <span className="text-[#1A9D8F]">{user?.full_name}</span> to Bracelet Tunisia
           </h1>
           <p className="text-lg text-[#4A3C31] mb-6">
             At Bracelet Tunisia, we believe in more than just selling products — we create experiences and build lasting relationships with our customers.

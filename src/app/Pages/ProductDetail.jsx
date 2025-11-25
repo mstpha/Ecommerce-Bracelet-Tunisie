@@ -5,14 +5,14 @@ import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Suggestions from '../Components/Suggestions';
 import { UserContext } from '../../userContext';
-import { addOrderToUser, addReview, addToFavorites, getReviews, removeFromFavorites } from '../Services/userServices';
+import { addOrderToUser, addReview, addToFavorites, getReviews, getUserFavorites, removeFromFavorites } from '../Services/userServices';
 import LoadingTruck from '../Components/Loader';
 
 const ProductDetail = ({ addToCart, products }) => {
   const { id } = useParams();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('');
-  const [formData, setFormData] = useState({ fullName: '', phoneNumber: '', address: '' });
+  const [formData, setFormData] = useState({ full_name: '', phoneNumber: '', address: '' });
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
@@ -45,14 +45,23 @@ const ProductDetail = ({ addToCart, products }) => {
     };
     fetchReviews();
 
-    if (user && user.favorites) {
-      const isInFavorites = user.favorites.some(fav => fav.id === parseInt(id));
-      setIsFavorite(isInFavorites);
-    }
 
   }, [product, id])
 
+  useEffect(()=>{
+    const isFavorited = async ()=>{
+      const productS = products.find(p => p.id === parseInt(id));
 
+      if (!productS) return;
+
+      const faves=await getUserFavorites(localStorage.getItem('ID'))
+      const isInFavorites = faves?.some(fav => fav.product_id === String(productS.id));
+      setIsFavorite(isInFavorites);
+    }
+    if (user) {
+      isFavorited()
+    }
+  })
   const handleToggleFavorite = async () => {
     if (!user) {
       toast.error('Please login to add favorites');
@@ -63,13 +72,11 @@ const ProductDetail = ({ addToCart, products }) => {
       if (isFavorite) {
         const updatedUser = await removeFromFavorites(currentUser, parseInt(id));
         if (updatedUser) {
-          setUser(updatedUser);
           setIsFavorite(false);
         }
       } else {
         const updatedUser = await addToFavorites(currentUser, product);
         if (updatedUser) {
-          setUser(updatedUser);
           setIsFavorite(true);
         }
       }
@@ -108,7 +115,7 @@ const ProductDetail = ({ addToCart, products }) => {
       return;
     }
 
-    const result = await addReview(id, user.fullName, reviewText);
+    const result = await addReview(id, user.full_name, reviewText);
     if (result) {
       setReviews(result.reviews);
       setReviewText('');
