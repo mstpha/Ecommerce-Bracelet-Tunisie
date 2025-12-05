@@ -126,7 +126,7 @@ const ProductDetail = ({ addToCart, products }) => {
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   const formatKey = (key) => {
-    return key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+    return key?.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
   };
 
   const formatValue = (value) => {
