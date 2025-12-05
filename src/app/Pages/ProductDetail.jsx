@@ -114,10 +114,14 @@ const ProductDetail = ({ addToCart, products }) => {
       toast.error('Please login to leave a review');
       return;
     }
-
+    const fetchReviews = async () => {
+      const productReviews = await getReviews(id);
+      setReviews(productReviews);
+    };
+    
     const result = await addReview(id, user.full_name, reviewText);
     if (result) {
-      setReviews(result.reviews);
+      fetchReviews();
       setReviewText('');
     }
   };
