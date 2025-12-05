@@ -17,7 +17,6 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   const sideNavRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sideNavRef.current && !sideNavRef.current.contains(event.target)) {

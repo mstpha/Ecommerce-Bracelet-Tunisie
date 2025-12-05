@@ -1,7 +1,8 @@
 import toast from "react-hot-toast";
 
-const API_URL = 'https://ecommerce-bracelet-tunisie-backend.onrender.com/api';
+const API_URL = 'http://localhost:5000/api'
 
+//
 // Token management
 const TOKEN_KEY = 'auth_token';
 
@@ -152,7 +153,6 @@ export const loginUser = async (email, password) => {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-
     // Store token and user data
     if (result.token) {
       setAuthToken(result.token);
