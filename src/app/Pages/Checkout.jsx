@@ -419,7 +419,7 @@ const Checkout = () => {
                   orderItems.map((item, index) => (
                     <div key={index} className="flex items-center space-x-4 pb-4 border-b border-gray-200">
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900">{item.name}</p>
+                        <p className="font-semibold text-gray-900">{item.product_name}</p>
                         <p className="text-sm text-gray-600">Quantité: {item.quantity}</p>
                       </div>
                       <p className="font-bold text-gray-900">
