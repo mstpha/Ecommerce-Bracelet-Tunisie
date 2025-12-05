@@ -131,6 +131,7 @@ const Checkout = () => {
         timestamp: new Date().toISOString()
       };
       if (isCart && orderItems) {
+        console.log(orderItems)
         const itemsList = orderItems.map(item =>
           `${item.name} x${item.quantity} prix: ${parseInt(item.price)} Total: ${(parseInt(item.price) * item.quantity).toFixed(2)}`
         ).join('\n');
