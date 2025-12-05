@@ -57,9 +57,9 @@ const Login = () => {
 
     const login = await loginUser(formData.email, formData.password);
     if (login) {
-      localStorage.setItem("ID", login.data.id? login.data.id: login.id);
-      toast.success("Welcome " + login.data.full_name?login.data.full_name:login.full_name);
-      setUser(login.data?login.data:login)
+      localStorage.setItem("ID", login.id? login.id: login.data.id);
+      toast.success("Welcome " + login.full_name?login.full_name:login.data.full_name);
+      setUser(login?login:login.data)
       navigate("/");
     }
   };
