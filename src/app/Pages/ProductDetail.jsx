@@ -30,7 +30,7 @@ const ProductDetail = ({ addToCart, products }) => {
 
     suggestions = products.filter(item => item.category === product.category);
     function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
+      for (let i = array?.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
@@ -291,12 +291,12 @@ const ProductDetail = ({ addToCart, products }) => {
       <div className="mt-10 bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-[#4A3C31]">Customer Reviews</h2>
-          {reviews.length > 0 && (
+          {reviews?.length > 0 && (
             <div className="flex items-center gap-2 bg-[#1A9D8F] text-white px-4 py-2 rounded-full">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span className="font-semibold">{reviews.length} Reviews</span>
+              <span className="font-semibold">{reviews?.length} Reviews</span>
             </div>
           )}
         </div>
@@ -342,24 +342,24 @@ const ProductDetail = ({ addToCart, products }) => {
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-[#1A9D8F] to-[#157A6E] rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
                         <span className="text-white font-bold text-lg">
-                          {review?.userName?.charAt(0).toUpperCase()}
+                          {review?.user_name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-bold text-base text-[#4A3C31]">{review?.userName}</h4>
+                          <h4 className="font-bold text-base text-[#4A3C31]">{review?.user_name}</h4>
                           <div className="flex items-center gap-2 text-xs text-gray-500">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            {new Date(review?.timestamp).toLocaleDateString('en-US', {
+                            {new Date(review?.created_at).toLocaleDateString('en-US', {
                               day: 'numeric',
                               month: 'short',
                               year: 'numeric'
                             })}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-700 leading-relaxed">{review?.review}</p>
+                        <p className="text-sm text-gray-700 leading-relaxed">{review?.review_message}</p>
                       </div>
                     </div>
                   </div>
