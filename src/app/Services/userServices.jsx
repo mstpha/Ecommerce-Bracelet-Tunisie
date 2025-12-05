@@ -48,7 +48,7 @@ const apiCall = async (endpoint, options = {}) => {
       if (response.status === 401 && data.message?.includes('Token expired')) {
         removeAuthToken();
         toast.error('Session expired. Please login again.');
-        window.location.href = '/login'; // Redirect to login
+        window.location.href = '/login'; 
       }
       throw new Error(data.message || 'Something went wrong');
     }

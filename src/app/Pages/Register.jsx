@@ -83,8 +83,8 @@ const Register = () => {
     if (validation === true) {
       newUser = await addUser(RegformData)
     }
-    setUser(newUser.data)
-    localStorage.setItem('ID', newUser.id);
+    setUser(newUser.user)
+    localStorage.setItem('ID', newUser.user.id);
     toast.success('Registration successful!');
     navigate("/")
   };

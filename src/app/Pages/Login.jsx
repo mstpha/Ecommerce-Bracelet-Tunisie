@@ -16,7 +16,7 @@ const Login = () => {
       var currentUser = localStorage.getItem("ID")
       if (currentUser) {
         const UserLogin = getUserById(currentUser);
-        setUser(UserLogin.data)
+        setUser(UserLogin)
         navigate("/")
       }
     }
