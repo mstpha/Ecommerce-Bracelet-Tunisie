@@ -53,7 +53,7 @@ const apiCall = async (endpoint, options = {}) => {
       throw new Error(data.message || 'Something went wrong');
     }
 
-    return data.data;
+    return data.data? data.data:data;
   } catch (error) {
     throw error;
   }
