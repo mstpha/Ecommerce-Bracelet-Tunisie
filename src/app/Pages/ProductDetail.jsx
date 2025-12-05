@@ -342,7 +342,7 @@ const ProductDetail = ({ addToCart, products }) => {
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-[#1A9D8F] to-[#157A6E] rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
                         <span className="text-white font-bold text-lg">
-                          {review?.userName.charAt(0).toUpperCase()}
+                          {review?.userName?.charAt(0).toUpperCase()}
                         </span>
                       </div>
                       <div className="flex-1">
