@@ -131,14 +131,13 @@ const Checkout = () => {
         timestamp: new Date().toISOString()
       };
       if (isCart && orderItems) {
-        console.log(orderItems)
         const itemsList = orderItems.map(item =>
-          `${item.name} x${item.quantity} prix: ${parseInt(item.price)} Total: ${(parseInt(item.price) * item.quantity).toFixed(2)}`
+          `${item.product_name} x${item.quantity} prix: ${parseInt(item.price)} Total: ${(parseInt(item.price) * item.quantity).toFixed(2)}`
         ).join('\n');
         const ordersWithData = orderItems.map(item => ({
           ...orderData,
-          productId: item.id,
-          product_name:item.name,
+          productId: item.product_id,
+          product_name:item.product_name,
           quantity: item.quantity,
           price: parseInt(item.price),
           total: parseInt(item.price) * item.quantity,
