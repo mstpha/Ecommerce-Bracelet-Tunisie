@@ -106,7 +106,6 @@ function App() {
       let cartOrders=[];
       const currentUser = localStorage.getItem("ID");
       let LoggedInUser;
-
       if (currentUser) {
         LoggedInUser = await getUserById(currentUser);
         setUser(LoggedInUser);

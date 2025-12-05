@@ -2,20 +2,54 @@ import toast from "react-hot-toast";
 
 const API_URL = 'https://ecommerce-bracelet-tunisie-backend.onrender.com/api';
 
+// Token management
+const TOKEN_KEY = 'auth_token';
+
+export const setAuthToken = (token) => {
+  localStorage.setItem(TOKEN_KEY, token);
+};
+
+export const getAuthToken = () => {
+  return localStorage.getItem(TOKEN_KEY);
+};
+
+export const removeAuthToken = () => {
+  localStorage.removeItem(TOKEN_KEY);
+};
+
+
+
+export const isAuthenticated = () => {
+  return !!getAuthToken();
+};
+
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
   try {
+    const headers = {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
+
+    // Add auth token if available
+    const token = getAuthToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
     const response = await fetch(`${API_URL}${endpoint}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
       ...options,
     });
 
     const data = await response.json();
 
     if (!response.ok) {
+      // Handle token expiration
+      if (response.status === 401 && data.message?.includes('Token expired')) {
+        removeAuthToken();
+        toast.error('Session expired. Please login again.');
+        window.location.href = '/login'; // Redirect to login
+      }
       throw new Error(data.message || 'Something went wrong');
     }
 
@@ -57,7 +91,7 @@ export const getUserByEmail = async (email) => {
 
 export const addUser = async (userData) => {
   try {
-    const newUser = await apiCall('/users', {
+    const result = await apiCall('/users', {
       method: 'POST',
       body: JSON.stringify({
         full_name: userData.full_name,
@@ -68,9 +102,14 @@ export const addUser = async (userData) => {
       }),
     });
 
-    return newUser;
+    // Store token and user data
+    if (result.token) {
+      setAuthToken(result.token);
+    }
+
+    return result;
   } catch (error) {
-    toast.error(error.message || 'Error adding user');
+    toast.error( 'Error adding user');
     throw error;
   }
 };
@@ -82,10 +121,11 @@ export const updateUser = async (userId, updates) => {
       body: JSON.stringify(updates),
     });
 
+    // Update stored user data
     toast.success('User updated successfully!');
     return updatedUser;
   } catch (error) {
-    toast.error(error.message || 'Error updating user');
+    toast.error('Error updating user');
     throw error;
   }
 };
@@ -96,26 +136,39 @@ export const deleteUser = async (userId) => {
       method: 'DELETE',
     });
 
+    // Clear auth data
+    removeAuthToken();
     toast.success('User deleted successfully!');
     return true;
   } catch (error) {
-    toast.error(error.message || 'Error deleting user');
+    toast.error( 'Error deleting user');
     throw error;
   }
 };
 
 export const loginUser = async (email, password) => {
   try {
-    const user = await apiCall('/users/login', {
+    const result = await apiCall('/users/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
 
-    return user;
+    // Store token and user data
+    if (result.token) {
+      setAuthToken(result.token);
+    }
+
+    return result;
   } catch (error) {
-    toast.error(error.message || 'Invalid email or password');
+    toast.error('Invalid email or password');
     throw error;
   }
+};
+
+export const logoutUser = () => {
+  removeAuthToken();
+  toast.success('Logged out successfully!');
+  window.location.href = '/login';
 };
 
 // ============ CART MANAGEMENT ============
@@ -131,7 +184,6 @@ export const getUserCart = async (userId) => {
 
 export const addToUserCart = async (userId, product, quantity) => {
   try {
-
     const cartItem = await apiCall(`/cart/${userId}`, {
       method: 'POST',
       body: JSON.stringify({ product, quantity }),
@@ -139,7 +191,7 @@ export const addToUserCart = async (userId, product, quantity) => {
 
     return cartItem;
   } catch (error) {
-    toast.error(error.message || 'Error adding to cart');
+    toast.error( 'Error adding to cart');
     throw error;
   }
 };
@@ -153,7 +205,7 @@ export const updateUserCartItem = async (userId, productId, newQuantity) => {
 
     return cartItem;
   } catch (error) {
-    toast.error(error.message || 'Error updating cart item');
+    toast.error( 'Error updating cart item');
     throw error;
   }
 };
@@ -167,7 +219,7 @@ export const removeFromUserCart = async (userId, productId) => {
     toast.success('Removed from cart!');
     return true;
   } catch (error) {
-    toast.error(error.message || 'Error removing from cart');
+    toast.error( 'Error removing from cart');
     throw error;
   }
 };
@@ -181,7 +233,7 @@ export const clearUserCart = async (userId) => {
     toast.success('Cart cleared!');
     return true;
   } catch (error) {
-    toast.error(error.message || 'Error clearing cart');
+    toast.error( 'Error clearing cart');
     throw error;
   }
 };
@@ -207,7 +259,7 @@ export const addToFavorites = async (userId, product) => {
     toast.success('Added to favorites!');
     return favorite;
   } catch (error) {
-    toast.error(error.message || 'Error adding to favorites');
+    toast.error( 'Error adding to favorites');
     throw error;
   }
 };
@@ -221,7 +273,7 @@ export const removeFromFavorites = async (userId, productId) => {
     toast.success('Removed from favorites');
     return true;
   } catch (error) {
-    toast.error(error.message || 'Error removing from favorites');
+    toast.error( 'Error removing from favorites');
     throw error;
   }
 };
@@ -256,7 +308,7 @@ export const addReview = async (productId, userName, reviewMessage) => {
     toast.success('Review added successfully!');
     return review;
   } catch (error) {
-    toast.error(error.message || 'Error adding review');
+    toast.error( 'Error adding review');
     throw error;
   }
 };
@@ -282,7 +334,7 @@ export const addOrderToUser = async (userId, order) => {
     toast.success('Order placed successfully!');
     return newOrder;
   } catch (error) {
-    toast.error(error.message || 'Error adding order');
+    toast.error( 'Error adding order');
     throw error;
   }
 };
@@ -297,7 +349,7 @@ export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => 
     toast.success('Orders placed successfully!');
     return orders;
   } catch (error) {
-    toast.error(error.message || 'Error adding cart orders');
+    toast.error( 'Error adding cart orders');
     throw error;
   }
 };
