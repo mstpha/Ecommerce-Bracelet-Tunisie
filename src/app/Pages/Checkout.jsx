@@ -137,6 +137,7 @@ const Checkout = () => {
         const ordersWithData = orderItems.map(item => ({
           ...orderData,
           productId: item.id,
+          product_name:item.name,
           quantity: item.quantity,
           price: parseInt(item.price),
           total: parseInt(item.price) * item.quantity,
