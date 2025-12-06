@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
   const navigate=useNavigate()
   const logout = () => {
     localStorage.removeItem('ID');
+    localStorage.removeItem('auth_token');
     setUser(null);
     navigate("/")
   };
