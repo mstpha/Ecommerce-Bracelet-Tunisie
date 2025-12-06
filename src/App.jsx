@@ -152,7 +152,7 @@ function App() {
             path="/shop/category/:category" 
             element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
           />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<Checkout clearCartItems={clearCartItems />} />
           <Route 
             path="/product/:id" 
             element={<ProductDetail addToCart={addToCart} products={products} />} 
