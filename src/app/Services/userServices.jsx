@@ -153,7 +153,6 @@ export const loginUser = async (email, password) => {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-    console.log(result)
     // Store token and user data
     if (result.token) {
       setAuthToken(result.token);
