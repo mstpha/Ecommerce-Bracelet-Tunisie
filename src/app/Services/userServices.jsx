@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-const API_URL = 'https://ecommerce-bracelet-tunisie-backend.onrender.com/api';
+const API_URL = 'http://localhost:5000/api';
 
 //
 // Token management
@@ -341,6 +341,8 @@ export const addOrderToUser = async (userId, order) => {
 
 export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => {
   try {
+    console.log(cartItems)
+    console.log(itemsList)
     const orders = await apiCall(`/orders/${userId}/checkout`, {
       method: 'POST',
       body: JSON.stringify({ cartItems, itemsList }),
