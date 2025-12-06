@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { UserContext } from '../../userContext';
 import { addOrderToUser, addCartOrdersToUser } from '../Services/userServices';
 
-const Checkout = () => {
+const Checkout = ({ clearCartItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(UserContext);
