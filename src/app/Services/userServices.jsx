@@ -341,8 +341,7 @@ export const addOrderToUser = async (userId, order) => {
 
 export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => {
   try {
-    console.log(cartItems)
-    console.log(itemsList)
+
     const orders = await apiCall(`/orders/${userId}/checkout`, {
       method: 'POST',
       body: JSON.stringify({ cartItems, itemsList }),
