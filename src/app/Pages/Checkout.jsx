@@ -145,6 +145,7 @@ const Checkout = () => {
           displayString: itemsList
         }));
         const updatedUser = await addCartOrdersToUser(currentUser, ordersWithData, itemsList);
+        clearCartItems()
         navigate("/shop")
       } else if (product && quantity) {
         const itemsList = `${product.name} x${quantity} prix: ${product.price} Total: ${(product.price * quantity).toFixed(2)}`;
