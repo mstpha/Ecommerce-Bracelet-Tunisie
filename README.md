@@ -2,7 +2,7 @@
 
 A modern and elegant e-commerce platform dedicated to selling bracelets in Tunisia, built with React and Firebase.
 
-🔗 **Live Demo**: [ecommerce-bracelet.vercel.app](https://ecommerce-bracelet.vercel.app)
+🔗 **Live Demo**: [ecommerce-bracelet.vercel.app](https://ecommerce-bracelet.vercel.app).
 
 ## 📋 Project Description
 
