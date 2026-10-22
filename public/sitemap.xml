@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://bracelettunisie.vercel.app/</loc></url>
-  <url><loc>https://bracelettunisie.vercel.app/bracelets</loc></url>
-  <url><loc>https://bracelettunisie.vercel.app/bagues</loc></url>
-  <url><loc>https://bracelettunisie.vercel.app/casquettes</loc></url>
+  <url><loc>https://bracelettunisie.vercel.app/shop</loc></url>
+  <url><loc>https://bracelettunisie.vercel.app/shop/category/bracelet</loc></url>
+  <url><loc>https://bracelettunisie.vercel.app/shop/category/cap</loc></url>
+  <url><loc>https://bracelettunisie.vercel.app/shop/category/necklace</loc></url>
+  <url><loc>https://bracelettunisie.vercel.app/shop/category/earring</loc></url>
 </urlset>
