@@ -21,8 +21,11 @@ import {
 } from './app/Services/userServices';
 import { UserContext } from './userContext';
 import Checkout from './app/Pages/Checkout';
+import usePageView from './hooks/usePageView';
+import { pushEcommerce, toAnalyticsItem } from './utils/analytics';
 
 function App() {
+  usePageView();
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState([]);
@@ -42,6 +45,11 @@ function App() {
         );
       }
       return [...prevItems, { ...product, quantity: quantity }];
+    });
+    pushEcommerce('add_to_cart', {
+      currency: 'TND',
+      value: parseFloat(product.price) * quantity,
+      items: [toAnalyticsItem(product, { quantity })]
     });
     let userCart;
     if (user?.id) {

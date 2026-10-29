@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ShoppingCartSideNav from './ShoppingCartSideNav';
 import { UserContext } from '../../userContext';
 import Profile from './Profile';
+import { pushEvent } from '../../utils/analytics';
 
 const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeCartItem }) => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
@@ -43,6 +44,9 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   }, [location, setSearchTerm]);
 
   const handleSearch = () => {
+    if (localSearchTerm.trim()) {
+      pushEvent('search', { search_term: localSearchTerm.trim().toLowerCase() });
+    }
     setSearchTerm(localSearchTerm);
     if (localSearchTerm) {
       navigate(`/shop?search=${encodeURIComponent(localSearchTerm)}`);

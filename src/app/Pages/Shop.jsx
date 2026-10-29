@@ -4,6 +4,7 @@ import productsData from '../Data/products.json';
 import ShopItem from '../Components/ShopItem';
 import Suggestions from '../Components/Suggestions';
 import LoadingTruck from '../Components/Loader';
+import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
 
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();
@@ -43,6 +44,14 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
 
     setItems(filteredItems);
     setSortedItems(filteredItems);
+
+    if (category && filteredItems?.length) {
+      pushEcommerce('view_item_list', {
+        item_list_id: category,
+        item_list_name: category,
+        items: filteredItems.map((p, index) => toAnalyticsItem(p, { index }))
+      });
+    }
   }, [gender, category]);
 
   useEffect(() => {

@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Truck, Package, CreditCard, MapPin, Phone, User, ArrowLeft, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { UserContext } from '../../userContext';
 import { addOrderToUser, addCartOrdersToUser } from '../Services/userServices';
+import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
 
 const Checkout = ({ clearCartItems }) => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const Checkout = ({ clearCartItems }) => {
   const [deliveryMode, setDeliveryMode] = useState('standard');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const beginCheckoutSent = useRef(false);
+  const orderSubmittedSent = useRef(false);
 
   const deliveryOptions = [
     {
@@ -76,6 +79,28 @@ const Checkout = ({ clearCartItems }) => {
   const deliveryFee = deliveryOptions.find(opt => opt.id === deliveryMode)?.price || 6;
   const subtotal = calculateSubtotal();
   const total = subtotal + deliveryFee;
+
+  const getAnalyticsEcommerce = () => {
+    let items = [];
+    if (isCart && orderItems) {
+      items = orderItems.map(item => toAnalyticsItem(item, { quantity: item.quantity }));
+    } else if (product && quantity) {
+      items = [toAnalyticsItem(product, { quantity })];
+    }
+    return { currency: 'TND', value: total, items };
+  };
+
+  const handleFormFocus = () => {
+    if (beginCheckoutSent.current) return;
+    beginCheckoutSent.current = true;
+    pushEcommerce('begin_checkout', getAnalyticsEcommerce());
+  };
+
+  const trackOrderSubmitted = () => {
+    if (orderSubmittedSent.current) return;
+    orderSubmittedSent.current = true;
+    pushEcommerce('order_submitted', getAnalyticsEcommerce());
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -145,6 +170,7 @@ const Checkout = ({ clearCartItems }) => {
           displayString: itemsList
         }));
         const updatedUser = await addCartOrdersToUser(currentUser, ordersWithData, itemsList);
+        trackOrderSubmitted();
         clearCartItems()
         navigate("/shop")
       } else if (product && quantity) {
@@ -160,6 +186,7 @@ const Checkout = ({ clearCartItems }) => {
           displayString: itemsList
         };
         const updatedUser = await addOrderToUser(currentUser, orderItem);
+        trackOrderSubmitted();
         navigate("/shop")
       }
 
@@ -201,7 +228,7 @@ const Checkout = ({ clearCartItems }) => {
                 <h2 className="text-2xl font-bold text-gray-900">Delivery information</h2>
               </div>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onFocus={handleFormFocus}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">

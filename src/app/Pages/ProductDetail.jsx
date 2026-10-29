@@ -7,6 +7,7 @@ import Suggestions from '../Components/Suggestions';
 import { UserContext } from '../../userContext';
 import { addOrderToUser, addReview, addToFavorites, getReviews, getUserFavorites, removeFromFavorites } from '../Services/userServices';
 import LoadingTruck from '../Components/Loader';
+import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
 
 const ProductDetail = ({ addToCart, products }) => {
   const { id } = useParams();
@@ -47,6 +48,15 @@ const ProductDetail = ({ addToCart, products }) => {
 
 
   }, [product, id])
+
+  useEffect(() => {
+    if (!product) return;
+    pushEcommerce('view_item', {
+      currency: 'TND',
+      value: parseFloat(product.price),
+      items: [toAnalyticsItem(product, { quantity: 1 })]
+    });
+  }, [product])
 
   useEffect(()=>{
     const isFavorited = async ()=>{
