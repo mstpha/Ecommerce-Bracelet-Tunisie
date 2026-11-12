@@ -1,39 +1,53 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { lazy, Suspense, useState, useEffect, useContext } from 'react';
+import { Route, Routes, useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 import Nav from './app/Pages/Nav';
-import ProductDetail from './app/Pages/ProductDetail';
-import Shop from './app/Pages/Shop';
-import Welcome from './app/Pages/Welcome';
-import productsData from './app/Data/products.json'
+import { products, productPath, categories } from './app/Data/catalog';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Footer from './Footer';
-import Login from './app/Pages/Login';
-import Register from './app/Pages/Register';
 import { 
   getUserById, 
   addToUserCart, 
   updateUserCartItem, 
   removeFromUserCart, 
   clearUserCart, 
-  getUserOrders,
   getUserCart
 } from './app/Services/userServices';
-import { UserContext } from './userContext';
-import Checkout from './app/Pages/Checkout';
+import { UserContext } from './UserContext.js';
 import usePageView from './hooks/usePageView';
 import { pushEcommerce, toAnalyticsItem } from './utils/analytics';
 
+const ProductDetail = lazy(() => import('./app/Pages/ProductDetail'));
+const Shop = lazy(() => import('./app/Pages/Shop'));
+const Welcome = lazy(() => import('./app/Pages/Welcome'));
+const Login = lazy(() => import('./app/Pages/Login'));
+const Register = lazy(() => import('./app/Pages/Register'));
+const Checkout = lazy(() => import('./app/Pages/Checkout'));
+const OrderConfirmation = lazy(() => import('./app/Pages/OrderConfirmation'));
+const NotFound = lazy(() => import('./app/Pages/NotFound'));
+
+function LegacyProductRedirect() {
+  const { id } = useParams();
+  const product = products.find((item) => item.id === Number(id));
+  return product ? <Navigate to={productPath(product)} replace /> : <Navigate to="/boutique" replace />;
+}
+
+function LegacyCategoryRedirect() {
+  const { category } = useParams();
+  const categoryKey = Object.keys(categories).find((key) => key === category.toLowerCase());
+  return <Navigate to={categories[categoryKey]?.path ?? '/boutique'} replace />;
+}
+
 function App() {
   usePageView();
+  const location = useLocation();
   const [cartItems, setCartItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [products, setProducts] = useState([]);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   
   const addToCart = async (product, quantity) => {
-    toast.success("Product added successfully");
+    toast.success("Article ajouté au panier");
     
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
@@ -54,8 +68,8 @@ function App() {
     let userCart;
     if (user?.id) {
       try {
-        const updatedUser = await addToUserCart(user.id, product, quantity);
-        userCart = await getUserCart(localStorage.getItem('ID'))
+        await addToUserCart(user.id, product, quantity);
+        userCart = await getUserCart(localStorage.getItem('ID'));
         setCartItems(userCart)
       } catch (error) {
         console.error('Error syncing cart:', error);
@@ -72,8 +86,7 @@ function App() {
 
     if (user?.id) {
       try {
-        const updatedUser = await updateUserCartItem(user.id, id, newQuantity);
-
+        await updateUserCartItem(user.id, id, newQuantity);
       } catch (error) {
         console.error('Error syncing cart update:', error);
       }
@@ -84,8 +97,8 @@ function App() {
 
     if (user) {
       try {
-        const updatedUser = await removeFromUserCart(localStorage.getItem('ID'), id);
-        const userCart = await getUserCart(localStorage.getItem('ID'))
+        await removeFromUserCart(localStorage.getItem('ID'), id);
+        const userCart = await getUserCart(localStorage.getItem('ID'));
         setCartItems(userCart)
       } catch (error) {
         console.error('Error syncing cart removal:', error);
@@ -98,8 +111,7 @@ function App() {
 
     if (user?.id) {
       try {
-        const updatedUser = await clearUserCart(user.id);
-
+        await clearUserCart(user.id);
       } catch (error) {
         console.error('Error syncing cart clear:', error);
       }
@@ -107,7 +119,7 @@ function App() {
   };
 
   useEffect(() => {
-    const initalize = async () => {
+    const initialize = async () => {
       if (user) {
         return;
       }
@@ -120,24 +132,20 @@ function App() {
         cartOrders= await getUserCart(currentUser)
         setCartItems(cartOrders || []);
         
-        if (location.pathname === "/login" || location.pathname==="/register") {
+        if (location.pathname === "/connexion" || location.pathname === "/inscription") {
           navigate("/");
         }
       }
-      
-      setProducts(productsData.products);
     }
-    initalize();
-  }, []);
+    initialize();
+  }, [location.pathname, navigate, setUser, user]);
 
-
-
-  const location = useLocation();
+  const privatePages = ['/connexion', '/inscription'];
 
   return (
     <div className="flex flex-col min-h-screen">
       <Toaster />
-      {(location.pathname !== '/login' && location.pathname !== "/register") && (
+      {!privatePages.includes(location.pathname) && (
         <Nav 
           setSearchTerm={setSearchTerm} 
           cartItems={cartItems} 
@@ -148,24 +156,25 @@ function App() {
       )}
       
       <main className="flex-grow">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="register" element={<Register/>}/>
-          <Route path="/" element={<Welcome />} />
-          <Route 
-            path="/shop" 
-            element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
-          />
-          <Route 
-            path="/shop/category/:category" 
-            element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} products={products} />} 
-          />
-          <Route path="/checkout" element={<Checkout clearCartItems={clearCartItems}/>} />
-          <Route 
-            path="/product/:id" 
-            element={<ProductDetail addToCart={addToCart} products={products} />} 
-          />
-        </Routes>
+        <Suspense fallback={<div className="min-h-screen" aria-label="Chargement" />}>
+          <Routes>
+            <Route path="/" element={<Welcome />} />
+            <Route path="/boutique" element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} />} />
+            <Route path="/boutique/categorie/:category" element={<Shop searchTerm={searchTerm} setSearchTerm={setSearchTerm} />} />
+            <Route path="/produit/:id" element={<ProductDetail addToCart={addToCart} products={products} />} />
+            <Route path="/commande" element={<Checkout clearCartItems={clearCartItems} />} />
+            <Route path="/commande/confirmation" element={<OrderConfirmation />} />
+            <Route path="/connexion" element={<Login />} />
+            <Route path="/inscription" element={<Register />} />
+            <Route path="/shop" element={<Navigate to="/boutique" replace />} />
+            <Route path="/shop/category/:category" element={<LegacyCategoryRedirect />} />
+            <Route path="/product/:id" element={<LegacyProductRedirect />} />
+            <Route path="/checkout" element={<Navigate to="/commande" replace />} />
+            <Route path="/login" element={<Navigate to="/connexion" replace />} />
+            <Route path="/register" element={<Navigate to="/inscription" replace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <Footer />

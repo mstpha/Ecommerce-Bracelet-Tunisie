@@ -3,11 +3,6 @@ import { Sparkles } from 'lucide-react';
 import ShopItem from './ShopItem';
 
 const Suggestions = ({ suggestions }) => {
-  const truncateDescription = (description, maxLength = 60) => {
-    if (description.length <= maxLength) return description;
-    return description.slice(0, maxLength).trim() + '...';
-  };
-
   return (
     <div className="w-full mb-8">
       <div className="flex items-center gap-4 mb-6">
@@ -23,8 +18,8 @@ const Suggestions = ({ suggestions }) => {
             <Sparkles className="text-[#1A9D8F]" size={24} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-[#4A3C31]">Suggestions For you</h2>
-            <p className="text-sm text-[#1A9D8F] font-medium">Aritcles Specially selected for you!</p>
+            <h2 className="text-2xl font-bold text-[#4A3C31]">Suggestions pour vous</h2>
+            <p className="text-sm text-[#1A9D8F] font-medium">Articles sélectionnés pour vous</p>
           </div>
         </div>
 
@@ -32,7 +27,7 @@ const Suggestions = ({ suggestions }) => {
           <div className="flex space-x-4 custom-scrollbar overflow-x-auto scrollbar-thin scrollbar-thumb-[#1A9D8F]/40 scrollbar-track-transparent scroll-smooth py-2">
             {suggestions.map((item) => (
               <div key={item.id} className="min-w-[180px] flex-shrink-0 transform transition-transform hover:scale-105">
-                <ShopItem item={item} truncateDescription={truncateDescription} />
+                <ShopItem item={item} />
               </div>
             ))}
           </div>

@@ -1,21 +1,26 @@
 @import "tailwindcss";
 
-@keyframes slideLeft {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+@keyframes home-background-pan {
+  to {
+    background-position: 100% center;
+  }
 }
 
-@keyframes slideRight {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+.home-background-pan {
+  background-position: 0 center;
+  background-repeat: no-repeat;
+  background-size: 115% auto;
+  animation: home-background-pan 55s linear infinite alternate;
 }
 
-.slide-left {
-  animation: slideLeft 0.3s ease-out;
+@media (max-aspect-ratio: 1/1) {
+  .home-background-pan {
+    background-size: auto 100%;
+  }
 }
 
-.slide-right {
-  animation: slideRight 0.3s ease-out;
+@media (prefers-reduced-motion: reduce) {
+  .home-background-pan {
+    animation: none;
+  }
 }
-
-

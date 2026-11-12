@@ -1,14 +1,10 @@
-import React, { useState, forwardRef, useContext } from 'react';
+import React, { forwardRef } from 'react';
 import { X, Plus, Minus, ShoppingCart } from 'lucide-react';
-import { addCartOrdersToUser } from '../Services/userServices';
-import { UserContext } from '../../userContext';
 import { useNavigate } from 'react-router-dom';
-
+import { products, productImage } from '../Data/catalog';
 
 
 const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCartItem, removeCartItem }, ref) => {
-  const [formData, setFormData] = useState({ full_name: '', phoneNumber: '', address: '' });
-  const { user, setUser } = useContext(UserContext)
   const calculateTotal = () => {
     const subtotal = cartItems.reduce((total, item) => {
       const price = item.price;
@@ -28,58 +24,66 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
       >
         <div className="sticky top-0 bg-[#4A3C31] z-10 p-4 flex justify-between items-center border-b border-[#F5F2E9]">
           <h2 className="text-2xl font-bold flex items-center">
-            <ShoppingCart className="mr-2" /> Shopping Cart
+            <ShoppingCart className="mr-2" /> Panier
           </h2>
           <X
+            aria-label="Fermer le panier"
+            role="button"
             className="cursor-pointer hover:text-[#1A9D8F] transition-colors"
             onClick={() => setIsOpen(false)}
           />
         </div>
         <ul className="mt-4 px-4">
-          {cartItems?.map((item) => (
+          {cartItems?.map((item) => {
+            const product = products.find((entry) => String(entry.id) === String(item.product_id ?? item.id));
+            const productName = product?.name ?? item.product_name;
+            return (
             <li key={item.id} className="mb-4 p-2 bg-[#5B4D3D] rounded-lg">
               <div className="flex gap-3 mb-2">
-                <img
-                  src={`/${item.product_id}/1.webp`}
-                  alt={item.product_name}
-                  className="w-16 h-16 object-cover rounded"
-                  onError={(e) => {
-                    e.target.src = '/placeholder.png';
-                  }}
-                />
+                {product && (
+                  <img
+                    src={productImage(product)}
+                    alt={`Vue du produit : ${productName}`}
+                    width="64"
+                    height="64"
+                    loading="lazy"
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                )}
                 <div className="flex-1">
                   <div className="flex justify-between items-start mb-1">
-                    <span className="font-medium text-sm">{item.product_name}</span>
+                    <span className="font-medium text-sm">{productName}</span>
                   </div>
                   <span className="text-[#1A9D8F] font-semibold">{item.price} TND</span>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center bg-[#4A3C31] rounded-full">
-                  <button onClick={() => updateCartItem(item.id, item.quantity - 1)} className="p-1 hover:bg-[#3A2C21] rounded-l-full">
+                  <button aria-label={`Diminuer la quantité de ${productName}`} onClick={() => updateCartItem(item.id, item.quantity - 1)} className="p-1 hover:bg-[#3A2C21] rounded-l-full">
                     <Minus size={16} />
                   </button>
                   <span className="mx-2 min-w-[20px] text-center">{item.quantity}</span>
-                  <button onClick={() => updateCartItem(item.id, item.quantity + 1)} className="p-1 hover:bg-[#3A2C21] rounded-r-full">
+                  <button aria-label={`Augmenter la quantité de ${productName}`} onClick={() => updateCartItem(item.id, item.quantity + 1)} className="p-1 hover:bg-[#3A2C21] rounded-r-full">
                     <Plus size={16} />
                   </button>
                 </div>
                 <button onClick={() => removeCartItem(item.product_id)} className="text-red-500 hover:text-red-700 text-sm">
-                  Remove item
+                  Retirer l’article
                 </button>
               </div>
             </li>
-          ))}
+            );
+          })}
         </ul>
         <div className="sticky bottom-0 bg-[#4A3C31] p-4 border-t border-[#F5F2E9]">
           <div className="mb-2 text-xl font-bold">
-            Total: {cartItems.length > 0 ? calculateTotal() : 0} TND
+            Total : {cartItems.length > 0 ? calculateTotal() : 0} TND
 
           </div>
           <button
             onClick={() => {
               setIsOpen(false);
-              navigate('/checkout', {
+              navigate('/commande', {
                 state: {
                   orderItems: cartItems,
                   isCart: true
@@ -89,7 +93,7 @@ const ShoppingCartSideNav = forwardRef(({ isOpen, setIsOpen, cartItems, updateCa
             className="w-full bg-[#1A9D8F] text-white font-bold py-2 px-4 rounded hover:bg-[#158275] transition-colors"
             disabled={cartItems.length === 0}
           >
-            Confirm Cart orders
+            Confirmer la commande
           </button>
         </div>
       </div>

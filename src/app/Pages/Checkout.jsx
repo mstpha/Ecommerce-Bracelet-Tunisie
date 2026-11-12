@@ -2,17 +2,16 @@ import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Truck, Package, CreditCard, MapPin, Phone, User, ArrowLeft, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { UserContext } from '../../userContext';
+import { UserContext } from '../../UserContext.js';
 import { addOrderToUser, addCartOrdersToUser } from '../Services/userServices';
 import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
+import Seo from '../../components/Seo';
+import { products } from '../Data/catalog';
 
 const Checkout = ({ clearCartItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useContext(UserContext);
-  const [CC, setCC] = useState(0)
-  const [CVV, setCVV] = useState(0)
-  const [EndDate, setEndDate] = useState("")
   const [errors, setErrors] = useState([]);
 
   const { orderItems, product, quantity, isCart } = location.state || {};
@@ -25,7 +24,7 @@ const Checkout = ({ clearCartItems }) => {
   });
 
   const [deliveryMode, setDeliveryMode] = useState('standard');
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const paymentMethod = 'cash';
   const [isSubmitting, setIsSubmitting] = useState(false);
   const beginCheckoutSent = useRef(false);
   const orderSubmittedSent = useRef(false);
@@ -33,15 +32,15 @@ const Checkout = ({ clearCartItems }) => {
   const deliveryOptions = [
     {
       id: 'standard',
-      name: 'Standard Delivery',
-      description: '48 hours',
+      name: 'Livraison standard',
+      description: 'Livraison dans toute la Tunisie',
       price: 6,
       icon: Truck
     },
     {
       id: 'express',
-      name: 'Express Delivery',
-      description: '24 hours',
+      name: 'Livraison express',
+      description: 'Livraison dans toute la Tunisie',
       price: 10,
       icon: Package
     }
@@ -50,19 +49,8 @@ const Checkout = ({ clearCartItems }) => {
     {
       id: 'cash',
 
-      name: 'Cash on Delivery',
-
-      description: 'Pay in cash upon receipt'
-
-    },
-
-    {
-      id: 'card',
-
-      name: 'Credit Card',
-
-      description: 'Secure Card Payment'
-
+      name: 'Paiement à la livraison',
+      description: 'Réglez votre commande à sa réception',
     }
   ];
 
@@ -118,25 +106,7 @@ const Checkout = ({ clearCartItems }) => {
     const validationErrors = [];
 
     if (!formData.full_name || !formData.phoneNumber || !formData.address || !formData.city || !formData.postalCode) {
-      validationErrors.push('Please fill in all delivery fields');
-    }
-
-    if (paymentMethod === 'card') {
-      if (!CC || !EndDate || !CVV) {
-        validationErrors.push('Please fill in all bank card details');
-      } else {
-        if (CC.toString().replace(/\s/g, '').length < 13 || CC.toString().replace(/\s/g, '').length > 19) {
-          validationErrors.push('Carte number invalid');
-        }
-
-        if (CVV.toString().length < 3 || CVV.toString().length > 4) {
-          validationErrors.push('CVV invalide');
-        }
-
-        if (!/^\d{2}\/\d{2}$/.test(EndDate)) {
-          validationErrors.push('Expiration Date invalid (MM/AA)');
-        }
-      }
+      validationErrors.push('Veuillez remplir tous les champs de livraison.');
     }
 
     if (validationErrors.length > 0) {
@@ -156,25 +126,30 @@ const Checkout = ({ clearCartItems }) => {
         timestamp: new Date().toISOString()
       };
       if (isCart && orderItems) {
-        const itemsList = orderItems.map(item =>
-          `${item.product_name} x${item.quantity} prix: ${parseInt(item.price)} Total: ${(parseInt(item.price) * item.quantity).toFixed(2)}`
-        ).join('\n');
-        const ordersWithData = orderItems.map(item => ({
-          ...orderData,
-          productId: item.product_id,
-          product_name:item.product_name,
-          quantity: item.quantity,
-          price: parseInt(item.price),
-          total: parseInt(item.price) * item.quantity,
-          name: item.name,
-          displayString: itemsList
-        }));
-        const updatedUser = await addCartOrdersToUser(currentUser, ordersWithData, itemsList);
+        const itemsList = orderItems.map((item) => {
+          const catalogProduct = products.find((entry) => String(entry.id) === String(item.product_id ?? item.id));
+          const name = catalogProduct?.name ?? item.product_name;
+          return `${name} x${item.quantity} prix : ${parseFloat(item.price)} total : ${(parseFloat(item.price) * item.quantity).toFixed(2)}`;
+        }).join('\n');
+        const ordersWithData = orderItems.map((item) => {
+          const catalogProduct = products.find((entry) => String(entry.id) === String(item.product_id ?? item.id));
+          return {
+            ...orderData,
+            productId: item.product_id ?? item.id,
+            product_name: catalogProduct?.name ?? item.product_name,
+            quantity: item.quantity,
+            price: parseFloat(item.price),
+            total: parseFloat(item.price) * item.quantity,
+            name: catalogProduct?.name ?? item.name,
+            displayString: itemsList
+          };
+        });
+        await addCartOrdersToUser(currentUser, ordersWithData, itemsList);
         trackOrderSubmitted();
         clearCartItems()
-        navigate("/shop")
+        navigate("/commande/confirmation")
       } else if (product && quantity) {
-        const itemsList = `${product.name} x${quantity} prix: ${product.price} Total: ${(product.price * quantity).toFixed(2)}`;
+        const itemsList = `${product.name} x${quantity} prix : ${product.price} total : ${(product.price * quantity).toFixed(2)}`;
 
         const orderItem = {
           ...orderData,
@@ -185,12 +160,12 @@ const Checkout = ({ clearCartItems }) => {
           total: product.price * quantity,
           displayString: itemsList
         };
-        const updatedUser = await addOrderToUser(currentUser, orderItem);
+        await addOrderToUser(currentUser, orderItem);
         trackOrderSubmitted();
-        navigate("/shop")
+        navigate("/commande/confirmation")
       }
 
-      toast.success('Order confirmed successfully!');
+      toast.success('Commande confirmée avec succès !');
 
     } catch (error) {
       console.error('Error submitting order:', error);
@@ -202,30 +177,36 @@ const Checkout = ({ clearCartItems }) => {
 
   useEffect(() => {
     if (!orderItems && !product) {
-      toast.error('No articles bought');
-      navigate('/login');
+      toast.error('Aucun article à commander.');
+      navigate('/connexion');
     }
   }, [orderItems, product, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+      <Seo
+        title="Finaliser votre commande | Bracelet Tunisie"
+        description="Finalisez votre commande de bracelets et accessoires en Tunisie. Renseignez vos coordonnées pour recevoir votre sélection et payer à la livraison."
+        path="/commande"
+        noindex
+      />
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center text-gray-600 hover:text-teal-600 mb-6 transition-colors"
         >
           <ArrowLeft className="mr-2" size={20} />
-          Return
+          Retour
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Finalize your order</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Finaliser votre commande</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <MapPin className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Delivery information</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Informations de livraison</h2>
               </div>
 
               <form className="space-y-4" onFocus={handleFormFocus}>
@@ -233,7 +214,7 @@ const Checkout = ({ clearCartItems }) => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       <User className="inline mr-2" size={16} />
-                      Full name
+                      Nom complet
                     </label>
                     <input
                       type="text"
@@ -249,7 +230,7 @@ const Checkout = ({ clearCartItems }) => {
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       <Phone className="inline mr-2" size={16} />
-                      Phone number
+                      Numéro de téléphone
                     </label>
                     <input
                       type="tel"
@@ -265,7 +246,7 @@ const Checkout = ({ clearCartItems }) => {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Full address
+                    Adresse complète
                   </label>
                   <textarea
                     name="address"
@@ -281,7 +262,7 @@ const Checkout = ({ clearCartItems }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      City
+                      Ville
                     </label>
                     <input
                       type="text"
@@ -295,7 +276,7 @@ const Checkout = ({ clearCartItems }) => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Postal code
+                      Code postal
                     </label>
                     <input
                       type="text"
@@ -313,7 +294,7 @@ const Checkout = ({ clearCartItems }) => {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <Truck className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Delivery type</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Mode de livraison</h2>
               </div>
 
               <div className="space-y-3">
@@ -348,17 +329,14 @@ const Checkout = ({ clearCartItems }) => {
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <div className="flex items-center mb-6">
                 <CreditCard className="text-teal-600 mr-3" size={24} />
-                <h2 className="text-2xl font-bold text-gray-900">Payment type</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Mode de paiement</h2>
               </div>
 
               <div className="space-y-3">
                 {paymentOptions.map((option) => (
                   <div
                     key={option.id}
-                    onClick={() => {
-                      setPaymentMethod(option.id);
-                      if (errors.length > 0) setErrors([]);
-                    }}
+                    onClick={() => errors.length > 0 && setErrors([])}
                     className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === option.id
                       ? 'border-teal-500 bg-teal-50'
                       : 'border-gray-200 hover:border-teal-300'
@@ -378,58 +356,17 @@ const Checkout = ({ clearCartItems }) => {
                 ))}
               </div>
 
-              {paymentMethod === 'card' && (
-                <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-                  <p className="text-sm text-gray-600 mb-4">Card information</p>
-                  <div className="space-y-3">
-                    <input
-                      type="text"
-                      value={CC}
-                      placeholder="Numéro de carte"
-                      onChange={(e) => {
-                        setCC(e.target.value);
-                        if (errors.length > 0) setErrors([]);
-                      }}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
-                    />
-                    <div className="grid grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        value={EndDate}
-                        placeholder="MM/AA"
-                        onChange={(e) => {
-                          setEndDate(e.target.value);
-                          if (errors.length > 0) setErrors([]);
-                        }}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      />
-                      <input
-                        type="text"
-                        value={CVV}
-                        onChange={(e) => {
-                          setCVV(e.target.value);
-                          if (errors.length > 0) setErrors([]);
-                        }}
-                        placeholder="CVV"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
 
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Summary</h2>
-
               {errors.length > 0 && (
                 <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
                   <div className="flex items-start">
                     <AlertCircle className="text-red-500 mr-3 flex-shrink-0 mt-0.5" size={20} />
                     <div className="flex-1">
-                      <h3 className="text-sm font-semibold text-red-800 mb-2">Valiation Error</h3>
+                      <h3 className="text-sm font-semibold text-red-800 mb-2">Erreur de validation</h3>
                       <ul className="space-y-1">
                         {errors.map((error, index) => (
                           <li key={index} className="text-sm text-red-700">
@@ -442,24 +379,28 @@ const Checkout = ({ clearCartItems }) => {
                 </div>
               )}
 
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Récapitulatif</h2>
               <div className="space-y-4 mb-6 max-h-80 overflow-y-auto">
                 {isCart && orderItems ? (
-                  orderItems.map((item, index) => (
+                  orderItems.map((item, index) => {
+                    const catalogProduct = products.find((entry) => String(entry.id) === String(item.product_id ?? item.id));
+                    return (
                     <div key={index} className="flex items-center space-x-4 pb-4 border-b border-gray-200">
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900">{item.product_name}</p>
+                        <p className="font-semibold text-gray-900">{catalogProduct?.name ?? item.product_name}</p>
                         <p className="text-sm text-gray-600">Quantité: {item.quantity}</p>
                       </div>
                       <p className="font-bold text-gray-900">
-                        {(parseInt(item.price) * item.quantity).toFixed(2)} TND
+                        {(parseFloat(item.price) * item.quantity).toFixed(2)} TND
                       </p>
                     </div>
-                  ))
+                    );
+                  })
                 ) : product && quantity ? (
                   <div className="flex items-center space-x-4 pb-4 border-b border-gray-200">
                     <div className="flex-1">
                       <p className="font-semibold text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-600">Quantity: {quantity}</p>
+                      <p className="text-sm text-gray-600">Quantité : {quantity}</p>
                     </div>
                     <p className="font-bold text-gray-900">
                       {(product.price * quantity).toFixed(2)} TND
@@ -470,11 +411,11 @@ const Checkout = ({ clearCartItems }) => {
 
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-600">
-                  <span>Sub-total</span>
+                  <span>Sous-total</span>
                   <span className="font-semibold">{subtotal.toFixed(2)} TND</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Delivery</span>
+                  <span>Livraison</span>
                   <span className="font-semibold">{deliveryFee.toFixed(2)} TND</span>
                 </div>
                 <div className="border-t border-gray-200 pt-3">
@@ -494,7 +435,7 @@ const Checkout = ({ clearCartItems }) => {
               </button>
 
               <p className="text-xs text-gray-500 text-center mt-4">
-                By confirming, you accept our terms and conditions.
+                En confirmant, vous acceptez les conditions de la commande.
               </p>
             </div>
           </div>

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Menu, ShoppingCart, Search, X, Home, ShoppingBag, ChevronDown, ChevronRight, LogOut } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import ShoppingCartSideNav from './ShoppingCartSideNav';
-import { UserContext } from '../../userContext';
+import { UserContext } from '../../UserContext.js';
 import Profile from './Profile';
 import { pushEvent } from '../../utils/analytics';
+import { categories } from '../Data/catalog';
 
 const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeCartItem }) => {
   const [isSideNavOpen, setIsSideNavOpen] = useState(false);
@@ -13,7 +14,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   const cartNavRef = useRef(null);
   const [isShopExpanded, setIsShopExpanded] = useState(false);
   const [isHommeExpanded, setIsHommeExpanded] = useState(false);
-  const { user, logout, loading } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const [showProfile, setShowProfile] = useState(false);
   const sideNavRef = useRef(null);
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const search = params.get('search');
-    if (!location.pathname.includes('/shop')) {
+    if (!location.pathname.includes('/boutique')) {
       setLocalSearchTerm('');
       setSearchTerm('');
     } else if (search) {
@@ -49,9 +50,9 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
     }
     setSearchTerm(localSearchTerm);
     if (localSearchTerm) {
-      navigate(`/shop?search=${encodeURIComponent(localSearchTerm)}`);
+      navigate(`/boutique?search=${encodeURIComponent(localSearchTerm)}`);
     } else {
-      navigate('/shop');
+      navigate('/boutique');
     }
   };
 
@@ -73,31 +74,36 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
 
   return (
     <>
-      <nav className="bg-[#4A3C31] text-[#F5F2E9] p-4 w-full relative">
+      <header>
+      <nav aria-label="Navigation principale" className="bg-[#4A3C31] text-[#F5F2E9] p-4 w-full relative">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-4">
-            <Menu className="cursor-pointer" onClick={() => setIsSideNavOpen(true)} />
-            <ShoppingCart className="cursor-pointer" onClick={() => setIsCartOpen(true)} />
-        <div onClick={()=>{navigate('/shop')}} className="flex items-center cursor-pointer space-x-1">
+            <button type="button" aria-label="Ouvrir le menu" onClick={() => setIsSideNavOpen(true)}>
+              <Menu className="cursor-pointer" />
+            </button>
+            <button type="button" aria-label="Ouvrir le panier" onClick={() => setIsCartOpen(true)}>
+              <ShoppingCart className="cursor-pointer" />
+            </button>
+        <button type="button" onClick={() => navigate('/boutique')} className="flex items-center cursor-pointer space-x-1">
           <ShoppingBag size={24} />
-          <span>Shop</span>
-        </div>
+          <span>Boutique</span>
+        </button>
           </div>
 
           <div className="flex-grow max-w-md mx-4">
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Rechercher..."
+                aria-label="Rechercher un produit"
                 className="w-full bg-[#F5F2E9] text-[#4A3C31] rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A9D8F]"
                 onChange={handleSearchChange}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 value={localSearchTerm}
               />
-              <Search
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4A3C31] cursor-pointer"
-                onClick={handleSearch}
-              />
+              <button type="button" aria-label="Rechercher" onClick={handleSearch} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#4A3C31]">
+                <Search className="cursor-pointer" />
+              </button>
 
             </div>
           </div>
@@ -105,12 +111,15 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             <span
               className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
               onClick={() => setShowProfile(true)}
+              aria-label="Ouvrir le profil"
             >
               {user?.full_name}
             </span>
             {user ? (
               <LogOut
                 size={18}
+                aria-label="Se déconnecter"
+                role="button"
                 className="hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -120,9 +129,9 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
             ) : (
               <span
                 className="text-[#1A9D8F] font-semibold underline decoration-2 underline-offset-4 hover:text-[#3CD6C5] transition-colors duration-300 cursor-pointer"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/connexion')}
               >
-                Login
+                Connexion
               </span>
             )}
 
@@ -130,6 +139,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
 
         </div>
       </nav>
+      </header>
 
       {isSideNavOpen && (
         <div className="fixed inset-0  bg-opacity-50 z-40" onClick={() => setIsSideNavOpen(false)}></div>
@@ -142,6 +152,8 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
       >
         <div className="h-56 bg-[url('/logo.jfif')] bg-center bg-cover bg-no-repeat relative">
           <X
+            aria-label="Fermer le menu"
+            role="button"
             className="absolute top-4 right-4 cursor-pointer text-[#F5F2E9] bg-[#4A3C31] rounded-full p-1"
             onClick={() => setIsSideNavOpen(false)}
           />
@@ -154,7 +166,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
               setIsSideNavOpen(false)
             }}>
               <Home className="mr-4" size={24} />
-              Main Page
+              Accueil
             </div>
           </li>
           <li className="mb-6">
@@ -163,7 +175,7 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
               onClick={toggleShopExpanded}
             >
               <ShoppingBag className="mr-4" size={24} />
-              Shop
+              Boutique
               {isShopExpanded ? (
                 <ChevronDown className="ml-2" size={20} />
               ) : (
@@ -176,12 +188,12 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
                   <div
                     className="flex items-center text-md hover:text-[#1A9D8F] cursor-pointer transition-colors duration-300 pb-2"
                     onClick={() => {
-                      navigate("/shop")
+                      navigate("/boutique")
                       setIsSideNavOpen(false)
                     }}
                   >
                     <ShoppingBag className="mr-4" size={24} />
-                    Shop
+                    Boutique
 
                   </div>
                   <div
@@ -193,19 +205,19 @@ const Nav = ({ setSearchTerm, clearCartItems, cartItems, updateCartItem, removeC
                     ) : (
                       <ChevronRight className="mr-2" size={20} />
                     )}
-                    Category
+                    Catégories
                   </div>
                   {isHommeExpanded && (
                     <ul className="mt-2 ml-4 space-y-2">
-                      {['Bracelet', 'Cap', 'Necklace', 'Earring'].map((item) => (<li key={item}>
+                      {Object.entries(categories).map(([key, category]) => (<li key={key}>
                         <div
                           className="text-sm hover:text-[#1A9D8F] block py-1 px-2 ml-4 rounded transition-colors duration-300 hover:bg-[#4A3C31]"
                           onClick={() => {
-                            navigate(`/shop/category/${item.toLowerCase()}`)
+                            navigate(category.path)
                             setIsSideNavOpen(false)
                           }}
                         >
-                          {item}
+                          {category.name}
                         </div>
                       </li>
                       ))}

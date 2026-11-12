@@ -4,32 +4,35 @@ import { ChevronLeft, ChevronRight, Truck, Shield, ThumbsUp, Plus, Minus, Packag
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
 import Suggestions from '../Components/Suggestions';
-import { UserContext } from '../../userContext';
-import { addOrderToUser, addReview, addToFavorites, getReviews, getUserFavorites, removeFromFavorites } from '../Services/userServices';
-import LoadingTruck from '../Components/Loader';
+import { UserContext } from '../../UserContext.js';
+import { addReview, addToFavorites, getReviews, getUserFavorites, removeFromFavorites } from '../Services/userServices';
 import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
+import { categories, productImage, productPath } from '../Data/catalog';
+import Seo from '../../components/Seo';
+import Breadcrumb from '../../components/Breadcrumb';
+import { productStructuredData } from '../Data/seoData';
+import { productSeo } from '../Data/seoPages';
 
 const ProductDetail = ({ addToCart, products }) => {
-  const { id } = useParams();
+  const { id: routeId } = useParams();
+  const id = routeId?.match(/^(\d+)(?:-|$)/)?.[1];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState('');
-  const [formData, setFormData] = useState({ full_name: '', phoneNumber: '', address: '' });
   const [quantity, setQuantity] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [reviewText, setReviewText] = useState('');
-  const [confirmdisable, setConfirmDisable] = useState(false);
   const [psug, setPsug] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const product = products.find(p => p.id === parseInt(id));
+  const product = products.find(p => p.id === Number(id));
   const currentUser = localStorage.getItem('ID');
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate()
-  let suggestions = [];
 
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    suggestions = products.filter(item => item.category === product.category);
+    if (!product) return;
+    const suggestions = products.filter(item => item.category === product.category && item.id !== product.id);
     function shuffleArray(array) {
       for (let i = array?.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -47,7 +50,7 @@ const ProductDetail = ({ addToCart, products }) => {
     fetchReviews();
 
 
-  }, [product, id])
+  }, [product, id, products])
 
   useEffect(() => {
     if (!product) return;
@@ -74,7 +77,7 @@ const ProductDetail = ({ addToCart, products }) => {
   })
   const handleToggleFavorite = async () => {
     if (!user) {
-      toast.error('Please login to add favorites');
+      toast.error('Connectez-vous pour ajouter cet article aux favoris');
       return;
     }
 
@@ -116,12 +119,12 @@ const ProductDetail = ({ addToCart, products }) => {
 
   const handleAddReview = async () => {
     if (!reviewText.trim()) {
-      toast.error('Please write a review');
+      toast.error('Veuillez rédiger un avis');
       return;
     }
 
     if (!user) {
-      toast.error('Please login to leave a review');
+      toast.error('Connectez-vous pour laisser un avis');
       return;
     }
     const fetchReviews = async () => {
@@ -139,18 +142,75 @@ const ProductDetail = ({ addToCart, products }) => {
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
-  const formatKey = (key) => {
-    return key?.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+  const characteristicLabels = {
+    material: 'Matière',
+    stone: 'Pierre',
+    finish: 'Finition',
+    style: 'Style',
+    includes: 'Contenu',
+    clasp: 'Fermoir',
+    closure: 'Fermeture',
+    length: 'Longueur',
+    color: 'Couleur',
+    diameter: 'Diamètre',
+    size: 'Taille',
+    adjustable: 'Réglable',
+    breathable: 'Respirant',
   };
+  const characteristicValues = {
+    'Sterling Silver': 'Argent sterling',
+    Rhinestone: 'Strass',
+    Polished: 'Poli',
+    Luxury: 'Style raffiné',
+    'Gold Plated': 'Plaqué or',
+    'Stainless Steel': 'Acier inoxydable',
+    'Cartier Inspired': 'Inspiré du style Cartier',
+    'Silver Tone': 'Ton argenté',
+    'Gold Tone': 'Ton doré',
+    'Black Tone': 'Ton noir',
+    'Silver & Gold': 'Argent et or',
+    'Coffee Bean Chain': 'Maille grain de café',
+    'High Polish': 'Poli brillant',
+    'Classic Chain': 'Chaîne classique',
+    'Swiss Link': 'Maille suisse',
+    'Box Clasp': 'Fermoir boîte',
+    'Lobster Clasp': 'Fermoir mousqueton',
+    'Magnetic Clasp': 'Fermoir magnétique',
+    'Hinged Clasp': 'Fermoir articulé',
+    'Push Back': 'Fermoir poussette',
+    'Strap Back': 'Fermeture à sangle',
+    Necklace: 'Collier',
+    Bracelet: 'Bracelet',
+    Watch: 'Montre',
+    'Africa Map Pendant': 'Pendentif carte de l’Afrique',
+    'Baseball Cap': 'Casquette classique',
+    'Cross Pendant': 'Pendentif croix',
+    Hoop: 'Créoles',
+    'Luxury Set': 'Parure',
+    'Snake Chain': 'Maille serpent',
+    'Sports Cap': 'Casquette de sport',
+    Streetwear: 'Style urbain',
+    Stud: 'Puces',
+    'Twisted Rope': 'Maille torsadée',
+    'Two-Tone': 'Bicolore',
+    'Cotton Blend': 'Mélange de coton',
+    Polyester: 'Polyester',
+    Beige: 'Beige',
+    Black: 'Noir',
+    White: 'Blanc',
+    '15mm': '15 mm',
+    '6mm': '6 mm',
+  };
+  const formatKey = (key) => characteristicLabels[key] ?? key;
 
   const formatValue = (value) => {
     if (Array.isArray(value)) {
-      return value.join(', ');
+      return value.map((item) => characteristicValues[item] ?? item).join(', ');
     }
     if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
+      return value ? 'Oui' : 'Non';
     }
-    return value;
+    return characteristicValues[value] ?? value.replace(' inches', ' pouces');
   };
 
   const getAvailabilityBadge = (availability) => {
@@ -160,9 +220,9 @@ const ProductDetail = ({ addToCart, products }) => {
       out_of_stock: 'bg-red-100 text-red-800 border-red-200'
     };
     const labels = {
-      in_stock: 'In Stock',
-      limited_stock: 'Limited Stock',
-      out_of_stock: 'Out of Stock'
+      in_stock: 'En stock',
+      limited_stock: 'Stock limité',
+      out_of_stock: 'Indisponible'
     };
     return (
       <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${styles[availability] || styles.in_stock}`}>
@@ -174,10 +234,10 @@ const ProductDetail = ({ addToCart, products }) => {
 
   if (!product) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <LoadingTruck />
-        </div>
+      <div className="container mx-auto px-4 py-12">
+        <Seo title="Produit introuvable | Bracelet Tunisie" description="Cette fiche produit n’est pas disponible. Découvrez les articles de notre boutique en ligne en Tunisie." path="/produit/introuvable" noindex />
+        <h1 className="text-3xl font-bold text-[#4A3C31]">Produit introuvable</h1>
+        <a href="/boutique" className="mt-4 inline-block text-[#1A9D8F] underline">Retour à la boutique</a>
       </div>
     );
   }
@@ -185,21 +245,39 @@ const ProductDetail = ({ addToCart, products }) => {
   return (
     <div className="container mx-auto px-4 py-8 bg-[#F5F5F5]">
       <Toaster />
+      <Seo
+        {...productSeo(product)}
+        image={productImage(product)}
+        imageAlt={`Photo du produit : ${product.name}`}
+        type="product"
+        jsonLd={productStructuredData(product)}
+      />
+      <Breadcrumb items={[
+        { name: 'Accueil', path: '/' },
+        { name: 'Boutique', path: '/boutique' },
+        { name: categories[product.category].name, path: categories[product.category].path },
+        { name: product.name, path: productPath(product) },
+      ]} />
       <div className="flex flex-col md:flex-row gap-8">
         <div className="relative w-full md:w-1/2 overflow-hidden">
           <img
-            src={`/${product.folder}/${currentImageIndex + 1}.webp`}
-            alt={product.name}
+            src={productImage(product, currentImageIndex + 1)}
+            alt={`Vue du produit : ${product.name}`}
+            width="800"
+            height="800"
+            loading={currentImageIndex === 0 ? 'eager' : 'lazy'}
+            fetchPriority={currentImageIndex === 0 ? 'high' : 'auto'}
             className={`w-full h-auto transition-transform duration-300 ${slideDirection}`}
             onAnimationEnd={() => setSlideDirection('')}
           />
-          <button onClick={prevImage} className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2">
+          <button aria-label="Image précédente" onClick={prevImage} className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2">
             <ChevronLeft size={24} />
           </button>
-          <button onClick={nextImage} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2">
+          <button aria-label="Image suivante" onClick={nextImage} className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2">
             <ChevronRight size={24} />
           </button>
           <button
+            aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
             onClick={handleToggleFavorite}
             className="absolute top-4 right-4 bg-white rounded-full p-3 shadow-lg hover:scale-110 transition-transform"
           >
@@ -225,17 +303,21 @@ const ProductDetail = ({ addToCart, products }) => {
             <p className="text-2xl font-bold text-[#1A9D8F] mb-4">
               {product.price} DT
               <br />
-              <span className="text-base font-normal text-gray-600">+ 6DT Delivery</span>
+              <span className="text-base font-normal text-gray-600">Frais de livraison à partir de 6 DT</span>
             </p>
 
             <p className="text-lg text-[#4A3C31] mb-6 font-serif leading-relaxed">{product.description}</p>
+            <section className="mb-6 rounded-lg bg-white p-4">
+              <h2 className="mb-2 text-lg font-semibold text-[#4A3C31]">Livraison et paiement</h2>
+              <p className="text-[#4A3C31]">Livraison dans toute la Tunisie, paiement à la livraison et confirmation de la commande par téléphone.</p>
+            </section>
 
             {/* Product Characteristics */}
             {product.characteristics && (
               <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
                 <div className="flex items-center mb-3">
                   <Info size={20} className="text-[#1A9D8F] mr-2" />
-                  <h3 className="text-lg font-semibold text-[#4A3C31]">Product Details</h3>
+                  <h3 className="text-lg font-semibold text-[#4A3C31]">Détails du produit</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {Object.entries(product.characteristics).map(([key, value]) => (
@@ -253,12 +335,12 @@ const ProductDetail = ({ addToCart, products }) => {
             )}
 
             <div className="flex items-center mb-4">
-              <span className="mr-4 text-lg font-medium">Quantity:</span>
-              <button onClick={decrementQuantity} className="bg-[#1A9D8F] text-white rounded-full p-1">
+              <span className="mr-4 text-lg font-medium">Quantité :</span>
+              <button aria-label="Diminuer la quantité" onClick={decrementQuantity} className="bg-[#1A9D8F] text-white rounded-full p-1">
                 <Minus size={20} />
               </button>
               <span className="mx-4 text-xl font-bold">{quantity}</span>
-              <button onClick={incrementQuantity} className="bg-[#1A9D8F] text-white rounded-full p-1">
+              <button aria-label="Augmenter la quantité" onClick={incrementQuantity} className="bg-[#1A9D8F] text-white rounded-full p-1">
                 <Plus size={20} />
               </button>
             </div>
@@ -266,22 +348,22 @@ const ProductDetail = ({ addToCart, products }) => {
             <div className="flex justify-between items-center mt-8 mb-8">
               <div className="flex flex-col items-center">
                 <Truck size={48} className="text-[#1A9D8F] mb-3" />
-                <p className="text-base text-center font-medium max-w-[120px]">Fast Delivery 48 Hours</p>
+                <p className="text-base text-center font-medium max-w-[120px]">Livraison dans toute la Tunisie</p>
               </div>
               <div className="flex flex-col items-center">
                 <Shield size={48} className="text-[#1A9D8F] mb-3" />
-                <p className="text-base text-center font-medium max-w-[120px]">Assured Quality</p>
+                <p className="text-base text-center font-medium max-w-[120px]">Informations produit consultables</p>
               </div>
               <div className="flex flex-col items-center">
                 <ThumbsUp size={48} className="text-[#1A9D8F] mb-3" />
-                <p className="text-base text-center font-medium max-w-[120px]">Guaranteed Satisfaction</p>
+                <p className="text-base text-center font-medium max-w-[120px]">Confirmation par téléphone</p>
               </div>
             </div>
           </div>
 
           <div>
             <button
-              onClick={() => navigate('/checkout', {
+              onClick={() => navigate('/commande', {
                 state: {
                   product,
                   quantity,
@@ -290,13 +372,13 @@ const ProductDetail = ({ addToCart, products }) => {
               })}
               className="w-full bg-orange-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-orange-600 mb-2"
             >
-              Buy now
+              Commander
             </button>
             <button
               onClick={() => addToCart(product, quantity)}
               className="w-full bg-[#1A9D8F] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:bg-[#157A6E]"
             >
-              Add to cart
+              Ajouter au panier
             </button>
           </div>
         </div>
@@ -304,13 +386,13 @@ const ProductDetail = ({ addToCart, products }) => {
 
       <div className="mt-10 bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-[#4A3C31]">Customer Reviews</h2>
+          <h2 className="text-2xl font-bold text-[#4A3C31]">Avis clients</h2>
           {reviews?.length > 0 && (
             <div className="flex items-center gap-2 bg-[#1A9D8F] text-white px-4 py-2 rounded-full">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span className="font-semibold">{reviews?.length} Reviews</span>
+              <span className="font-semibold">{reviews?.length} avis</span>
             </div>
           )}
         </div>
@@ -323,14 +405,14 @@ const ProductDetail = ({ addToCart, products }) => {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-[#4A3C31] mb-1">Share Your Experience</h3>
-              <p className="text-sm text-gray-600">Help others by sharing your thoughts on this product</p>
+              <h3 className="text-lg font-bold text-[#4A3C31] mb-1">Partagez votre expérience</h3>
+              <p className="text-sm text-gray-600">Aidez les autres en partageant votre avis sur ce produit.</p>
             </div>
           </div>
           <textarea
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Write your review here... What did you like? How was the quality?"
+            placeholder="Rédigez votre avis sur ce produit..."
             className="w-full p-4 text-sm border-2 border-gray-200 rounded-xl mb-3 focus:ring-2 focus:ring-[#1A9D8F] focus:border-[#1A9D8F] transition-all resize-none"
             rows="4"
           />
@@ -338,7 +420,7 @@ const ProductDetail = ({ addToCart, products }) => {
             onClick={handleAddReview}
             className="bg-[#1A9D8F] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#157A6E] transition-all hover:shadow-lg transform hover:-translate-y-0.5"
           >
-            Post Review
+            Publier l’avis
           </button>
         </div>
 
@@ -347,7 +429,7 @@ const ProductDetail = ({ addToCart, products }) => {
             <>
               <div className="flex items-center gap-2 mb-4">
                 <div className="h-px bg-gray-200 flex-1"></div>
-                <span className="text-sm font-medium text-gray-500">All Reviews</span>
+                <span className="text-sm font-medium text-gray-500">Tous les avis</span>
                 <div className="h-px bg-gray-200 flex-1"></div>
               </div>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
@@ -387,9 +469,9 @@ const ProductDetail = ({ addToCart, products }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">No Reviews Yet</h3>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Aucun avis pour le moment</h3>
               <p className="text-gray-500 text-sm">
-                Be the first to share your experience with this product!
+                Soyez la première personne à partager votre expérience sur ce produit.
               </p>
             </div>
           )}

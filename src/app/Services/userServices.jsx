@@ -26,7 +26,6 @@ export const isAuthenticated = () => {
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
-  try {
     const headers = {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -48,16 +47,13 @@ const apiCall = async (endpoint, options = {}) => {
       // Handle token expiration
       if (response.status === 401 && data.message?.includes('Token expired')) {
         removeAuthToken();
-        toast.error('Session expired. Please login again.');
-        window.location.href = '/login'; 
+        toast.error('Session expirée. Veuillez vous reconnecter.');
+        window.location.href = '/connexion'; 
       }
-      throw new Error(data.message || 'Something went wrong');
+      throw new Error(data.message || 'Une erreur est survenue.');
     }
 
     return data.data? data.data:data;
-  } catch (error) {
-    throw error;
-  }
 };
 
 // ============ USER FUNCTIONS ============
@@ -66,7 +62,7 @@ export const getUsers = async () => {
   try {
     return await apiCall('/users');
   } catch (error) {
-    toast.error("Error fetching users");
+    toast.error("Impossible de récupérer les utilisateurs.");
     throw error;
   }
 };
@@ -75,7 +71,7 @@ export const getUserById = async (userId) => {
   try {
     return await apiCall(`/users/${userId}`);
   } catch (error) {
-    toast.error("Error fetching user");
+    toast.error("Impossible de récupérer l’utilisateur.");
     throw error;
   }
 };
@@ -85,7 +81,7 @@ export const getUserByEmail = async (email) => {
     const users = await getUsers();
     return users.find(user => user.email === email) || null;
   } catch (error) {
-    toast.error("Error fetching user by email");
+    toast.error("Impossible de récupérer l’utilisateur avec cette adresse e-mail.");
     throw error;
   }
 };
@@ -110,7 +106,7 @@ export const addUser = async (userData) => {
 
     return result;
   } catch (error) {
-    toast.error( 'Error adding user');
+    toast.error('Impossible de créer le compte.');
     throw error;
   }
 };
@@ -123,10 +119,10 @@ export const updateUser = async (userId, updates) => {
     });
 
     // Update stored user data
-    toast.success('User updated successfully!');
+    toast.success('Profil mis à jour avec succès !');
     return updatedUser;
   } catch (error) {
-    toast.error('Error updating user');
+    toast.error('Impossible de mettre à jour le profil.');
     throw error;
   }
 };
@@ -139,10 +135,10 @@ export const deleteUser = async (userId) => {
 
     // Clear auth data
     removeAuthToken();
-    toast.success('User deleted successfully!');
+    toast.success('Compte supprimé avec succès.');
     return true;
   } catch (error) {
-    toast.error( 'Error deleting user');
+    toast.error('Impossible de supprimer le compte.');
     throw error;
   }
 };
@@ -160,15 +156,15 @@ export const loginUser = async (email, password) => {
 
     return result;
   } catch (error) {
-    toast.error('Invalid email or password');
+    toast.error('Adresse e-mail ou mot de passe invalide.');
     throw error;
   }
 };
 
 export const logoutUser = () => {
   removeAuthToken();
-  toast.success('Logged out successfully!');
-  window.location.href = '/login';
+  toast.success('Vous êtes déconnecté.');
+  window.location.href = '/connexion';
 };
 
 // ============ CART MANAGEMENT ============
@@ -177,7 +173,7 @@ export const getUserCart = async (userId) => {
   try {
     return await apiCall(`/cart/${userId}`);
   } catch (error) {
-    toast.error("Error fetching cart");
+    toast.error("Impossible de récupérer le panier.");
     throw error;
   }
 };
@@ -191,7 +187,7 @@ export const addToUserCart = async (userId, product, quantity) => {
 
     return cartItem;
   } catch (error) {
-    toast.error( 'Error adding to cart');
+    toast.error('Impossible d’ajouter l’article au panier.');
     throw error;
   }
 };
@@ -205,7 +201,7 @@ export const updateUserCartItem = async (userId, productId, newQuantity) => {
 
     return cartItem;
   } catch (error) {
-    toast.error( 'Error updating cart item');
+    toast.error('Impossible de mettre à jour le panier.');
     throw error;
   }
 };
@@ -216,10 +212,10 @@ export const removeFromUserCart = async (userId, productId) => {
       method: 'DELETE',
     });
 
-    toast.success('Removed from cart!');
+    toast.success('Article retiré du panier.');
     return true;
   } catch (error) {
-    toast.error( 'Error removing from cart');
+    toast.error('Impossible de retirer l’article du panier.');
     throw error;
   }
 };
@@ -230,10 +226,10 @@ export const clearUserCart = async (userId) => {
       method: 'DELETE',
     });
 
-    toast.success('Cart cleared!');
+    toast.success('Panier vidé.');
     return true;
   } catch (error) {
-    toast.error( 'Error clearing cart');
+    toast.error('Impossible de vider le panier.');
     throw error;
   }
 };
@@ -244,7 +240,7 @@ export const getUserFavorites = async (userId) => {
   try {
     return await apiCall(`/favorites/${userId}`);
   } catch (error) {
-    toast.error("Error fetching favorites");
+    toast.error("Impossible de récupérer les favoris.");
     throw error;
   }
 };
@@ -256,10 +252,10 @@ export const addToFavorites = async (userId, product) => {
       body: JSON.stringify({ product }),
     });
 
-    toast.success('Added to favorites!');
+    toast.success('Article ajouté aux favoris.');
     return favorite;
   } catch (error) {
-    toast.error( 'Error adding to favorites');
+    toast.error('Impossible d’ajouter l’article aux favoris.');
     throw error;
   }
 };
@@ -270,10 +266,10 @@ export const removeFromFavorites = async (userId, productId) => {
       method: 'DELETE',
     });
 
-    toast.success('Removed from favorites');
+    toast.success('Article retiré des favoris.');
     return true;
   } catch (error) {
-    toast.error( 'Error removing from favorites');
+    toast.error('Impossible de retirer l’article des favoris.');
     throw error;
   }
 };
@@ -283,12 +279,12 @@ export const removeFromFavorites = async (userId, productId) => {
 export const getReviews = async (productId) => {
   try {
     if (!productId) {
-      toast.error('Product ID is required');
+      toast.error('La référence du produit est obligatoire.');
       return [];
     }
     return await apiCall(`/reviews/${productId}`);
   } catch (error) {
-    toast.error("Error fetching reviews");
+    toast.error("Impossible de récupérer les avis.");
     throw error;
   }
 };
@@ -296,7 +292,7 @@ export const getReviews = async (productId) => {
 export const addReview = async (productId, userName, reviewMessage) => {
   try {
     if (!productId || !userName || !reviewMessage) {
-      toast.error('Product ID, user name, and review message are required');
+      toast.error('La référence du produit, le nom et le contenu de l’avis sont obligatoires.');
       return null;
     }
 
@@ -305,10 +301,10 @@ export const addReview = async (productId, userName, reviewMessage) => {
       body: JSON.stringify({ userName, reviewMessage }),
     });
 
-    toast.success('Review added successfully!');
+    toast.success('Avis ajouté avec succès !');
     return review;
   } catch (error) {
-    toast.error( 'Error adding review');
+    toast.error('Impossible d’ajouter l’avis.');
     throw error;
   }
 };
@@ -319,8 +315,8 @@ export const getUserOrders = async (userId) => {
   try {
     return await apiCall(`/orders/${userId}`);
   } catch (error) {
-    toast.error("Error fetching orders");
-    return [];
+    toast.error("Impossible de récupérer les commandes.");
+    throw error;
   }
 };
 
@@ -331,10 +327,10 @@ export const addOrderToUser = async (userId, order) => {
       body: JSON.stringify(order),
     });
 
-    toast.success('Order placed successfully!');
+    toast.success('Commande enregistrée avec succès !');
     return newOrder;
   } catch (error) {
-    toast.error( 'Error adding order');
+    toast.error('Impossible d’enregistrer la commande.');
     throw error;
   }
 };
@@ -347,10 +343,10 @@ export const addCartOrdersToUser = async (userId, cartItems, itemsList = '') => 
       body: JSON.stringify({ cartItems, itemsList }),
     });
 
-    toast.success('Orders placed successfully!');
+    toast.success('Commandes enregistrées avec succès !');
     return orders;
   } catch (error) {
-    toast.error( 'Error adding cart orders');
+    toast.error('Impossible d’enregistrer les commandes du panier.');
     throw error;
   }
 };

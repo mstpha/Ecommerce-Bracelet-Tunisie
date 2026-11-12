@@ -1,4 +1,4 @@
-import productsData from '../app/Data/products.json';
+import { categories, products } from '../app/Data/catalog';
 
 export function pushEvent(event, params = {}) {
   try {
@@ -23,11 +23,11 @@ export function pushEcommerce(event, ecommerce) {
 // (cart items use product_id / product_name and may lack a category).
 export function toAnalyticsItem(item, extra = {}) {
   const id = item?.product_id ?? item?.id;
-  const catalogProduct = productsData.products.find(p => String(p.id) === String(id));
+  const catalogProduct = products.find(p => String(p.id) === String(id));
   return {
     item_id: String(id),
-    item_name: item?.product_name ?? item?.name ?? catalogProduct?.name,
-    item_category: item?.category ?? catalogProduct?.category,
+    item_name: catalogProduct?.name ?? item?.product_name ?? item?.name,
+    item_category: catalogProduct ? categories[catalogProduct.category]?.name : item?.category,
     price: parseFloat(item?.price) || 0,
     ...extra
   };

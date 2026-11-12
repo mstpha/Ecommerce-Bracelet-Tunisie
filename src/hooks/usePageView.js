@@ -6,9 +6,12 @@ export default function usePageView() {
   const { pathname, search } = useLocation();
 
   useEffect(() => {
-    pushEvent('virtual_page_view', {
-      page_path: pathname + search,
-      page_title: document.title
-    });
+    const timer = setTimeout(() => {
+      pushEvent('virtual_page_view', {
+        page_path: pathname + search,
+        page_title: document.title
+      });
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname, search]);
 }

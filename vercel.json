@@ -1,5 +1,220 @@
 {
-    "rewrites":  [
-      {"source": "/(.*)", "destination": "/"}
-    ]
-  }
+  "redirects": [
+    {
+      "source": "/shop",
+      "destination": "/boutique",
+      "permanent": true
+    },
+    {
+      "source": "/shop/category/bracelet",
+      "destination": "/boutique/categorie/bracelets",
+      "permanent": true
+    },
+    {
+      "source": "/shop/category/cap",
+      "destination": "/boutique/categorie/casquettes",
+      "permanent": true
+    },
+    {
+      "source": "/shop/category/necklace",
+      "destination": "/boutique/categorie/colliers",
+      "permanent": true
+    },
+    {
+      "source": "/shop/category/earring",
+      "destination": "/boutique/categorie/boucles-d-oreilles",
+      "permanent": true
+    },
+    {
+      "source": "/checkout",
+      "destination": "/commande",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "/connexion",
+      "permanent": true
+    },
+    {
+      "source": "/register",
+      "destination": "/inscription",
+      "permanent": true
+    },
+    {
+      "source": "/product/1",
+      "destination": "/produit/1-collier-et-bracelet-argentes-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/2",
+      "destination": "/produit/2-collier-et-bracelet-dores-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/3",
+      "destination": "/produit/3-collier-et-bracelet-style-cartier-argentes",
+      "permanent": true
+    },
+    {
+      "source": "/product/4",
+      "destination": "/produit/4-collier-et-bracelet-style-cartier-dores",
+      "permanent": true
+    },
+    {
+      "source": "/product/5",
+      "destination": "/produit/5-collier-et-bracelet-chaine-grain-de-cafe",
+      "permanent": true
+    },
+    {
+      "source": "/product/6",
+      "destination": "/produit/6-collier-dore-pour-homme",
+      "permanent": true
+    },
+    {
+      "source": "/product/7",
+      "destination": "/produit/7-collier-et-bracelet-maille-suisse-argentes",
+      "permanent": true
+    },
+    {
+      "source": "/product/8",
+      "destination": "/produit/8-collier-maille-suisse-argente",
+      "permanent": true
+    },
+    {
+      "source": "/product/9",
+      "destination": "/produit/9-collier-chaine-grain-de-cafe-argente",
+      "permanent": true
+    },
+    {
+      "source": "/product/10",
+      "destination": "/produit/10-collier-torsade-dore",
+      "permanent": true
+    },
+    {
+      "source": "/product/11",
+      "destination": "/produit/11-collier-style-cartier-argente",
+      "permanent": true
+    },
+    {
+      "source": "/product/12",
+      "destination": "/produit/12-collier-style-cartier-dore",
+      "permanent": true
+    },
+    {
+      "source": "/product/13",
+      "destination": "/produit/13-parure-collier-bracelet-et-montre-doree-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/14",
+      "destination": "/produit/14-parure-collier-bracelet-et-montre-argentee-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/15",
+      "destination": "/produit/15-collier-argente-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/16",
+      "destination": "/produit/16-collier-dore-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/17",
+      "destination": "/produit/17-collier-argente-pour-homme",
+      "permanent": true
+    },
+    {
+      "source": "/product/18",
+      "destination": "/produit/18-bracelet-serpent-argente",
+      "permanent": true
+    },
+    {
+      "source": "/product/19",
+      "destination": "/produit/19-bracelet-serpent-dore",
+      "permanent": true
+    },
+    {
+      "source": "/product/20",
+      "destination": "/produit/20-collier-argente-pour-homme-modele-20",
+      "permanent": true
+    },
+    {
+      "source": "/product/21",
+      "destination": "/produit/21-collier-maille-suisse-dore",
+      "permanent": true
+    },
+    {
+      "source": "/product/22",
+      "destination": "/produit/22-collier-multicolore",
+      "permanent": true
+    },
+    {
+      "source": "/product/23",
+      "destination": "/produit/23-bracelet-multicolore",
+      "permanent": true
+    },
+    {
+      "source": "/product/24",
+      "destination": "/produit/24-collier-afrique",
+      "permanent": true
+    },
+    {
+      "source": "/product/25",
+      "destination": "/produit/25-collier-croix-argente",
+      "permanent": true
+    },
+    {
+      "source": "/product/26",
+      "destination": "/produit/26-collier-pendentif-croix",
+      "permanent": true
+    },
+    {
+      "source": "/product/27",
+      "destination": "/produit/27-bracelet-argente-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/28",
+      "destination": "/produit/28-bracelet-dore-a-strass",
+      "permanent": true
+    },
+    {
+      "source": "/product/29",
+      "destination": "/produit/29-bracelet-maille-suisse-dore",
+      "permanent": true
+    },
+    {
+      "source": "/product/30",
+      "destination": "/produit/30-casquette-classique-noire",
+      "permanent": true
+    },
+    {
+      "source": "/product/31",
+      "destination": "/produit/31-casquette-streetwear-beige",
+      "permanent": true
+    },
+    {
+      "source": "/product/32",
+      "destination": "/produit/32-casquette-de-sport-blanche",
+      "permanent": true
+    },
+    {
+      "source": "/product/33",
+      "destination": "/produit/33-boucles-d-oreilles-puces-argentees",
+      "permanent": true
+    },
+    {
+      "source": "/product/34",
+      "destination": "/produit/34-boucles-d-oreilles-creoles-noires",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

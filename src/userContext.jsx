@@ -1,8 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserById } from './app/Services/userServices';
-
-export const UserContext = createContext();
+import { UserContext } from './UserContext.js';
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);

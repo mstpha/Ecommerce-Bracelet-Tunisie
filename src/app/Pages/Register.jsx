@@ -5,8 +5,8 @@ import {
   addUser,
 } from '../Services/userServices';
 
-import { Toaster } from 'react-hot-toast';
-import { UserContext } from '../../userContext';
+import { UserContext } from '../../UserContext.js';
+import Seo from '../../components/Seo';
 const Register = () => {
   const [RegformData, setRegformData] = useState({
     full_name: '',
@@ -32,11 +32,11 @@ const Register = () => {
   const validatefull_name = (name) => {
     const trimmedName = name.trim();
     if (trimmedName.length < 2) {
-      toast.error('Full name must be at least 2 characters long');
+      toast.error('Le nom complet doit comporter au moins 2 caractères.');
       return false;
     }
-    if (!/^[a-zA-Z\s]+$/.test(trimmedName)) {
-      toast.error('Full name should only contain letters and spaces');
+    if (!/^[\p{L}\s'-]+$/u.test(trimmedName)) {
+      toast.error('Le nom complet ne peut contenir que des lettres et des espaces.');
       return false;
 
     }
@@ -47,7 +47,7 @@ const Register = () => {
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      toast.error('Please enter a valid email address');
+      toast.error('Veuillez saisir une adresse e-mail valide.');
       return false;
     }
     return true;
@@ -56,15 +56,15 @@ const Register = () => {
 
   const validatePassword = (password) => {
     if (password.length < 8) {
-      toast.error('Password must be at least 8 characters long');
+      toast.error('Le mot de passe doit comporter au moins 8 caractères.');
       return false;
     }
     if (!/[a-zA-Z]/.test(password)) {
-      toast.error('Password must contain at least one letter');
+      toast.error('Le mot de passe doit contenir au moins une lettre.');
       return false;
     }
     if (!/[0-9]/.test(password)) {
-      toast.error('Password must contain at least one number');
+      toast.error('Le mot de passe doit contenir au moins un chiffre.');
       return false;
     }
     return true;
@@ -73,24 +73,28 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var validation = validatefull_name(RegformData.full_name) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
+    const validation = validatefull_name(RegformData.full_name) && validateEmail(RegformData.email) && validatePassword(RegformData.password);
 
     if (RegformData.password !== RegformData.confirmPassword) {
-      toast.error('Passwords do not match.');
+      toast.error('Les mots de passe ne correspondent pas.');
       return;
     }
-    let newUser;
-    if (validation === true) {
-      newUser = await addUser(RegformData)
-    }
+    if (!validation) return;
+    const newUser = await addUser(RegformData);
     setUser(newUser.user)
     localStorage.setItem('ID', newUser.user.id);
-    toast.success('Registration successful!');
+    toast.success('Inscription réussie !');
     navigate("/")
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 ">
+      <Seo
+        title="Créer un compte | Bracelet Tunisie"
+        description="Créez un compte Bracelet Tunisie pour gérer votre profil et vos commandes. Inscrivez-vous facilement dès maintenant et retrouvez votre espace client."
+        path="/inscription"
+        noindex
+      />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl mb-4 shadow-lg text-white">
@@ -99,15 +103,15 @@ const Register = () => {
             </svg>
           </div>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create an Account</h1>
-          <p className="text-gray-600">Join us and start your journey today</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Créer un compte</h1>
+          <p className="text-gray-600">Inscrivez-vous pour accéder à votre espace client.</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="full_name" className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Name
+                Nom complet
               </label>
               <input
                 type="text"
@@ -117,13 +121,13 @@ const Register = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
-                placeholder="Your full name"
+                placeholder="Votre nom complet"
               />
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email Address
+                Adresse e-mail
               </label>
               <input
                 type="email"
@@ -133,13 +137,13 @@ const Register = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
-                placeholder="you@example.com"
+                placeholder="vous@exemple.tn"
               />
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                Password
+                Mot de passe
               </label>
               <div className="relative">
                 <input
@@ -150,10 +154,11 @@ const Register = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 pr-12"
-                  placeholder="Enter a strong password"
+                  placeholder="Choisissez un mot de passe sécurisé"
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-600 transition-colors duration-300"
                 >
@@ -173,7 +178,7 @@ const Register = () => {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-2">
-                Confirm Password
+                Confirmer le mot de passe
               </label>
               <div className="relative">
                 <input
@@ -184,10 +189,11 @@ const Register = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300 pr-12"
-                  placeholder="Re-enter your password"
+                  placeholder="Saisissez à nouveau votre mot de passe"
                 />
                 <button
                   type="button"
+                  aria-label={showConfirmPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-600 transition-colors duration-300"
                 >
@@ -209,7 +215,7 @@ const Register = () => {
               type="submit"
               className="w-full py-3 px-4 text-base font-semibold text-white bg-gradient-to-r from-teal-500 to-emerald-600 rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transform hover:-translate-y-0.5 transition-all duration-300"
             >
-              Sign Up
+              S’inscrire
             </button>
           </form>
 
@@ -218,16 +224,16 @@ const Register = () => {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">Already have an account?</span>
+              <span className="px-4 bg-white text-gray-500">Vous avez déjà un compte ?</span>
             </div>
           </div>
 
           <div className="text-center">
             <Link
-              to="/"
+              to="/connexion"
               className="inline-flex items-center justify-center w-full py-3 px-4 text-base font-semibold text-teal-600 bg-teal-50 rounded-xl hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all duration-300"
             >
-              Sign In
+              Se connecter
             </Link>
           </div>
         </div>

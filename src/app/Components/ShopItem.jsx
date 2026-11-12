@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { productImage, productPath } from '../Data/catalog';
 
 
-const ShopItem = ({ item, truncateDescription }) => {
+const ShopItem = ({ item, eager = false }) => {
   const [hovered, setHovered] = useState(false);
   const [currentImage, setCurrentImage] = useState(1);
 
@@ -28,7 +29,7 @@ const ShopItem = ({ item, truncateDescription }) => {
     return false;
   };
   return (
-    <Link to={`/product/${item.id}`} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+    <Link to={productPath(item)} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       <div
         className="h-80 flex items-center justify-center overflow-hidden"
         onMouseEnter={() => setHovered(true)}
@@ -38,8 +39,12 @@ const ShopItem = ({ item, truncateDescription }) => {
 
       >
         <img
-          src={`/${item.folder}/${currentImage}.webp`}
-          alt={item.name}
+          src={productImage(item, currentImage)}
+          alt={`Vue du produit : ${item.name}`}
+          width="600"
+          height="600"
+          loading={eager ? 'eager' : 'lazy'}
+          fetchPriority={eager ? 'high' : 'auto'}
           className="w-full h-full object-fit select-none"
           onContextMenu={preventDefaultBehavior}
           onTouchStart={preventDefaultBehavior}
@@ -55,13 +60,10 @@ const ShopItem = ({ item, truncateDescription }) => {
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <h3 className="text-lg font-semibold text-[#4A3C31] mb-2 line-clamp-2">{item.name}</h3>
-        <p className="text-sm text-[#4A3C31] mb-2 flex-grow line-clamp-2">{truncateDescription(item.description)}</p>
+        <p className="text-sm text-[#4A3C31] mb-2 flex-grow line-clamp-2">{item.descriptor}</p>
         <p className="text-[#1A9D8F] font-bold mt-auto">
           {item.discount ? item.discount : item.price} DT
           <span className='line-through ml-1 text-[0.8em]'>{item.discount ? item.price + " DT" : null} </span>
-        </p>
-        <p className="text-xl text-yellow-500 font-semibold">
-          ★ {item.rating ? item.rating : "N/A"}
         </p>
       </div>
     </Link>

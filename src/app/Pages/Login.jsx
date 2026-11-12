@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { getUserById, loginUser } from '../Services/userServices';
-import { UserContext } from '../../userContext';
+import { UserContext } from '../../UserContext.js';
+import Seo from '../../components/Seo';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,21 +11,21 @@ const Login = () => {
     password: ''
   });
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     const initalize = async () => {
       var currentUser = localStorage.getItem("ID")
       if (currentUser) {
-        const UserLogin = getUserById(currentUser);
+        const UserLogin = await getUserById(currentUser);
         setUser(UserLogin)
         navigate("/")
       }
     }
     initalize()
 
-  }, [])
+  }, [navigate, setUser])
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +40,7 @@ const Login = () => {
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      toast.error('Please enter a valid email address');
+      toast.error('Veuillez saisir une adresse e-mail valide.');
       return false;
     }
     return true;
@@ -51,14 +52,13 @@ const Login = () => {
     e.preventDefault();
 
     if (!validateEmail(formData.email)) {
-      toast.error("Please enter a valid email address");
       return;
     }
 
     const login = await loginUser(formData.email, formData.password);
     if (login) {
       localStorage.setItem("ID", login.user.id);
-      toast.success("Welcome " + login.user.full_name);
+      toast.success(`Bienvenue ${login.user.full_name}`);
       setUser(login.user)
       navigate("/");
     }
@@ -67,6 +67,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen  flex items-center justify-center px-4 py-12">
+      <Seo
+        title="Connexion | Bracelet Tunisie"
+        description="Connectez-vous à votre compte Bracelet Tunisie pour retrouver votre profil et vos commandes. Accédez à votre espace client en toute simplicité."
+        path="/connexion"
+        noindex
+      />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl mb-4 shadow-lg">
@@ -74,15 +80,15 @@ const Login = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Sign in to continue to your account</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bon retour</h1>
+          <p className="text-gray-600">Connectez-vous pour accéder à votre compte.</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                Email Address
+                Adresse e-mail
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -98,14 +104,14 @@ const Login = () => {
                   onChange={handleChange}
                   required
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
-                  placeholder="you@example.com"
+                  placeholder="vous@exemple.tn"
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
-                Password
+                Mot de passe
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -119,13 +125,14 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  autoComplete="new-password"
+                  autoComplete="current-password"
                   required
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-300"
-                  placeholder="Enter your password"
+                  placeholder="Saisissez votre mot de passe"
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-teal-600 transition-colors duration-300"
                 >
@@ -149,7 +156,7 @@ const Login = () => {
               type="submit"
               className="w-full py-3 px-4 text-base font-semibold text-white bg-gradient-to-r from-teal-500 to-emerald-600 rounded-xl shadow-lg hover:shadow-xl hover:from-teal-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transform hover:-translate-y-0.5 transition-all duration-300"
             >
-              Sign In
+              Se connecter
             </button>
           </form>
 
@@ -158,16 +165,16 @@ const Login = () => {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">New to our platform?</span>
+              <span className="px-4 bg-white text-gray-500">Vous n’avez pas encore de compte ?</span>
             </div>
           </div>
 
           <div className="text-center">
             <Link
-              to="/register"
+              to="/inscription"
               className="inline-flex items-center justify-center w-full py-3 px-4 text-base font-semibold text-teal-600 bg-teal-50 rounded-xl hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all duration-300"
             >
-              Create an account
+              Créer un compte
             </Link>
           </div>
         </div>

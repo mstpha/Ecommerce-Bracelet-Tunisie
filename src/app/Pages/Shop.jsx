@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import productsData from '../Data/products.json';
 import ShopItem from '../Components/ShopItem';
 import Suggestions from '../Components/Suggestions';
 import LoadingTruck from '../Components/Loader';
 import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
+import { categories, categoryTitle, products } from '../Data/catalog';
+import Seo from '../../components/Seo';
+import Breadcrumb from '../../components/Breadcrumb';
+import { collectionStructuredData } from '../Data/seoData';
+import { categorySeo, shopSeo } from '../Data/seoPages';
 
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();
-  const { gender, category } = useParams();
+  const { category: categorySlug } = useParams();
+  const category = categorySlug
+    ? Object.keys(categories).find((key) => categories[key].path.endsWith(categorySlug))
+    : undefined;
   const [items, setItems] = useState([]);
   const [sortedItems, setSortedItems] = useState([]);
   const [sortOrder, setSortOrder] = useState('none');
-  const [ratingFilter, setRatingFilter] = useState('all');
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,12 +37,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
   }, []);
 
   useEffect(() => {
-    let filteredItems = productsData.products;
-
-    if (gender) {
-      filteredItems = filteredItems.filter(item => item.gender === gender);
-    }
-
+    let filteredItems = products;
     if (category) {
       filteredItems = filteredItems.filter(item => item.category === category);
     }
@@ -48,18 +48,16 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     if (category && filteredItems?.length) {
       pushEcommerce('view_item_list', {
         item_list_id: category,
-        item_list_name: category,
+        item_list_name: categories[category].name,
         items: filteredItems.map((p, index) => toAnalyticsItem(p, { index }))
       });
     }
-  }, [gender, category]);
+  }, [category]);
 
   useEffect(() => {
     let filtered = items;
     if (searchTerm) {
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
     setSortedItems(filtered);
     setSortOrder('none');
@@ -89,24 +87,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
   const resetOrder = () => {
     setSortedItems(items);
     setSortOrder('none');
-    setRatingFilter('all');
-  };
-
-  const handleRatingFilter = (ratingValue) => {
-    setRatingFilter(ratingValue);
-    if (ratingValue === 'all') {
-      setSortedItems(items);
-      return;
-    }
-    const filteredByRating = items.filter(
-      item => Math.floor(parseFloat(item.rating)) === parseInt(ratingValue)
-    );
-    setSortedItems(filteredByRating);
-  };
-
-  const truncateDescription = (description, maxLength = 60) => {
-    if (description.length <= maxLength) return description;
-    return description.slice(0, maxLength).trim() + '...';
   };
 
   if (loading) {
@@ -120,12 +100,33 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     );
   }
 
+  const pageSeo = category ? categorySeo(category) : shopSeo;
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold text-[#4A3C31] mb-6">Shop</h2>
+      <Seo
+        {...pageSeo}
+        jsonLd={collectionStructuredData(items, category)}
+      />
+      {category && (
+        <Breadcrumb items={[
+          { name: 'Accueil', path: '/' },
+          { name: 'Boutique', path: '/boutique' },
+          { name: categories[category].name, path: pageSeo.path },
+        ]} />
+      )}
+      <h1 className="text-2xl font-bold text-[#4A3C31] mb-6">
+        {category
+          ? category === 'bracelet' ? 'Bracelets homme et femme en Tunisie'
+            : `${categoryTitle(category)} en Tunisie`
+          : 'Notre boutique de bracelets et accessoires'}
+      </h1>
+      {category && (
+        <p className="text-[#4A3C31] leading-relaxed mb-8">{categories[category].intro}</p>
+      )}
 
       <div className="mb-4 flex flex-wrap gap-4 items-center">
-        <Suggestions suggestions={shuffleArray(productsData.products).slice(0, 15)} />
+        <Suggestions suggestions={shuffleArray(products).slice(0, 15)} />
 
         <div className="inline-flex rounded-md shadow-sm" role="group">
           <button
@@ -135,7 +136,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
               focus:outline-none focus:ring-2 focus:ring-[#1A9D8F]
               transition-colors duration-300 ${sortOrder === 'asc' ? 'ring-2 ring-[#1A9D8F]' : ''}`}
           >
-            Low to High
+            Prix croissant
           </button>
 
           <button
@@ -145,24 +146,8 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
               focus:outline-none focus:ring-2 focus:ring-[#1A9D8F]
               transition-colors duration-300 ${sortOrder === 'desc' ? 'ring-2 ring-[#1A9D8F]' : ''}`}
           >
-            High to Low
+            Prix décroissant
           </button>
-
-          <select
-            value={ratingFilter}
-            onChange={(e) => handleRatingFilter(e.target.value)}
-            className="px-4 py-2 text-sm font-medium border-t border-b border-[#1A9D8F] 
-              text-white bg-[#1A9D8F] hover:bg-white hover:text-[#1A9D8F] 
-              focus:outline-none focus:ring-2 focus:ring-[#1A9D8F]
-              transition-colors duration-300 cursor-pointer appearance-none"
-          >
-            <option value="all">All Ratings</option>
-            <option value="1">1★ & Up</option>
-            <option value="2">2★ & Up</option>
-            <option value="3">3★ & Up</option>
-            <option value="4">4★ & Up</option>
-            <option value="5">5★ Only</option>
-          </select>
 
           <button
             onClick={resetOrder}
@@ -171,16 +156,20 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
               focus:outline-none focus:ring-2 focus:ring-[#1A9D8F]
               transition-colors duration-300`}
           >
-            Reset
+            Réinitialiser
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {sortedItems.map((item) => (
-          <ShopItem key={item.id} item={item} truncateDescription={truncateDescription} />
+        {sortedItems.map((item, index) => (
+          <ShopItem key={item.id} item={item} eager={index === 0} />
         ))}
       </div>
+      <section className="mt-10 rounded-lg bg-white p-6 text-[#4A3C31]">
+        <h2 className="mb-2 text-xl font-semibold">Livraison et paiement</h2>
+        <p>Livraison dans toute la Tunisie, paiement à la livraison et confirmation de la commande par téléphone.</p>
+      </section>
     </div>
   );
 };
