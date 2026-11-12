@@ -120,7 +120,7 @@ function renderHtml(page) {
   html = setMeta(html, 'name', 'twitter:image:alt', page.imageAlt ?? 'Sélection de bracelets et accessoires de Bracelet Tunisie');
   if (page.noindex) html = setMeta(html, 'name', 'robots', 'noindex, nofollow');
   const structuredData = page.jsonLd
-    ? `<script data-rh="true" type="application/ld+json">${escapeJsonLd(page.jsonLd)}</script>`
+    ? `<script data-seo-jsonld type="application/ld+json">${escapeJsonLd(page.jsonLd)}</script>`
     : '';
   const body = `<main><h1>${escapeHtml(page.heading)}</h1>${page.content ?? ''}${structuredData}</main>`;
   html = html.replace(/<div id="root">[\s\S]*?<\/div>/i, `<div id="root">${body}</div>`);

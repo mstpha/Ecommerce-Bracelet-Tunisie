@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-seo.mjs",
+    "build": "vite build && node scripts/generate-seo.mjs && node scripts/check-seo-head.mjs",
     "generate:vercel": "node scripts/generate-vercel-config.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
