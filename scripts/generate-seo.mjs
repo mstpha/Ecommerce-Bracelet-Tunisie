@@ -206,7 +206,16 @@ routes.push(
 );
 
 for (const page of routes) {
-  if (page.title.length >= 60) throw new Error(`Titre trop long (${page.title.length}) : ${page.path}`);
+  const productTitleWithFullName = page.type === 'product' && page.title === `${page.heading} | Bracelet Tunisie`;
+  if (page.type === 'product' && ![
+    `${page.heading} en Tunisie | Bracelet Tunisie`,
+    `${page.heading} | Bracelet Tunisie`,
+  ].includes(page.title)) {
+    throw new Error(`Le titre doit conserver le nom complet du produit : ${page.path}`);
+  }
+  if (page.title.length >= 60 && !productTitleWithFullName) {
+    throw new Error(`Titre trop long (${page.title.length}) : ${page.path}`);
+  }
   if (page.description.length < 140 || page.description.length > 160) {
     throw new Error(`Description SEO hors limite (${page.description.length}) : ${page.path} — ${page.description}`);
   }
@@ -217,6 +226,15 @@ for (const page of routes) {
 for (const product of products) {
   const count = product.description.trim().split(/\s+/).length;
   if (count < 80 || count > 120) throw new Error(`Description produit hors limite (${count} mots) : ${product.id}`);
+  if (product.metaDescription.length < 140 || product.metaDescription.length > 160) {
+    throw new Error(`Description meta produit hors limite (${product.metaDescription.length}) : ${product.id}`);
+  }
+}
+if (new Set(products.map((product) => product.description)).size !== products.length) {
+  throw new Error('Les descriptions produit doivent être uniques.');
+}
+if (new Set(products.map((product) => product.metaDescription)).size !== products.length) {
+  throw new Error('Les descriptions meta produit doivent être uniques.');
 }
 for (const category of Object.values(categories)) {
   const count = category.intro.trim().split(/\s+/).length;
