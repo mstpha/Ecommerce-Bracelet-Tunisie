@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ShopItem from '../Components/ShopItem';
 import Suggestions from '../Components/Suggestions';
@@ -8,6 +8,15 @@ import Seo from '../../components/Seo';
 import Breadcrumb from '../../components/Breadcrumb';
 import { collectionStructuredData } from '../Data/seoData';
 import { categorySeo, shopSeo } from '../Data/seoPages';
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 const Shop = ({ searchTerm, setSearchTerm }) => {
   const location = useLocation();
@@ -54,15 +63,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     setSortOrder('none');
   }, [items, searchTerm]);
 
-  const shuffleArray = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
   const sortByPrice = (order) => {
     setSortedItems(prevItems => {
       const sorted = [...prevItems].sort((a, b) => {
@@ -80,6 +80,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     setSortOrder('none');
   };
 
+  const suggestedItems = useMemo(() => shuffleArray(products).slice(0, 15), []);
   const pageSeo = category ? categorySeo(category) : shopSeo;
 
   return (
@@ -106,8 +107,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
       )}
 
       <div className="mb-4 flex flex-wrap gap-4 items-center">
-        <Suggestions suggestions={shuffleArray(products).slice(0, 15)} />
-
         <div className="inline-flex rounded-md shadow-sm" role="group">
           <button
             onClick={() => sortByPrice('asc')}
@@ -146,6 +145,7 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
           <ShopItem key={item.id} item={item} eager={index === 0} />
         ))}
       </div>
+      <Suggestions suggestions={suggestedItems} />
       <section className="mt-10 rounded-lg bg-white p-6 text-[#4A3C31]">
         <h2 className="mb-2 text-xl font-semibold">Livraison et paiement</h2>
         <p>Livraison dans toute la Tunisie, paiement à la livraison et confirmation de la commande par téléphone.</p>

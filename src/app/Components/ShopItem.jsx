@@ -28,6 +28,11 @@ const ShopItem = ({ item, eager = false }) => {
     e.stopPropagation();
     return false;
   };
+  const imagePath = productImage(item, currentImage);
+  const imageSrc = import.meta.env.PROD
+    ? imagePath.replace(/\.webp$/, '-thumb.webp')
+    : imagePath;
+
   return (
     <Link to={productPath(item)} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       <div
@@ -39,7 +44,7 @@ const ShopItem = ({ item, eager = false }) => {
 
       >
         <img
-          src={productImage(item, currentImage)}
+          src={imageSrc}
           alt={`Vue du produit : ${item.name}`}
           width="600"
           height="600"

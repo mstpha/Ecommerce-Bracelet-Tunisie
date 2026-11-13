@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState, useEffect, useContext } from 'react';
 import { Route, Routes, useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 import Nav from './app/Pages/Nav';
+import Shop from './app/Pages/Shop';
 import { products, productPath, categories } from './app/Data/catalog';
 import toast from 'react-hot-toast';
 import { Toaster } from 'react-hot-toast';
@@ -18,7 +19,6 @@ import usePageView from './hooks/usePageView';
 import { pushEcommerce, toAnalyticsItem } from './utils/analytics';
 
 const ProductDetail = lazy(() => import('./app/Pages/ProductDetail'));
-const Shop = lazy(() => import('./app/Pages/Shop'));
 const Welcome = lazy(() => import('./app/Pages/Welcome'));
 const Login = lazy(() => import('./app/Pages/Login'));
 const Register = lazy(() => import('./app/Pages/Register'));
