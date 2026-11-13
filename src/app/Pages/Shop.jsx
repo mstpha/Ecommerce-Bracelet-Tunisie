@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ShopItem from '../Components/ShopItem';
 import Suggestions from '../Components/Suggestions';
-import LoadingTruck from '../Components/Loader';
 import { pushEcommerce, toAnalyticsItem } from '../../utils/analytics';
 import { categories, categoryTitle, products } from '../Data/catalog';
 import Seo from '../../components/Seo';
@@ -19,7 +18,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
   const [items, setItems] = useState([]);
   const [sortedItems, setSortedItems] = useState([]);
   const [sortOrder, setSortOrder] = useState('none');
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -28,13 +26,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
       setSearchTerm(search);
     }
   }, [location, setSearchTerm]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     let filteredItems = products;
@@ -88,17 +79,6 @@ const Shop = ({ searchTerm, setSearchTerm }) => {
     setSortedItems(items);
     setSortOrder('none');
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-
-        <div className="transform scale-150 sm:scale-200 md:scale-300 lg:scale-400">
-          <LoadingTruck />
-        </div>
-      </div>
-    );
-  }
 
   const pageSeo = category ? categorySeo(category) : shopSeo;
 
