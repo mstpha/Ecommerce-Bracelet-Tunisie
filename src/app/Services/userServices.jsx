@@ -274,41 +274,6 @@ export const removeFromFavorites = async (userId, productId) => {
   }
 };
 
-// ============ REVIEW FUNCTIONS ============
-
-export const getReviews = async (productId) => {
-  try {
-    if (!productId) {
-      toast.error('La référence du produit est obligatoire.');
-      return [];
-    }
-    return await apiCall(`/reviews/${productId}`);
-  } catch (error) {
-    toast.error("Impossible de récupérer les avis.");
-    throw error;
-  }
-};
-
-export const addReview = async (productId, userName, reviewMessage) => {
-  try {
-    if (!productId || !userName || !reviewMessage) {
-      toast.error('La référence du produit, le nom et le contenu de l’avis sont obligatoires.');
-      return null;
-    }
-
-    const review = await apiCall(`/reviews/${productId}`, {
-      method: 'POST',
-      body: JSON.stringify({ userName, reviewMessage }),
-    });
-
-    toast.success('Avis ajouté avec succès !');
-    return review;
-  } catch (error) {
-    toast.error('Impossible d’ajouter l’avis.');
-    throw error;
-  }
-};
-
 // ============ ORDER FUNCTIONS ============
 
 export const getUserOrders = async (userId) => {
